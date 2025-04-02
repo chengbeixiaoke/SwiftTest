@@ -1,0 +1,39 @@
+PODS:
+  - CombineCocoa (0.4.1)
+  - CoreStore (9.2.0)
+  - SnapKit (5.7.1)
+  - SwiftyJSON (5.0.2)
+  - WebRTC-SDK (125.6422.07)
+  - YYKit (1.0.9):
+    - YYKit/no-arc (= 1.0.9)
+  - YYKit/no-arc (1.0.9)
+
+DEPENDENCIES:
+  - CombineCocoa
+  - CoreStore
+  - SnapKit
+  - SwiftyJSON
+  - WebRTC-SDK (= 125.6422.07)
+  - YYKit
+
+SPEC REPOS:
+  https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git:
+    - WebRTC-SDK
+  trunk:
+    - CombineCocoa
+    - CoreStore
+    - SnapKit
+    - SwiftyJSON
+    - YYKit
+
+SPEC CHECKSUMS:
+  CombineCocoa: e5210dbfb480ff251078929459ac17e750e7af1d
+  CoreStore: 6e7e2010ce7b8ad9cf7348c650020c3d7ea0afb2
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
+  WebRTC-SDK: dff00a3892bc570b6014e046297782084071657e
+  YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
+
+PODFILE CHECKSUM: 459e87c718bff5c20cbf4386ad9cf7810fe0bd23
+
+COCOAPODS: 1.16.2
