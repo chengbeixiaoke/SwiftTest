@@ -10,11 +10,12 @@ def base_pod
   pod 'YYKit'
   pod 'CombineCocoa'
   pod 'SwifterSwift'
+  pod 'Kingfisher'
   
   pod 'WebRTC-SDK', '=125.6422.07'
   
-  pod 'BMPlayer', :path => './Frameworks/BMPlayer'
-  pod 'ffmpeg-kit-ios-full', :path => './Frameworks/ffmpeg-kit-ios-full'
+  pod 'BMPlayer', :path => './Frameworks/BMPlayer', :inhibit_warnings => false
+  pod 'ffmpeg-kit-ios-full', :path => './Frameworks/ffmpeg-kit-ios-full', :inhibit_warnings => false
 end
 
 target 'SwiftTest' do
