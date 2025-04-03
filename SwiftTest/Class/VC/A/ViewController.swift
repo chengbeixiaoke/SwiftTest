@@ -69,7 +69,7 @@ class ViewController: UIViewController {
     }
     
     /// 开启通话计时
-    func startTimer() {
+    func startTimer() { 
         print("测试一哈".test())
         print(OtherFile.default().name)
         navigationController?.pushViewController(VideoPlayerViewController())

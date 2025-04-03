@@ -13,7 +13,7 @@ DerivedData/
 *.hap
 *.ipa
 *.xcarchive
-/Pods/
+Pods/
 
 # Build
 build/
