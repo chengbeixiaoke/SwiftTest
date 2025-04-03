@@ -1,0 +1,64 @@
+# Xcode
+.DS_Store
+*/xcuserdata
+*.xcuserstate
+*.xcuserdatad
+*.xccheckout
+*.xcscmblueprint
+*.xcscheme
+*.xcworkspace
+xcuserdata/
+*.moved-aside
+DerivedData/
+*.hap
+*.ipa
+*.xcarchive
+/Pods/
+
+# Build
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Swift Package Manager
+.swiftpm
+.build/
+Packages/
+
+# CocoaPods
+Podfile.lock
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# AppCode
+.idea/
+
+# OS X
+.DS_Store
+
+# Carthage
+Carthage/Build/
+
+# Local development environment
+.env
+.env.local
+
+# Swift files
+*.swiftdoc
+
+# Other
+*.log
+*.backup
+*.orig
+*.rej
+*.app

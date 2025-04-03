@@ -21,6 +21,7 @@ import CombineCocoa
 import AVFoundation
 import AVKit
 import MyPackage
+import ffmpegkit
 
 class ViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
@@ -71,6 +72,6 @@ class ViewController: UIViewController {
     func startTimer() {
         print("测试一哈".test())
         print(OtherFile.default().name)
+        navigationController?.pushViewController(VideoPlayerViewController())
     }
-    
 }

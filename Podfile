@@ -4,13 +4,17 @@ platform :ios, '13.0'
 use_frameworks!
 
 def base_pod
-  pod 'SnapKit'
+  pod 'SnapKit', '~>5.7.1'
   pod 'SwiftyJSON'
   pod 'CoreStore'
   pod 'YYKit'
   pod 'CombineCocoa'
+  pod 'SwifterSwift'
   
   pod 'WebRTC-SDK', '=125.6422.07'
+  
+  pod 'BMPlayer', :path => './Frameworks/BMPlayer'
+  pod 'ffmpeg-kit-ios-full', :path => './Frameworks/ffmpeg-kit-ios-full'
 end
 
 target 'SwiftTest' do

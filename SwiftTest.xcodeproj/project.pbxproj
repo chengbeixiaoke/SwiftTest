@@ -39,6 +39,8 @@
 		43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */; };
 		43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A292D9544FB0025EEAC /* Main.storyboard */; };
 		43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A272D9544FB0025EEAC /* LaunchScreen.storyboard */; };
+		435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B76512D9E345700093B91 /* VideoPlayerViewController.swift */; };
+		435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B766D2D9E411500093B91 /* Object+Extension.swift */; };
 		4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 4381FB6A2D9D48EF00BF4B93 /* MyPackage */; };
 		CB18B4B42DDDDE6363B5C9E6 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC1074E8D3246D479EF5BC8 /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
@@ -81,7 +83,8 @@
 		43269A072D95438A0025EEAC /* UserModelDataV2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserModelDataV2.xcdatamodel; sourceTree = "<group>"; };
 		43269A262D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43269A282D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
-		43269A582D95453F0025EEAC /* SimulatorInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = SimulatorInfo.plist; path = /Users/yyw/Desktop/SwiftTest/SwiftTest/SimulatorInfo.plist; sourceTree = "<absolute>"; };
+		435B76512D9E345700093B91 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
+		435B766D2D9E411500093B91 /* Object+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Object+Extension.swift"; sourceTree = "<group>"; };
 		7EC1074E8D3246D479EF5BC8 /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		842A0790A6A07654653F741A /* Pods-SwiftTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.debug.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,7 +127,6 @@
 				432699DC2D9543780025EEAC /* Assets.xcassets */,
 				43269A2A2D9544FB0025EEAC /* Base.lproj */,
 				432699CD2D9540390025EEAC /* Info.plist */,
-				43269A582D95453F0025EEAC /* SimulatorInfo.plist */,
 			);
 			path = SwiftTest;
 			sourceTree = "<group>";
@@ -163,6 +165,7 @@
 				432699ED2D95438A0025EEAC /* UIDimmingView+Extension.m */,
 				432699EE2D95438A0025EEAC /* UIImage+Extension.swift */,
 				432699EF2D95438A0025EEAC /* UIView+Tools.swift */,
+				435B766D2D9E411500093B91 /* Object+Extension.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -170,7 +173,7 @@
 		432699F32D95438A0025EEAC /* A */ = {
 			isa = PBXGroup;
 			children = (
-				432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */,
+				435B76532D9E345B00093B91 /* Player */,
 				432699F22D95438A0025EEAC /* ViewController.swift */,
 			);
 			path = A;
@@ -245,6 +248,15 @@
 				43269A292D9544FB0025EEAC /* Main.storyboard */,
 			);
 			path = Base.lproj;
+			sourceTree = "<group>";
+		};
+		435B76532D9E345B00093B91 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */,
+				435B76512D9E345700093B91 /* VideoPlayerViewController.swift */,
+			);
+			path = Player;
 			sourceTree = "<group>";
 		};
 		4527CF5FDD7521C1F88CDE62 /* Frameworks */ = {
@@ -396,6 +408,8 @@
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
 				43269A122D95438A0025EEAC /* UIDimmingView+Extension.m in Sources */,
 				43269A132D95438A0025EEAC /* ChatIMDateFormatter.swift in Sources */,
+				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
+				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
 				43269A142D95438A0025EEAC /* CViewController.swift in Sources */,
 				43269A152D95438A0025EEAC /* CoreDataManager.swift in Sources */,
 				43269A162D95438A0025EEAC /* C1TableView.swift in Sources */,
