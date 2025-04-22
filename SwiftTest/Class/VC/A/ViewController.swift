@@ -15,7 +15,6 @@ import Security
 import CryptoKit
 import Security
 import CommonCrypto
-import YYKit
 import UIKit
 import CombineCocoa
 import AVFoundation
@@ -72,6 +71,6 @@ class ViewController: UIViewController {
     func startTimer() { 
         print("测试一哈".test())
         print(OtherFile.default().name)
-        navigationController?.pushViewController(VideoPlayerViewController())
+        navigationController?.pushViewController(TestUIViewController())
     }
 }

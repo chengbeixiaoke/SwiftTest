@@ -8,7 +8,6 @@
 import UIKit
 import Combine
 import CoreStore
-import YYKit
 import SnapKit
 
 class C1ViewController: UIViewController {
@@ -26,6 +25,8 @@ class C1ViewController: UIViewController {
     var scrollDirection: Scroll = .none
     var enableReceiveNewData: Bool  = true
     var scrollToUserStartAnimationBlock: (()->())?
+    
+    var monitor: ListMonitor<EntityUserModel>?
     
     lazy var flowLayout: CustomFlowLayout = {
         return CustomFlowLayout()
@@ -54,7 +55,7 @@ class C1ViewController: UIViewController {
             tableView.sectionHeaderTopPadding = 0
         }
         
-        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.contentInsetAdjustmentBehavior = .always
         tableView.register(CCell.self,
                            forCellReuseIdentifier: "CCell")
         return tableView
@@ -72,7 +73,7 @@ class C1ViewController: UIViewController {
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 88, left: 0, bottom: 0, right: 0))
+            make.edges.equalToSuperview()
         }
         
         initializeCoreData()
@@ -97,6 +98,8 @@ class C1ViewController: UIViewController {
         if let indexStr = indexStr, let index = Int(indexStr)  {
             idNumber = index
         }
+        
+        initializeMonitor()
     }
     
     @objc func addUser() {
@@ -648,5 +651,62 @@ extension C1ViewController {
                 print("insert error: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+
+extension C1ViewController: ListObjectObserver {
+    typealias ListEntityType = EntityUserModel
+    
+    /// 初始化 NSFetchedResultsController
+    func initializeMonitor() {
+        let dataStack = CoreDataManager.shared.coreDataStack
+        let monitor = dataStack!.monitorList(From<ListEntityType>()
+            .orderBy(.descending(\.$createTime))
+        )
+        monitor.addObserver(self)
+        self.monitor = monitor
+    }
+    
+    func listMonitorWillRefetch(_ monitor: ListMonitor<ListEntityType>) {
+
+    }
+    
+    func listMonitorDidRefetch(_ monitor: CoreStore.ListMonitor<ListEntityType>) {
+
+    }
+    
+    func listMonitorWillChange(_ monitor: ListMonitor<ListEntityType>) {
+//        tableView.beginUpdates()
+    }
+    
+    func listMonitorDidChange(_ monitor: CoreStore.ListMonitor<ListEntityType>) {
+//        tableView.endUpdates()
+    }
+    
+    func listMonitor(_ monitor: ListMonitor<ListEntityType>,
+                     didInsertObject object: ListEntityType,
+                     toIndexPath indexPath: IndexPath) {
+        print("Insert: \(indexPath)")
+    }
+    
+    func listMonitor(_ monitor: ListMonitor<ListEntityType>,
+                     didUpdateObject object: ListEntityType,
+                     atIndexPath indexPath: IndexPath) {
+        print("Update: \(indexPath)")
+    }
+    
+    func listMonitor(_ monitor: ListMonitor<ListEntityType>,
+                     didDeleteObject object: ListEntityType,
+                     fromIndexPath indexPath: IndexPath) {
+        
+        print("Delete: \(indexPath)")
+    }
+    
+    func listMonitor(_ monitor: ListMonitor<ListEntityType>,
+                     didMoveObject object: ListEntityType,
+                     fromIndexPath: IndexPath,
+                     toIndexPath: IndexPath) {
+        print("Move: \(fromIndexPath), \(toIndexPath)")
     }
 }

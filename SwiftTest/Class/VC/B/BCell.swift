@@ -7,6 +7,7 @@
 
 import Foundation
 import SnapKit
+import YYText
 
 class BCell: UITableViewCell {
     var longPress:((UIView)->())?
@@ -22,7 +23,7 @@ class BCell: UITableViewCell {
     }()
     
     lazy var nameLabel = {
-        let label = UILabel()
+        let label = YYLabel()
         label.font = UIFont.systemFont(ofSize: 15)
         label.textColor = UIColor.black
         return label
@@ -30,14 +31,13 @@ class BCell: UITableViewCell {
     
     lazy var callingButton = {
         let button = UIButton()
-        button.setTitle("打电话", for: .normal)
+        button.setTitle("按钮", for: .normal)
         button.backgroundColor = .red
         return button
     }()
     
     lazy var messageLabel = {
-        let label = UILabel()
-        
+        let label = YYLabel()
         return label
     }()
     
@@ -55,11 +55,9 @@ class BCell: UITableViewCell {
         }
     }
     
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     func setUpContentView() {
         
@@ -95,7 +93,7 @@ class BCell: UITableViewCell {
         callingButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(30)
             make.centerY.equalToSuperview()
-            make.size.equalTo(CGSize(width: 50, height: 40))
+            make.size.equalTo(CGSize(width: 70, height: 40))
         }
     }
     

@@ -1,13 +1,17 @@
-source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
+#source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
+source 'https://github.com/SumSubstance/Specs.git'
 
 platform :ios, '13.0'
 use_frameworks!
+inhibit_all_warnings!
+install! 'cocoapods', :deterministic_uuids => false
 
 def base_pod
-  pod 'SnapKit', '~>5.7.1'
+  pod 'SnapKit'
   pod 'SwiftyJSON'
   pod 'CoreStore'
-  pod 'YYKit'
+  pod 'YYText'
   pod 'CombineCocoa'
   pod 'SwifterSwift'
   pod 'Kingfisher'
@@ -36,9 +40,9 @@ post_install do |installer|
         config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       end
     end
-    target.build_configurations.each do |config|
-      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-    end
   end
-  
+#  installer.pods_project.build_configurations.each do |config|
+#    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+#  end
 end
+

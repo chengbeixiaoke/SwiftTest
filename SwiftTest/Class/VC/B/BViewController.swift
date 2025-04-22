@@ -14,16 +14,14 @@ class BViewController: UIViewController, UITableViewDelegate, UITableViewDataSou
     private var cancellables = Set<AnyCancellable>()
     
     let tableView: UITableView =  {
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        let tableView = UITableView(frame: .zero, style: .plain)
         tableView.separatorStyle = .none
+        tableView.tableHeaderView = UIView()
         tableView.tableFooterView = UIView()
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         tableView.contentInset = .zero
         tableView.scrollIndicatorInsets = .zero
         
-        /// 需要设置预估高度为0，不然页面滑动时，会导致cell跳跃，页面闪动
         tableView.estimatedRowHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
@@ -34,13 +32,13 @@ class BViewController: UIViewController, UITableViewDelegate, UITableViewDataSou
             tableView.sectionHeaderTopPadding = 0
         }
         
+        tableView.contentInsetAdjustmentBehavior = .always
+        
         tableView.register(BCell.self,
                            forCellReuseIdentifier: "BCell")
         
         tableView.register(UITableViewCell.self,
                            forCellReuseIdentifier: "UITableViewCell")
-        
-        tableView.contentInsetAdjustmentBehavior = .never
         
         return tableView
     }()
@@ -53,7 +51,7 @@ class BViewController: UIViewController, UITableViewDelegate, UITableViewDataSou
         self.tableView.dataSource = self
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 200, left: 0, bottom: 0, right: 0))
+            make.edges.equalToSuperview()
         }
         
         for i in 0..<10 {
