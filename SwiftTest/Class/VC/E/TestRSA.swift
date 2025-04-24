@@ -43,6 +43,12 @@ class TestRSA {
     
     // 将 Data 转换为 Base64 字符串
     func dataToBase64(_ data: Data) -> String {
-        return data.base64EncodedString()
+        print(data.base64EncodedString(options: .lineLength64Characters))
+        print(data.base64EncodedString(options: .lineLength76Characters))
+        print(data.base64EncodedString(options: .endLineWithCarriageReturn))
+        print(data.base64EncodedString(options: .endLineWithLineFeed))
+
+        
+        return data.base64EncodedString(options: .lineLength64Characters)
     }
 }

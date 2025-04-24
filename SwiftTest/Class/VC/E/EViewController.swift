@@ -25,6 +25,23 @@ class EViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
+        let createRSAKeyPair = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        createRSAKeyPair.setTitle("生成密钥", for: .normal)
+        createRSAKeyPair.setTitleColor(.blue, for: .normal)
+        view.addSubview(createRSAKeyPair)
+        createRSAKeyPair.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(-150)
+            make.centerX.equalToSuperview()
+            make.size.equalTo(CGSize(width: 100, height: 50))
+        }
+        
+        createRSAKeyPair.tapPublisher
+            .sink { [weak self] in
+                guard let weakSelf = self else { return }
+                weakSelf.createRSAKeyPair()
+            }
+            .store(in: &cancellables)
+        
         let encryption = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         encryption.setTitle("加密", for: .normal)
         encryption.setTitleColor(.blue, for: .normal)
@@ -81,8 +98,8 @@ class EViewController: UIViewController {
     
     // 加密文件
     func encryptFile() {
-        guard let filePath = Bundle.main.path(forResource: "2025-04-18_3897301462_Logs", ofType: "log") else { return }
-        guard let outputURL = URL.outputURL("2025-04-18_3897301462_Logs_encryptFile",
+        guard let filePath = Bundle.main.path(forResource: "2025-04-23_4029257634_Logs", ofType: "log") else { return }
+        guard let outputURL = URL.outputURL("2025-04-23_4029257634_Logs_encryptFile",
                                             clearOld: true,
                                             createEmptyFile: true) else { return }
         
@@ -95,8 +112,8 @@ class EViewController: UIViewController {
     
     func decryptFile()
     {
-        guard let inputURL = URL.outputURL("2025-04-18_3897301462_Logs_encryptFile") else { return }
-        guard let outputURL = URL.outputURL("2025-04-18_3897301462_Logs_decryptFile.log",
+        guard let inputURL = URL.outputURL("2025-04-23_4029257634_Logs_encryptFile") else { return }
+        guard let outputURL = URL.outputURL("2025-04-23_4029257634_Logs_decryptFile.log",
                                             clearOld: true,
                                             createEmptyFile: true) else { return }
         

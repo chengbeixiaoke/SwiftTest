@@ -43,9 +43,12 @@
 		435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B76512D9E345700093B91 /* VideoPlayerViewController.swift */; };
 		435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B766D2D9E411500093B91 /* Object+Extension.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
+		437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */; };
+		4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988462DBA061300A9BEE2 /* private_key.pem */; };
+		4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988472DBA061300A9BEE2 /* public_key.pem */; };
+		4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */ = {isa = PBXBuildFile; fileRef = 437988452DBA061300A9BEE2 /* decryptFile.py */; };
 		4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 4381FB6A2D9D48EF00BF4B93 /* MyPackage */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
-		43DCC3892DB642F400E83159 /* 2025-04-18_3897301462_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 43DCC3882DB642F400E83159 /* 2025-04-18_3897301462_Logs.log */; };
 		ABA827A812A8478632665BAB /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -91,8 +94,11 @@
 		435B76512D9E345700093B91 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		435B766D2D9E411500093B91 /* Object+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Object+Extension.swift"; sourceTree = "<group>"; };
 		43740CBF2DB7840E005119F4 /* TestRSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRSA.swift; sourceTree = "<group>"; };
+		437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2025-04-23_4029257634_Logs.log"; sourceTree = "<group>"; };
+		437988452DBA061300A9BEE2 /* decryptFile.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = decryptFile.py; sourceTree = "<group>"; };
+		437988462DBA061300A9BEE2 /* private_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = private_key.pem; sourceTree = "<group>"; };
+		437988472DBA061300A9BEE2 /* public_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = public_key.pem; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
-		43DCC3882DB642F400E83159 /* 2025-04-18_3897301462_Logs.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2025-04-18_3897301462_Logs.log"; sourceTree = "<group>"; };
 		BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8250E9C7686A7369CF06319 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -221,7 +227,8 @@
 		43269A012D95438A0025EEAC /* E */ = {
 			isa = PBXGroup;
 			children = (
-				43DCC3882DB642F400E83159 /* 2025-04-18_3897301462_Logs.log */,
+				437988482DBA061300A9BEE2 /* RSA */,
+				437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */,
 				43269A002D95438A0025EEAC /* EViewController.swift */,
 				43DCC3862DB62EA100E83159 /* FileEncryptor.swift */,
 				43740CBF2DB7840E005119F4 /* TestRSA.swift */,
@@ -269,6 +276,16 @@
 				435B76512D9E345700093B91 /* VideoPlayerViewController.swift */,
 			);
 			path = Player;
+			sourceTree = "<group>";
+		};
+		437988482DBA061300A9BEE2 /* RSA */ = {
+			isa = PBXGroup;
+			children = (
+				437988452DBA061300A9BEE2 /* decryptFile.py */,
+				437988462DBA061300A9BEE2 /* private_key.pem */,
+				437988472DBA061300A9BEE2 /* public_key.pem */,
+			);
+			path = RSA;
 			sourceTree = "<group>";
 		};
 		4D93665770E4F5D2D0790FAB /* Pods */ = {
@@ -353,9 +370,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
-				43DCC3892DB642F400E83159 /* 2025-04-18_3897301462_Logs.log in Resources */,
+				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
+				4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */,
+				4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */,
 				43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */,
 				43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */,
+				437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */,
 				432699DD2D9543780025EEAC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
