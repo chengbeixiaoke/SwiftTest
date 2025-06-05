@@ -11,6 +11,7 @@ def base_pod
   pod 'SnapKit'
   pod 'SwiftyJSON'
   pod 'CoreStore'
+  pod 'SQLCipher', '~> 4.0'
   pod 'YYText'
   pod 'CombineCocoa'
   pod 'SwifterSwift'

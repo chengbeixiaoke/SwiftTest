@@ -87,7 +87,7 @@ class C1ViewController: UIViewController {
     }
     
     func initializeCoreData() {
-        let indexStr = try? CoreDataManager.shared.coreDataStack.queryValue(From<EntityUserModel>()
+        let indexStr = try? CoreDataManager.shared.dataStack.queryValue(From<EntityUserModel>()
             .select(String.self, [SelectTerm<EntityUserModel>(stringLiteral: "id")])
             .orderBy(.descending(\.$createTime))
             .tweak({
@@ -184,7 +184,7 @@ extension C1ViewController {
     }
     
     func findIndex(_ userId: String?) -> (Int, Int?) {
-        let allUserIds = try? CoreDataManager.shared.coreDataStack.queryAttributes(
+        let allUserIds = try? CoreDataManager.shared.dataStack.queryAttributes(
             From<EntityUserModel>(),
             Select("id"),
             OrderBy<EntityUserModel>(.descending(\.$createTime))
@@ -255,7 +255,7 @@ extension C1ViewController {
         }
         
         var tmp_dataSource: [UserModel] = []
-        CoreDataManager.shared.coreDataStack.perform { transaction in
+        CoreDataManager.shared.dataStack.perform { transaction in
             let results = try transaction.fetchAll(From<EntityUserModelV3>()
                 .orderBy(.descending(\.$createTime))
                 .tweak({
@@ -307,7 +307,7 @@ extension C1ViewController {
         }
         
         var tmp_dataSource: [UserModel] = []
-        CoreDataManager.shared.coreDataStack.perform { transaction in
+        CoreDataManager.shared.dataStack.perform { transaction in
             let results = try transaction.fetchAll(From<EntityUserModelV3>()
                 .orderBy(.descending(\.$createTime))
                 .tweak({
@@ -357,7 +357,7 @@ extension C1ViewController {
         }
         
         var tmp_dataSource: [UserModel] = []
-        CoreDataManager.shared.coreDataStack.perform { transaction in
+        CoreDataManager.shared.dataStack.perform { transaction in
             let results = try transaction.fetchAll(From<EntityUserModelV3>()
                 .orderBy(.descending(\.$createTime))
                 .tweak({
@@ -417,7 +417,7 @@ extension C1ViewController {
         }
         
         var tmp_dataSource: [UserModel] = []
-        CoreDataManager.shared.coreDataStack.perform { transaction in
+        CoreDataManager.shared.dataStack.perform { transaction in
             let results = try transaction.fetchAll(From<EntityUserModelV3>()
                 .orderBy(.descending(\.$createTime))
                 .tweak({
@@ -517,13 +517,13 @@ extension C1ViewController {
     func insertUserV1() {
         self.idNumber += 1
         var userModel: UserModel?
-        CoreDataManager.shared.coreDataStack.perform { [weak self] transaction in
+        CoreDataManager.shared.dataStack.perform { [weak self] transaction in
             guard let weakSelf = self else { return }
             
             let model = UserModel()
             model.createTime = Int64(Date().timeIntervalSince1970 * 1000)
             model.id = "\(weakSelf.idNumber)"
-            model.name = "王小1"
+            model.name = "王小\(weakSelf.idNumber)"
             model.sex = 1
             model.dog = DogModel(id: model.id, name: "狗狗", color: "yellow")
             let _ = try transaction.importUniqueObject(Into<EntityUserModelV1>(),
@@ -532,7 +532,7 @@ extension C1ViewController {
             let model2 = UserModel()
             model2.createTime = Int64(Date().timeIntervalSince1970 * 1000)
             model2.id = "\(weakSelf.idNumber)"
-            model2.name = "王小1测试"
+            model2.name = "王小\(weakSelf.idNumber)测试"
             model2.sex = 0
             let user = try transaction.importUniqueObject(Into<EntityUserModelV1>(),
                                                           source: model2)
@@ -559,13 +559,13 @@ extension C1ViewController {
     func insertUserV2() {
         self.idNumber += 1
         var userModel: UserModel?
-        CoreDataManager.shared.coreDataStack.perform { [weak self] transaction in
+        CoreDataManager.shared.dataStack.perform { [weak self] transaction in
             guard let weakSelf = self else { return }
             
             let model = UserModel()
             model.createTime = Int64(Date().timeIntervalSince1970 * 1000)
             model.id = "\(weakSelf.idNumber)"
-            model.name = "王小2"
+            model.name = "王小\(weakSelf.idNumber)"
             model.sex = 1
             model.car = "测试哈"
             model.dog = DogModel(id: model.id, name: "狗狗V2", color: "green")
@@ -575,10 +575,10 @@ extension C1ViewController {
             let model2 = UserModel()
             model2.createTime = Int64(Date().timeIntervalSince1970 * 1000)
             model2.id = "\(weakSelf.idNumber)"
-            model2.name = "王小2测试"
+            model2.name = "王小\(weakSelf.idNumber)测试"
             model2.sex = 0
-            model.car = "测试哈111"
-            model.dog = DogModel(id: model2.id, name: "狗狗V2更新", color: "green")
+            model2.car = "测试哈111"
+            model2.dog = DogModel(id: model2.id, name: "狗狗V2更新", color: "green")
             _ = try transaction.importUniqueObject(Into<EntityUserModelV2>(),
                                                    source: model2)
             
@@ -603,13 +603,13 @@ extension C1ViewController {
     func insertUserV3() {
         self.idNumber += 1
         var userModel: UserModel?
-        CoreDataManager.shared.coreDataStack.perform { [weak self] transaction in
+        CoreDataManager.shared.dataStack.perform { [weak self] transaction in
             guard let weakSelf = self else { return }
             
             let model = UserModel()
             model.createTime = Int64(Date().timeIntervalSince1970 * 1000)
             model.id = "\(weakSelf.idNumber)"
-            model.name = "王小3"
+            model.name = "王小\(weakSelf.idNumber)"
             model.sex = 1
             model.car = "测试哈"
             model.color = "yellow"
@@ -621,11 +621,11 @@ extension C1ViewController {
             let model2 = UserModel()
             model2.createTime = Int64(Date().timeIntervalSince1970 * 1000)
             model2.id = "\(weakSelf.idNumber)"
-            model2.name = "王小3测试"
+            model2.name = "王小\(weakSelf.idNumber)测试"
             model2.sex = 0
-            model.car = "测试哈111"
-            model.color = "yellow"
-            model.height = 178.01
+            model2.car = "测试哈111"
+            model2.color = "yellow"
+            model2.height = 178.01
             let user = try transaction.importUniqueObject(Into<EntityUserModelV3>(),
                                                           source: model2)
             user?.dog?.color = "blue"
@@ -660,7 +660,7 @@ extension C1ViewController: ListObjectObserver {
     
     /// 初始化 NSFetchedResultsController
     func initializeMonitor() {
-        let dataStack = CoreDataManager.shared.coreDataStack
+        let dataStack = CoreDataManager.shared.dataStack
         let monitor = dataStack!.monitorList(From<ListEntityType>()
             .orderBy(.descending(\.$createTime))
         )

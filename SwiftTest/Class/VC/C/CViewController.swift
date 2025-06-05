@@ -20,7 +20,7 @@ class CViewController: UIViewController {
         view.backgroundColor = .orange
         
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        button.setTitle("新增", for: .normal)
+        button.setTitle("数据库", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         view.addSubview(button)
         button.snp.makeConstraints { make in
@@ -43,7 +43,7 @@ extension CViewController {
     func insertUserV3() {
         self.idNumber += 1
         var userModel: UserModel?
-        CoreDataManager.shared.coreDataStack.perform { [weak self] transaction in
+        CoreDataManager.shared.dataStack.perform { [weak self] transaction in
             guard let weakSelf = self else { return }
             
             let model = UserModel()

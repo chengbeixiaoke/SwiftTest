@@ -6,29 +6,37 @@
 //
 
 import UIKit
+import WebKit
+import SnapKit
 
-class TestUIViewController: UIViewController, UITextFieldDelegate {
-    let textField = UITextField(frame: CGRectMake(50, 100, 300, 50))
+class TestUIViewController: UIViewController {
+    lazy var webview = {
+        return WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         
-        
-        
-        textField.placeholder = "输入"
-        view.addSubview(textField)
-        textField.delegate = self
+        setupUI()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        textField.resignFirstResponder()
-    }
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("输入开始")
-    }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("输入结束")
+    func setupUI() {
+        view.addSubview(webview)
+        webview.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        // 加载 URL
+        if let url = URL(string: "http://www.baidu.com") {
+            let request = URLRequest(url: url)
+            webview.load(request)
+            
+            if #available(iOS 16.4, *) {
+                webview.isInspectable = true
+            } else {
+                // Fallback on earlier versions
+            }
+        }
     }
 }
 
