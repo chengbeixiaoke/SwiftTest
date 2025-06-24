@@ -40,14 +40,22 @@
 		43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */; };
 		43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A292D9544FB0025EEAC /* Main.storyboard */; };
 		43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A272D9544FB0025EEAC /* LaunchScreen.storyboard */; };
+		4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4333CFA52E001CDB00ADDF38 /* String+Extension.swift */; };
 		435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B76512D9E345700093B91 /* VideoPlayerViewController.swift */; };
 		435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B766D2D9E411500093B91 /* Object+Extension.swift */; };
+		435D785E2E03E52900688F0E /* MiniAppTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D785D2E03E52900688F0E /* MiniAppTestView.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
 		437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */; };
 		4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988462DBA061300A9BEE2 /* private_key.pem */; };
 		4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988472DBA061300A9BEE2 /* public_key.pem */; };
 		4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */ = {isa = PBXBuildFile; fileRef = 437988452DBA061300A9BEE2 /* decryptFile.py */; };
 		4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 4381FB6A2D9D48EF00BF4B93 /* MyPackage */; };
+		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
+		43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */; };
+		43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */; };
+		43BEABAC2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABAA2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift */; };
+		43BEABAE2E02B45C00092EB3 /* MiniAppContainerButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA92E02B45C00092EB3 /* MiniAppContainerButtonView.swift */; };
+		43BEABB02E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABAF2E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
 		ABA827A812A8478632665BAB /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
@@ -91,13 +99,21 @@
 		43269A072D95438A0025EEAC /* UserModelDataV2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserModelDataV2.xcdatamodel; sourceTree = "<group>"; };
 		43269A262D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43269A282D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
+		4333CFA52E001CDB00ADDF38 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		435B76512D9E345700093B91 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		435B766D2D9E411500093B91 /* Object+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Object+Extension.swift"; sourceTree = "<group>"; };
+		435D785D2E03E52900688F0E /* MiniAppTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppTestView.swift; sourceTree = "<group>"; };
 		43740CBF2DB7840E005119F4 /* TestRSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRSA.swift; sourceTree = "<group>"; };
 		437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2025-04-23_4029257634_Logs.log"; sourceTree = "<group>"; };
 		437988452DBA061300A9BEE2 /* decryptFile.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = decryptFile.py; sourceTree = "<group>"; };
 		437988462DBA061300A9BEE2 /* private_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = private_key.pem; sourceTree = "<group>"; };
 		437988472DBA061300A9BEE2 /* public_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = public_key.pem; sourceTree = "<group>"; };
+		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
+		43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerViewController.swift; sourceTree = "<group>"; };
+		43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavoPresentSwipeInteractionController.swift; sourceTree = "<group>"; };
+		43BEABA92E02B45C00092EB3 /* MiniAppContainerButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppContainerButtonView.swift; sourceTree = "<group>"; };
+		43BEABAA2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppContainerNavigationView.swift; sourceTree = "<group>"; };
+		43BEABAF2E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerSmallView.swift; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
 		BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8250E9C7686A7369CF06319 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
@@ -180,6 +196,7 @@
 				432699EE2D95438A0025EEAC /* UIImage+Extension.swift */,
 				432699EF2D95438A0025EEAC /* UIView+Tools.swift */,
 				435B766D2D9E411500093B91 /* Object+Extension.swift */,
+				4333CFA52E001CDB00ADDF38 /* String+Extension.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -251,6 +268,7 @@
 		43269A052D95438A0025EEAC /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				43BEABA22E02B26400092EB3 /* MiniApp */,
 				432699E62D95438A0025EEAC /* CoreData */,
 				432699F02D95438A0025EEAC /* Tools */,
 				43269A022D95438A0025EEAC /* VC */,
@@ -286,6 +304,20 @@
 				437988472DBA061300A9BEE2 /* public_key.pem */,
 			);
 			path = RSA;
+			sourceTree = "<group>";
+		};
+		43BEABA22E02B26400092EB3 /* MiniApp */ = {
+			isa = PBXGroup;
+			children = (
+				43BEABA92E02B45C00092EB3 /* MiniAppContainerButtonView.swift */,
+				43BEABAA2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift */,
+				43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */,
+				43BEABA32E02B27500092EB3 /* MiniAppManager.swift */,
+				43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */,
+				43BEABAF2E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift */,
+				435D785D2E03E52900688F0E /* MiniAppTestView.swift */,
+			);
+			path = MiniApp;
 			sourceTree = "<group>";
 		};
 		4D93665770E4F5D2D0790FAB /* Pods */ = {
@@ -436,11 +468,15 @@
 				43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */,
 				43269A092D95438A0025EEAC /* EViewController.swift in Sources */,
 				43269A0A2D95438A0025EEAC /* UserModel.swift in Sources */,
+				43BEABAC2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift in Sources */,
+				43BEABAE2E02B45C00092EB3 /* MiniAppContainerButtonView.swift in Sources */,
 				43269A0B2D95438A0025EEAC /* DTableView.swift in Sources */,
 				43269A0C2D95438A0025EEAC /* BViewController.swift in Sources */,
 				43269A0D2D95438A0025EEAC /* DCell.swift in Sources */,
 				43269A0E2D95438A0025EEAC /* C1ViewController.swift in Sources */,
 				43269A0F2D95438A0025EEAC /* UserModelData.xcdatamodeld in Sources */,
+				43BEABB02E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift in Sources */,
+				4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */,
 				43269A102D95438A0025EEAC /* EntityUserModelV2.swift in Sources */,
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
 				43269A122D95438A0025EEAC /* UIDimmingView+Extension.m in Sources */,
@@ -448,16 +484,20 @@
 				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
 				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
 				43269A142D95438A0025EEAC /* CViewController.swift in Sources */,
+				43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */,
 				43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */,
+				43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */,
 				43269A152D95438A0025EEAC /* CoreDataManager.swift in Sources */,
 				43269A162D95438A0025EEAC /* C1TableView.swift in Sources */,
 				43269A172D95438A0025EEAC /* Tools.swift in Sources */,
 				4324E4EC2DA909F500C8971B /* TestUIViewController.swift in Sources */,
 				43269A182D95438A0025EEAC /* EntityUserModelV3.swift in Sources */,
 				43269A192D95438A0025EEAC /* AppDelegate.swift in Sources */,
+				43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */,
 				43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */,
 				43269A1A2D95438A0025EEAC /* User.swift in Sources */,
 				43269A1B2D95438A0025EEAC /* SwiftNavigationViewController.swift in Sources */,
+				435D785E2E03E52900688F0E /* MiniAppTestView.swift in Sources */,
 				43269A1C2D95438A0025EEAC /* CCell.swift in Sources */,
 				43269A1D2D95438A0025EEAC /* AppDelegate+Other.swift in Sources */,
 				43269A1E2D95438A0025EEAC /* CustomFlowLayout.swift in Sources */,

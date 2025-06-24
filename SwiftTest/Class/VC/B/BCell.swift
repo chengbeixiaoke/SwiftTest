@@ -7,7 +7,7 @@
 
 import Foundation
 import SnapKit
-import YYText
+import YYKit
 
 class BCell: UITableViewCell {
     var longPress:((UIView)->())?

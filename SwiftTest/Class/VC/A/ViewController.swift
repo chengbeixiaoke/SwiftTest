@@ -48,8 +48,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("ViewController viewDidLoad")
-
+        
         view.backgroundColor = .white
+        
+        let imageView = UIImageView(image: UIImage(named: "miniapp_image"))
+        view.addSubview(imageView)
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         let button = UIButton()
         button.setTitle("按钮", for: .normal)
@@ -65,12 +71,37 @@ class ViewController: UIViewController {
                 weakSelf.startTimer()
             }
             .store(in: &cancellables)
+        
+        let button2 = UIButton()
+        button2.setTitle("复原", for: .normal)
+        button2.backgroundColor = .red
+        view.addSubview(button2)
+        button2.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(view.snp.centerY).offset(UIScale(60))
+            make.size.equalTo(CGSizeMake(100, 50))
+        }
+        button2.tapPublisher
+            .sink {
+                MiniAppManager.shared.restoration()
+            }
+            .store(in: &cancellables)
+        
+        test()
+        
+        view.setGradientBackground(colors: [.black, .clear],
+                                   locations: [0, 1],
+                                   startPoint: CGPoint(x: 0.5, y: 1.0),
+                                   endPoint: CGPoint(x: 0.5, y: 0.7),
+                                   size: CGSize(width: WidthScreen, height: HeightScreen))
     }
     
     /// 开启通话计时
-    func startTimer() { 
-        print("测试一哈".test())
-        print(OtherFile.default().name)
-        navigationController?.pushViewController(TestUIViewController())
+    func startTimer() {
+        MiniAppManager.shared.openMiniApp("http://192.168.0.143/miniappH5.html")
+    }
+    
+    func test() {
+        
     }
 }

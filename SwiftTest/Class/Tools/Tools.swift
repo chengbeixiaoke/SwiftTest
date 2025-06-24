@@ -32,3 +32,14 @@ func ChatIMExecuteOnMainThreadAndWait(task: @escaping () -> Void) {
         semaphore.wait()
     }
 }
+
+
+// ratio (以430的屏宽为基准)
+public let Ratio_Scale: CGFloat = WidthScreen / CGFloat(430)
+public func UIScale(_ x: CGFloat) -> CGFloat {
+    if UIDevice.current.model.contains("iPhone") {
+        return x * Ratio_Scale
+    } else {
+        return x
+    }
+}

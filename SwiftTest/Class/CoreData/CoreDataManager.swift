@@ -13,8 +13,8 @@ let VEntityUserModelV1 = "EntityUserModelV1"
 let VEntityUserModelV2 = "EntityUserModelV2"
 let VEntityUserModelV3 = "EntityUserModelV3"
 
-let CurrentEntityUserModelVersion = VEntityUserModelV3
-typealias EntityUserModel = EntityUserModelV3
+let CurrentEntityUserModelVersion = VEntityUserModelV1
+typealias EntityUserModel = EntityUserModelV1
 
 enum CoreDataManagerVersion: RawRepresentable, CaseIterable, Hashable, CustomStringConvertible {
     typealias RawValue = ModelVersion
@@ -114,7 +114,7 @@ class CoreDataManager: NSObject {
         return [v1Schema, v2Schema, v3Schema]
     }()
     
-    var coreDataStack: DataStack!
+    var dataStack: DataStack!
     private func createDataStack(
         exactCurrentModelVersion: ModelVersion?,
         migrationChain: MigrationChain) -> DataStack
@@ -128,7 +128,7 @@ class CoreDataManager: NSObject {
         )
     }
     
-    private func accessSQLiteStore() -> SQLiteStore
+    private func sqliteStore() -> SQLiteStore
     {
         let upgradeMappings: [SchemaMappingProvider] = [
             EntityUserModelV2.mappingFromV1,
@@ -151,7 +151,7 @@ class CoreDataManager: NSObject {
         let dataStack = self.createDataStack(exactCurrentModelVersion: nil, migrationChain: MigrationChain(allVersions))
         
         let migrations = try! dataStack.requiredMigrationsForStorage(
-            self.accessSQLiteStore()
+            self.sqliteStore()
         )
         let lastVersion = migrations.first?.sourceVersion
         if lastVersion == CurrentEntityUserModelVersion {
@@ -180,7 +180,7 @@ class CoreDataManager: NSObject {
             migrationChain = MigrationChain(isUpgrade ? upgradeMigrationChain : upgradeMigrationChain.reversed())
         }
         
-        self.coreDataStack = self.createDataStack(
+        self.dataStack = self.createDataStack(
             exactCurrentModelVersion: CurrentEntityUserModelVersion,
             migrationChain: migrationChain
         )
@@ -190,7 +190,7 @@ class CoreDataManager: NSObject {
             weakSelf.isBusy = false
         }
         
-        self.progress = self.coreDataStack.addStorage(self.accessSQLiteStore(), completion: { [weak self] result in
+        self.progress = self.dataStack.addStorage(self.sqliteStore(), completion: { [weak self] result in
             guard let weakSelf = self else { return }
             switch result {
             case .success(let xx):
@@ -204,7 +204,7 @@ class CoreDataManager: NSObject {
         })
         
         self.progress?.setProgressHandler({ progress in
-            print("数据库迁移进度: \(progress.completedUnitCount)")
+            print("数据库迁移进度: \(progress.fractionCompleted * 100)%")
         })
     }
 }

@@ -64,3 +64,20 @@ extension UIView {
     }
 }
 
+extension UIView {
+    @discardableResult
+    func setGradientBackground(colors: [UIColor],
+                               locations: [NSNumber],
+                               startPoint: CGPoint,
+                               endPoint: CGPoint,
+                               size: CGSize) -> CAGradientLayer {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
+        gradientLayer.colors = colors.map { $0.cgColor }
+        gradientLayer.locations = locations
+        gradientLayer.startPoint = startPoint
+        gradientLayer.endPoint = endPoint
+        layer.addSublayer(gradientLayer)
+        return gradientLayer
+    }
+}

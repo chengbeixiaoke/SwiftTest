@@ -12,10 +12,10 @@ def base_pod
   pod 'SwiftyJSON'
   pod 'CoreStore'
   pod 'SQLCipher', '~> 4.0'
-  pod 'YYText'
   pod 'CombineCocoa'
   pod 'SwifterSwift'
   pod 'Kingfisher'
+  pod 'YYKit'
   
   pod 'WebRTC-SDK', '=125.6422.07'
   
@@ -38,12 +38,12 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     if ['iProov', 'Socket.IO-Client-Swift', 'Starscream'].include? target.name
       target.build_configurations.each do |config|
-        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       end
     end
+    target.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
   end
-#  installer.pods_project.build_configurations.each do |config|
-#    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-#  end
 end
 

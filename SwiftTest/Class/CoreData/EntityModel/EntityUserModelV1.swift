@@ -107,8 +107,8 @@ class EntityUserModelV1: CoreStoreObject, ImportableUniqueObject {
     
     static var mappingFromV2: CustomSchemaMappingProvider {
         return CustomSchemaMappingProvider(
-            from: "EntityUserModelV2",
-            to: "EntityUserModelV1",
+            from: VEntityUserModelV2,
+            to: VEntityUserModelV1,
             entityMappings: [
                 .transformEntity(
                     sourceEntity: "EntityUserModelV2",

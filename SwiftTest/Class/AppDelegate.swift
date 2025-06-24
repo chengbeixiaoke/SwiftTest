@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = initializeTabBarController()
         window?.makeKeyAndVisible()
+        window?.backgroundColor = .brown
         
         let _ = CoreDataManager.shared
         
@@ -52,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         vc5.tabBarItem.title = "EVC"
         
         let tabbarVc = UITabBarController()
-        tabbarVc.tabBar.backgroundColor = .brown
+        tabbarVc.tabBar.backgroundColor = .white
         tabbarVc.viewControllers = [vc1, vc2, vc3, vc4, vc5]
         
         return tabbarVc
