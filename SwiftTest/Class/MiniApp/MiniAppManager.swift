@@ -31,11 +31,14 @@ class MiniAppManager {
     
     var currentSmallMiniApp: MiniAppH5ContainerSmallView?
     
+    var count: Int = 1
+    
     // 跳转H5小程序
     func openMiniApp(_ url: String)
     {
-        let view = MiniAppTestView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen))
+        let view = MiniAppTestView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen), count: count)
         view.show()
+        count += 1
         return
         
         guard let currentVc = UIApplication.topViewController() else { return }
@@ -130,7 +133,7 @@ class MiniAppManager {
             restoration()
         }
         else {
-            let view = MiniAppTestView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen))
+            let view = MiniAppTestView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen), count: 10)
             view.show()
         }
     }

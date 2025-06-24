@@ -93,7 +93,7 @@ class ViewController: UIViewController {
                                    locations: [0, 1],
                                    startPoint: CGPoint(x: 0.5, y: 1.0),
                                    endPoint: CGPoint(x: 0.5, y: 0.7),
-                                   size: CGSize(width: WidthScreen, height: HeightScreen))
+                                   size: CGSize(width: view.frame.width, height: view.frame.height))
     }
     
     /// 开启通话计时
