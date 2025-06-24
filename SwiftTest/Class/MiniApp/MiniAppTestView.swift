@@ -7,6 +7,7 @@
 
 import UIKit
 import YYKit
+import SwifterSwift
 
 class MiniAppTestView: UIView, UIScrollViewDelegate {
     let scrollView: UIScrollView = {
@@ -78,7 +79,7 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
     let total: Int
     
     init(frame: CGRect, count: Int) {
-        self.total = 10
+        self.total = 30
         super.init(frame: frame)
         setupUI()
         let tap = UITapGestureRecognizer { [weak self] _ in
@@ -135,17 +136,16 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
         scrollView.delegate = self
         scrollView.frame = bounds
         
-        for _ in 0..<total {
+        for i in 0..<total {
             let view = MiniAppItemView(frame: .zero)
+            view.tag = 1000 + i
             scrollView.addSubview(view)
             scrollViewSubviews.append(view)
             
             let tap = UITapGestureRecognizer { [weak self] sender in
                 guard let weakSelf = self else { return }
                 guard let sender = sender as? UITapGestureRecognizer, let view = sender.view as? MiniAppItemView else { return }
-                view.removeFromSuperview()
-                weakSelf.scrollViewSubviews.removeAll(view)
-                weakSelf.refreshingScrollViewLayout()
+                weakSelf.refreshingScrollViewLayout(view)
             }
             view.addGestureRecognizer(tap)
         }
@@ -168,7 +168,7 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
     
     func updateScrollViewLayout() {
         let count = scrollViewSubviews.count
-        UIView.animateKeyframes(withDuration: 5, delay: 0.0) {
+        UIView.animateKeyframes(withDuration: 1.0, delay: 0.0) {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
                 for (index, view) in self.scrollViewSubviews.enumerated() {
                     let top = self.scrollView.contentSize.height - CGFloat(count  - index) * UIScale(100)
@@ -188,8 +188,7 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
                         view.frame = CGRectMake(self.scroll_subview_left,
                                                 top,
                                                 self.scroll_subview_width,
-                                                height
-                        )
+                                                height)
                     }
                     else {
                         view.frame = CGRectMake(self.scroll_subview_left,
@@ -209,36 +208,107 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
         }
     }
     
-    func refreshingScrollViewLayout(_ animation: Bool = true) {
-        switch scrollViewSubviews.count {
-        case 1:
-            refreshingScrollViewLayout_1(animation)
-            
-        case 2:
-            refreshingScrollViewLayout_2(animation)
-            
-        case 3:
-            refreshingScrollViewLayout_3(animation)
-            
-        default:
-            refreshingScrollViewLayout_default(animation)
+    func refreshingScrollViewLayout(_ view: MiniAppItemView) {
+        view.removeFromSuperview()
+        scrollViewSubviews.removeAll(where: { $0 == view })
+        
+        if scrollViewSubviews.count == 1 {
+            refreshingScrollViewLayout_1()
+        }
+        else if scrollViewSubviews.count < 5 {
+            refreshingScrollViewLayout_low(view)
+        }
+        else {
+            refreshingScrollViewLayout_default(view)
         }
     }
     
-    func refreshingScrollViewLayout_1(_ animation: Bool = true) {
-        
+    func refreshingScrollViewLayout_1() {
+        scrollView.contentSize = scroll_content_size
+        guard let view = scrollViewSubviews.first else { return }
+        UIView.animate(withDuration: 0.25) {
+            var transform = CATransform3DIdentity
+            transform.m34 = self.m34
+            transform = CATransform3DRotate(transform, self.angle(view), 1, 0, 0)
+            view.layer.transform = transform
+            
+            let top = HeightScreen / 2.0 - view.frame.height / 2.0
+            view.frame = CGRectMake(view.frame.minX,
+                                    top,
+                                    view.bounds.width,
+                                    view.bounds.height)
+        }
     }
     
-    func refreshingScrollViewLayout_2(_ animation: Bool = true) {
-        
+    func refreshingScrollViewLayout_low(_ deleteView: MiniAppItemView) {
+        scrollView.contentSize = scroll_content_size
+        UIView.animate(withDuration: 0.25) {
+            for (index, view) in self.scrollViewSubviews.enumerated() {
+                let top = self.scroll_subview_top + CGFloat(index) * self.scroll_subview_height
+                view.frame = CGRectMake(view.frame.minX,
+                                        top,
+                                        view.bounds.width,
+                                        view.bounds.height)
+                
+                var transform = CATransform3DIdentity
+                transform.m34 = self.m34
+                transform = CATransform3DRotate(transform, self.angle(view), 1, 0, 0)
+                view.layer.transform = transform
+                
+                view.grayView.alpha = 0.0
+            }
+        }
     }
     
-    func refreshingScrollViewLayout_3(_ animation: Bool = true) {
+    func refreshingScrollViewLayout_default(_ deleteView: MiniAppItemView) {
+        guard let lastView = scrollViewSubviews.last else { return }
+        let lastViewFrame = scrollView.convert(lastView.frame, to: self)
+        let lastViewOnScreen = self.frame.intersects(lastViewFrame)
         
-    }
-    
-    func refreshingScrollViewLayout_default(_ animation: Bool = true) {
-        
+        UIView.animate(withDuration: 0.25) {
+            for (index, view) in self.scrollViewSubviews.enumerated() {
+                
+                if lastViewOnScreen {
+                    if view.tag > deleteView.tag {
+                        continue
+                    }
+                    
+                    let top = self.scroll_subview_top + CGFloat(index + 1) * self.scroll_subview_height
+                    view.frame = CGRectMake(view.frame.minX,
+                                            top,
+                                            view.bounds.width,
+                                            view.bounds.height)
+                }
+                else {
+                    if view.tag < deleteView.tag {
+                        continue
+                    }
+                    
+                    let top = self.scroll_subview_top + CGFloat(index) * self.scroll_subview_height
+                    view.frame = CGRectMake(view.frame.minX,
+                                            top,
+                                            view.bounds.width,
+                                            view.bounds.height)
+                }
+                
+                var transform = CATransform3DIdentity
+                transform.m34 = self.m34
+                transform = CATransform3DRotate(transform, self.angle(view), 1, 0, 0)
+                view.layer.transform = transform
+                
+                view.grayView.alpha = 0.0
+            }
+        } completion: { _ in
+            for (index, view) in self.scrollViewSubviews.enumerated() {
+                let top = self.scroll_subview_top + CGFloat(index) * self.scroll_subview_height
+                view.frame = CGRectMake(view.frame.minX,
+                                        top,
+                                        view.bounds.width,
+                                        view.bounds.height)
+            }
+            self.scrollView.contentOffset = CGPoint(x: 0, y: self.scrollView.contentOffset.y - self.scroll_subview_height)
+            self.scrollView.contentSize = self.scroll_content_size
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -249,7 +319,6 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
             view.layer.transform = transform
         }
     }
-    
     
     func show() {
         guard let window = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else { return }
