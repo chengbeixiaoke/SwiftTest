@@ -13,12 +13,15 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
     let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.alwaysBounceVertical = true
-        sv.showsVerticalScrollIndicator = true
+        sv.showsVerticalScrollIndicator = false
+        sv.showsHorizontalScrollIndicator = false
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.contentInsetAdjustmentBehavior = .never
         sv.contentInset = .zero
         return sv
     }()
+    
+    var initialCenter: CGPoint = .zero
     
     // 透视度
     let m34 = -1.0 / 600.0
@@ -142,12 +145,20 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
             scrollView.addSubview(view)
             scrollViewSubviews.append(view)
             
-            let tap = UITapGestureRecognizer { [weak self] sender in
+            //            let tap = UITapGestureRecognizer { [weak self] sender in
+            //                guard let weakSelf = self else { return }
+            //                guard let sender = sender as? UITapGestureRecognizer, let view = sender.view as? MiniAppItemView else { return }
+            //                weakSelf.deleteViewAndRefreshLayout(view)
+            //            }
+            //            view.addGestureRecognizer(tap)
+            
+            let panGesture = UIPanGestureRecognizer { [weak self] sender in
                 guard let weakSelf = self else { return }
-                guard let sender = sender as? UITapGestureRecognizer, let view = sender.view as? MiniAppItemView else { return }
-                weakSelf.refreshingScrollViewLayout(view)
+                guard let sender = sender as? UIPanGestureRecognizer else { return }
+                weakSelf.handlePan(sender)
             }
-            view.addGestureRecognizer(tap)
+            panGesture.delegate = self
+            view.addGestureRecognizer(panGesture)
         }
         
         scrollView.contentSize = scroll_content_size
@@ -208,22 +219,22 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
         }
     }
     
-    func refreshingScrollViewLayout(_ view: MiniAppItemView) {
+    func deleteViewAndRefreshLayout(_ view: MiniAppItemView) {
         view.removeFromSuperview()
         scrollViewSubviews.removeAll(where: { $0 == view })
         
         if scrollViewSubviews.count == 1 {
-            refreshingScrollViewLayout_1()
+            deleteViewAndRefreshLayout_1()
         }
         else if scrollViewSubviews.count < 5 {
-            refreshingScrollViewLayout_low(view)
+            deleteViewAndRefreshLayout_low(view)
         }
         else {
-            refreshingScrollViewLayout_default(view)
+            deleteViewAndRefreshLayout_default(view)
         }
     }
     
-    func refreshingScrollViewLayout_1() {
+    func deleteViewAndRefreshLayout_1() {
         scrollView.contentSize = scroll_content_size
         guard let view = scrollViewSubviews.first else { return }
         UIView.animate(withDuration: 0.25) {
@@ -240,7 +251,7 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
         }
     }
     
-    func refreshingScrollViewLayout_low(_ deleteView: MiniAppItemView) {
+    func deleteViewAndRefreshLayout_low(_ deleteView: MiniAppItemView) {
         scrollView.contentSize = scroll_content_size
         UIView.animate(withDuration: 0.25) {
             for (index, view) in self.scrollViewSubviews.enumerated() {
@@ -260,7 +271,7 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
         }
     }
     
-    func refreshingScrollViewLayout_default(_ deleteView: MiniAppItemView) {
+    func deleteViewAndRefreshLayout_default(_ deleteView: MiniAppItemView) {
         guard let lastView = scrollViewSubviews.last else { return }
         let lastViewFrame = scrollView.convert(lastView.frame, to: self)
         let lastViewOnScreen = self.frame.intersects(lastViewFrame)
@@ -306,8 +317,42 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
                                         view.bounds.width,
                                         view.bounds.height)
             }
-            self.scrollView.contentOffset = CGPoint(x: 0, y: self.scrollView.contentOffset.y - self.scroll_subview_height)
+            //            self.scrollView.contentOffset = CGPoint(x: 0, y: self.scrollView.contentOffset.y - self.scroll_subview_height)
             self.scrollView.contentSize = self.scroll_content_size
+        }
+    }
+    
+    func handlePan(_ gesture: UIPanGestureRecognizer) {
+        guard let gestureView = gesture.view as? MiniAppItemView else { return }
+        let translation = gesture.translation(in: self)
+        
+        switch gesture.state {
+        case .began:
+            initialCenter = gestureView.center
+            
+        case .changed:
+            let newCenter = CGPoint(x: initialCenter.x + translation.x, y: initialCenter.y)
+            if newCenter.x < gestureView.centerX {
+                gestureView.center = newCenter
+            }
+            print(gestureView.centerX)
+            print(gestureView.center)
+
+            
+        case .ended, .cancelled:
+            print(gestureView.centerX)
+            print(gestureView.center)
+            if gestureView.centerX <= WidthScreen / 15.0 {
+                deleteViewAndRefreshLayout(gestureView)
+            }
+            else {
+                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
+                    gestureView.center = self.initialCenter
+                })
+            }
+            
+        default:
+            break
         }
     }
     
@@ -331,6 +376,37 @@ class MiniAppTestView: UIView, UIScrollViewDelegate {
         } completion: { _ in
             self.removeFromSuperview()
         }
+    }
+}
+
+extension MiniAppTestView: UIGestureRecognizerDelegate {
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
+            return true
+        }
+        
+        let velocity = panGesture.velocity(in: panGesture.view)
+        
+        // 只有当主要是水平滑动时才处理
+        return abs(velocity.x) > abs(velocity.y)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // 不允许同时识别，确保一次只有一个手势处理器工作
+        return false
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // 不要求其他手势失败
+        return false
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // 不要求本手势必须失败
+        return false
     }
 }
 
