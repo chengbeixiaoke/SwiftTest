@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = initializeTabBarController()
         window?.makeKeyAndVisible()
-        window?.backgroundColor = .brown
         
         let _ = CoreDataManager.shared
         

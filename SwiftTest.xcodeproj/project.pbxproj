@@ -19,7 +19,6 @@
 		43269A0F2D95438A0025EEAC /* UserModelData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 432699E52D95438A0025EEAC /* UserModelData.xcdatamodeld */; };
 		43269A102D95438A0025EEAC /* EntityUserModelV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699DF2D95438A0025EEAC /* EntityUserModelV2.swift */; };
 		43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699EE2D95438A0025EEAC /* UIImage+Extension.swift */; };
-		43269A122D95438A0025EEAC /* UIDimmingView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 432699ED2D95438A0025EEAC /* UIDimmingView+Extension.m */; };
 		43269A132D95438A0025EEAC /* ChatIMDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699E72D95438A0025EEAC /* ChatIMDateFormatter.swift */; };
 		43269A142D95438A0025EEAC /* CViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699FB2D95438A0025EEAC /* CViewController.swift */; };
 		43269A152D95438A0025EEAC /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699E22D95438A0025EEAC /* CoreDataManager.swift */; };
@@ -77,8 +76,6 @@
 		432699E92D95438A0025EEAC /* DTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTableView.swift; sourceTree = "<group>"; };
 		432699EA2D95438A0025EEAC /* SwiftNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftNavigationViewController.swift; sourceTree = "<group>"; };
 		432699EB2D95438A0025EEAC /* Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
-		432699EC2D95438A0025EEAC /* UIDimmingView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIDimmingView+Extension.h"; sourceTree = "<group>"; };
-		432699ED2D95438A0025EEAC /* UIDimmingView+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIDimmingView+Extension.m"; sourceTree = "<group>"; };
 		432699EE2D95438A0025EEAC /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		432699EF2D95438A0025EEAC /* UIView+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Tools.swift"; sourceTree = "<group>"; };
 		432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "飞书20250120-095209.mp4"; sourceTree = "<group>"; };
@@ -191,8 +188,6 @@
 				432699E92D95438A0025EEAC /* DTableView.swift */,
 				432699EA2D95438A0025EEAC /* SwiftNavigationViewController.swift */,
 				432699EB2D95438A0025EEAC /* Tools.swift */,
-				432699EC2D95438A0025EEAC /* UIDimmingView+Extension.h */,
-				432699ED2D95438A0025EEAC /* UIDimmingView+Extension.m */,
 				432699EE2D95438A0025EEAC /* UIImage+Extension.swift */,
 				432699EF2D95438A0025EEAC /* UIView+Tools.swift */,
 				435B766D2D9E411500093B91 /* Object+Extension.swift */,
@@ -479,7 +474,6 @@
 				4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */,
 				43269A102D95438A0025EEAC /* EntityUserModelV2.swift in Sources */,
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
-				43269A122D95438A0025EEAC /* UIDimmingView+Extension.m in Sources */,
 				43269A132D95438A0025EEAC /* ChatIMDateFormatter.swift in Sources */,
 				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
 				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
