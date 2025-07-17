@@ -29,7 +29,6 @@
 		43269A1A2D95438A0025EEAC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699E32D95438A0025EEAC /* User.swift */; };
 		43269A1B2D95438A0025EEAC /* SwiftNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699EA2D95438A0025EEAC /* SwiftNavigationViewController.swift */; };
 		43269A1C2D95438A0025EEAC /* CCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699F92D95438A0025EEAC /* CCell.swift */; };
-		43269A1D2D95438A0025EEAC /* AppDelegate+Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43269A042D95438A0025EEAC /* AppDelegate+Other.swift */; };
 		43269A1E2D95438A0025EEAC /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699FA2D95438A0025EEAC /* CustomFlowLayout.swift */; };
 		43269A1F2D95438A0025EEAC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699F22D95438A0025EEAC /* ViewController.swift */; };
 		43269A202D95438A0025EEAC /* BCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699F42D95438A0025EEAC /* BCell.swift */; };
@@ -55,6 +54,10 @@
 		43BEABAC2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABAA2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift */; };
 		43BEABAE2E02B45C00092EB3 /* MiniAppContainerButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA92E02B45C00092EB3 /* MiniAppContainerButtonView.swift */; };
 		43BEABB02E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABAF2E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift */; };
+		43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E23C2E28F3BC00F04297 /* AppThemeModeManager.swift */; };
+		43C2E23F2E28F5F000F04297 /* WYYUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E23E2E28F5F000F04297 /* WYYUIView.swift */; };
+		43C2E2412E28F5FC00F04297 /* WYYUIViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2402E28F5FC00F04297 /* WYYUIViewViewController.swift */; };
+		43C2E2432E28FBB900F04297 /* AppDelegate+Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
 		ABA827A812A8478632665BAB /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
@@ -91,7 +94,6 @@
 		432699FE2D95438A0025EEAC /* DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DViewController.swift; sourceTree = "<group>"; };
 		43269A002D95438A0025EEAC /* EViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EViewController.swift; sourceTree = "<group>"; };
 		43269A032D95438A0025EEAC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		43269A042D95438A0025EEAC /* AppDelegate+Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Other.swift"; sourceTree = "<group>"; };
 		43269A062D95438A0025EEAC /* UserModelData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserModelData.xcdatamodel; sourceTree = "<group>"; };
 		43269A072D95438A0025EEAC /* UserModelDataV2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserModelDataV2.xcdatamodel; sourceTree = "<group>"; };
 		43269A262D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -111,6 +113,10 @@
 		43BEABA92E02B45C00092EB3 /* MiniAppContainerButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppContainerButtonView.swift; sourceTree = "<group>"; };
 		43BEABAA2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppContainerNavigationView.swift; sourceTree = "<group>"; };
 		43BEABAF2E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerSmallView.swift; sourceTree = "<group>"; };
+		43C2E23C2E28F3BC00F04297 /* AppThemeModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeModeManager.swift; sourceTree = "<group>"; };
+		43C2E23E2E28F5F000F04297 /* WYYUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WYYUIView.swift; sourceTree = "<group>"; };
+		43C2E2402E28F5FC00F04297 /* WYYUIViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WYYUIViewViewController.swift; sourceTree = "<group>"; };
+		43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Other.swift"; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
 		BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8250E9C7686A7369CF06319 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
@@ -183,6 +189,7 @@
 		432699F02D95438A0025EEAC /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				43C2E23C2E28F3BC00F04297 /* AppThemeModeManager.swift */,
 				432699E72D95438A0025EEAC /* ChatIMDateFormatter.swift */,
 				432699E82D95438A0025EEAC /* Color+Extension.swift */,
 				432699E92D95438A0025EEAC /* DTableView.swift */,
@@ -192,6 +199,8 @@
 				432699EF2D95438A0025EEAC /* UIView+Tools.swift */,
 				435B766D2D9E411500093B91 /* Object+Extension.swift */,
 				4333CFA52E001CDB00ADDF38 /* String+Extension.swift */,
+				43C2E23E2E28F5F000F04297 /* WYYUIView.swift */,
+				43C2E2402E28F5FC00F04297 /* WYYUIViewViewController.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -268,7 +277,7 @@
 				432699F02D95438A0025EEAC /* Tools */,
 				43269A022D95438A0025EEAC /* VC */,
 				43269A032D95438A0025EEAC /* AppDelegate.swift */,
-				43269A042D95438A0025EEAC /* AppDelegate+Other.swift */,
+				43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -466,6 +475,7 @@
 				43BEABAC2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift in Sources */,
 				43BEABAE2E02B45C00092EB3 /* MiniAppContainerButtonView.swift in Sources */,
 				43269A0B2D95438A0025EEAC /* DTableView.swift in Sources */,
+				43C2E23F2E28F5F000F04297 /* WYYUIView.swift in Sources */,
 				43269A0C2D95438A0025EEAC /* BViewController.swift in Sources */,
 				43269A0D2D95438A0025EEAC /* DCell.swift in Sources */,
 				43269A0E2D95438A0025EEAC /* C1ViewController.swift in Sources */,
@@ -486,6 +496,7 @@
 				43269A172D95438A0025EEAC /* Tools.swift in Sources */,
 				4324E4EC2DA909F500C8971B /* TestUIViewController.swift in Sources */,
 				43269A182D95438A0025EEAC /* EntityUserModelV3.swift in Sources */,
+				43C2E2432E28FBB900F04297 /* AppDelegate+Other.swift in Sources */,
 				43269A192D95438A0025EEAC /* AppDelegate.swift in Sources */,
 				43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */,
 				43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */,
@@ -493,11 +504,12 @@
 				43269A1B2D95438A0025EEAC /* SwiftNavigationViewController.swift in Sources */,
 				435D785E2E03E52900688F0E /* MiniAppTestView.swift in Sources */,
 				43269A1C2D95438A0025EEAC /* CCell.swift in Sources */,
-				43269A1D2D95438A0025EEAC /* AppDelegate+Other.swift in Sources */,
 				43269A1E2D95438A0025EEAC /* CustomFlowLayout.swift in Sources */,
+				43C2E2412E28F5FC00F04297 /* WYYUIViewViewController.swift in Sources */,
 				43269A1F2D95438A0025EEAC /* ViewController.swift in Sources */,
 				43269A202D95438A0025EEAC /* BCell.swift in Sources */,
 				43269A212D95438A0025EEAC /* DViewController.swift in Sources */,
+				43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */,
 				43269A222D95438A0025EEAC /* Color+Extension.swift in Sources */,
 				43269A232D95438A0025EEAC /* UIView+Tools.swift in Sources */,
 			);

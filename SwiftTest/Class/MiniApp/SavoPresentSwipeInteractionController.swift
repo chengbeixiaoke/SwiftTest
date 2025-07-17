@@ -134,18 +134,4 @@ class SavoSlideDownTransitionDelegate: NSObject, UIViewControllerTransitioningDe
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return interactiveTransition.interactionInProgress ? interactiveTransition : nil
     }
-    
-    func presentationController(forPresented presented: UIViewController,
-                                presenting: UIViewController?,
-                                source: UIViewController) -> UIPresentationController? {
-        return CustomPresentationController(presentedViewController: presented,
-                                            presenting: presenting)
-    }
-}
-
-
-class CustomPresentationController: UIPresentationController {
-    override var shouldRemovePresentersView: Bool {
-        return true // 保持 presenting view controller 的视图
-    }
 }

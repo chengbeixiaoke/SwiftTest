@@ -22,7 +22,7 @@ import AVKit
 import MyPackage
 import ffmpegkit
 
-class ViewController: UIViewController {
+class ViewController: WYYUIViewViewController {
     private var cancellables = Set<AnyCancellable>()
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,13 +49,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         print("ViewController viewDidLoad")
         
-        view.backgroundColor = .white
-        
-        let imageView = UIImageView(image: UIImage(named: "miniapp_image"))
-        view.addSubview(imageView)
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        view.backgroundColor = UIColor.ColorWhite
         
         let button = UIButton()
         button.setTitle("按钮", for: .normal)
@@ -101,6 +95,12 @@ class ViewController: UIViewController {
             naviVc.modalPresentationStyle = .pageSheet
             present(naviVc, animated: true)
         }
+    }
+    
+    override func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.wyy_traitCollectionDidChange(previousTraitCollection)
+        
+        view.backgroundColor = UIColor.ColorBG_6236FF_1_ADA7FF_1
     }
 }
 

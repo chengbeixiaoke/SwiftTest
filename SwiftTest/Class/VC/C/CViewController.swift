@@ -11,7 +11,7 @@ import Combine
 import CombineCocoa
 import CoreStore
 
-class CViewController: UIViewController {
+class CViewController: WYYUIViewViewController {
     var cancellables = Set<AnyCancellable>()
     var idNumber: Int = 0
     

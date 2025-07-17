@@ -10,7 +10,7 @@ import CoreStore
 import SnapKit
 import Combine
 
-class DViewController: UIViewController {
+class DViewController: WYYUIViewViewController {
     var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {

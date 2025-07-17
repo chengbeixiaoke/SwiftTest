@@ -10,7 +10,7 @@ import Combine
 import CoreStore
 import SnapKit
 
-class C1ViewController: UIViewController {
+class C1ViewController: WYYUIViewViewController {
     var cancellables = Set<AnyCancellable>()
     var idNumber = 0
     var dataList: [UserModel] = []

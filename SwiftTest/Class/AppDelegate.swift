@@ -11,18 +11,20 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var wyyWindow: WYYWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         window = UIWindow(frame: UIScreen.main.bounds)
+        
+        /// 初始化暗黑模式监听者
+        AppThemeModeManager.initUserInterfaceStyleListener()
+        window?.overrideUserInterfaceStyle = AppThemeModeManager.shared.userInterfaceStyle()
+        
         window?.rootViewController = initializeTabBarController()
         window?.makeKeyAndVisible()
         
         let _ = CoreDataManager.shared
-        
-        addAppThemeModeMonitor()
-        
+                
         return true
     }
     

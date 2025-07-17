@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 import SnapKit
 
-class TestUIViewController: UIViewController {
+class TestUIViewController: WYYUIViewViewController {
     lazy var webview = {
         return WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
     }()
