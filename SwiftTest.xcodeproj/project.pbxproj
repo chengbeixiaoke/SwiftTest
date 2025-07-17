@@ -58,6 +58,7 @@
 		43C2E23F2E28F5F000F04297 /* WYYUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E23E2E28F5F000F04297 /* WYYUIView.swift */; };
 		43C2E2412E28F5FC00F04297 /* WYYUIViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2402E28F5FC00F04297 /* WYYUIViewViewController.swift */; };
 		43C2E2432E28FBB900F04297 /* AppDelegate+Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */; };
+		43C2E2452E290D6700F04297 /* YYLabel+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2442E290D6700F04297 /* YYLabel+Theme.swift */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
 		ABA827A812A8478632665BAB /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
@@ -117,6 +118,7 @@
 		43C2E23E2E28F5F000F04297 /* WYYUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WYYUIView.swift; sourceTree = "<group>"; };
 		43C2E2402E28F5FC00F04297 /* WYYUIViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WYYUIViewViewController.swift; sourceTree = "<group>"; };
 		43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Other.swift"; sourceTree = "<group>"; };
+		43C2E2442E290D6700F04297 /* YYLabel+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YYLabel+Theme.swift"; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
 		BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8250E9C7686A7369CF06319 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 		432699F02D95438A0025EEAC /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				43C2E2442E290D6700F04297 /* YYLabel+Theme.swift */,
 				43C2E23C2E28F3BC00F04297 /* AppThemeModeManager.swift */,
 				432699E72D95438A0025EEAC /* ChatIMDateFormatter.swift */,
 				432699E82D95438A0025EEAC /* Color+Extension.swift */,
@@ -511,6 +514,7 @@
 				43269A212D95438A0025EEAC /* DViewController.swift in Sources */,
 				43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */,
 				43269A222D95438A0025EEAC /* Color+Extension.swift in Sources */,
+				43C2E2452E290D6700F04297 /* YYLabel+Theme.swift in Sources */,
 				43269A232D95438A0025EEAC /* UIView+Tools.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

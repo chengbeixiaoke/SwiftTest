@@ -47,7 +47,7 @@ class AppThemeModeManager {
         self.changeKeyWindowUserInterfaceStyle(self.userInterfaceStyle())
     }
     
-    func getSystemThemeMode() -> AppThemeMode {
+    private func getSystemThemeMode() -> AppThemeMode {
         var style: AppThemeMode = .light
         
         
@@ -89,7 +89,7 @@ class AppThemeModeManager {
         }
     }
     
-    func changeKeyWindowUserInterfaceStyle(_ type: UIUserInterfaceStyle) {
+    fileprivate func changeKeyWindowUserInterfaceStyle(_ type: UIUserInterfaceStyle) {
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             appDelegate.updateTraitCollection(type)
             print("SAVO - [Style] 主题颜色切换为: \(type == .light ? "浅色模式" : "深色模式")")
@@ -98,7 +98,7 @@ class AppThemeModeManager {
 }
 
 extension AppThemeModeManager {
-    static func getCurrentModeByCache() -> AppThemeMode {
+    private static func getCurrentModeByCache() -> AppThemeMode {
         let defualt = UserDefaults.standard
         if let cache = defualt.value(forKey: keyCacheAppThemeMode) as? String {
             return AppThemeMode.init(rawValue: cache) ?? .followingSystem

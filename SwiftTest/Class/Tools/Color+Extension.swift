@@ -41,7 +41,7 @@ func ColorFromHex (_ hex: String, _ alpha: CGFloat = 1, darkHex: String? = nil, 
     
     
     return UIColor { traitCollection in
-        if AppThemeModeManager.shared.userInterfaceStyle() == . dark {
+        if traitCollection.userInterfaceStyle == . dark {
             return darkColor
         }
         else {

@@ -21,6 +21,7 @@ import AVFoundation
 import AVKit
 import MyPackage
 import ffmpegkit
+import YYKit
 
 class ViewController: WYYUIViewViewController {
     private var cancellables = Set<AnyCancellable>()
@@ -45,11 +46,45 @@ class ViewController: WYYUIViewViewController {
         print("ViewController viewDidDisappear:")
     }
     
+    lazy var nameLabel = {
+        let label = YYLabel()
+        return label
+    }()
+    
+    lazy var nameLabel2 = {
+        let label = YYLabel()
+        label.font = .systemFont(ofSize: 15)
+        label.textColor = UIColor.ColorBlack
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("ViewController viewDidLoad")
         
         view.backgroundColor = UIColor.ColorWhite
+        
+        view.addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(60)
+            make.width.equalToSuperview().inset(30)
+        }
+        
+        let attr = NSMutableAttributedString(string: "测试代码")
+        attr.color = UIColor.ColorBlack
+        attr.font = UIFont.systemFont(ofSize: 30)
+        nameLabel.attributedText = attr
+        
+        view.addSubview(nameLabel2)
+        nameLabel2.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(70)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(60)
+            make.width.equalToSuperview().inset(30)
+        }
+        nameLabel2.text = "哈哈哈哈哈上"
         
         let button = UIButton()
         button.setTitle("按钮", for: .normal)
@@ -62,8 +97,7 @@ class ViewController: WYYUIViewViewController {
         button.tapPublisher
             .sink { [weak self] in
                 guard let weakSelf = self else { return }
-                weakSelf.startTimer()
-                
+                weakSelf.action()
             }
             .store(in: &cancellables)
         
@@ -77,169 +111,26 @@ class ViewController: WYYUIViewViewController {
             make.size.equalTo(CGSizeMake(100, 50))
         }
         button2.tapPublisher
-            .sink {
-                MiniAppManager.shared.restoration()
+            .sink { [weak self] in
+                guard let weakSelf = self else { return }
+                weakSelf.navigationController?.pushViewController(TestUIViewController(), animated: true)
+                //                MiniAppManager.shared.restoration()
+                
             }
             .store(in: &cancellables)
     }
     
-    /// 开启通话计时
-    func startTimer() {
-        test()
-    }
-    
-    func test() {
-        do{
-            let vc = VC1()
-            let naviVc = UINavigationController(rootViewController: vc)
-            naviVc.modalPresentationStyle = .pageSheet
-            present(naviVc, animated: true)
+    func action() {
+        if AppThemeModeManager.isDark() {
+            AppThemeModeManager.shared.changeAppThemeMode(.light)
+        }
+        else {
+            AppThemeModeManager.shared.changeAppThemeMode(.dark)
         }
     }
     
     override func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.wyy_traitCollectionDidChange(previousTraitCollection)
         
-        view.backgroundColor = UIColor.ColorBG_6236FF_1_ADA7FF_1
-    }
-}
-
-class VC1: UIViewController {
-    private var cancellables = Set<AnyCancellable>()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .blue
-        
-        let button = UIButton()
-        button.setTitle("按钮", for: .normal)
-        button.backgroundColor = .red
-        view.addSubview(button)
-        button.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(CGSizeMake(100, 50))
-        }
-        button.tapPublisher
-            .sink { [weak self] in
-                guard let weakSelf = self else { return }
-                weakSelf.test()
-            }
-            .store(in: &cancellables)
-    }
-    
-    func test() {
-//        let vc = VC2()
-//        vc.modalPresentationStyle = .pageSheet
-//        present(vc, animated: true)
-        
-        MiniAppManager.shared.openMiniApp("https://imadmin.crazyshit.io/chats/detail/4rhkk/5d77h")
-    }
-}
-
-class VC2: UIViewController {
-    private var cancellables = Set<AnyCancellable>()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .orange
-        
-        
-        let button = UIButton()
-        button.setTitle("按钮", for: .normal)
-        button.backgroundColor = .red
-        view.addSubview(button)
-        button.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(CGSizeMake(100, 50))
-        }
-        button.tapPublisher
-            .sink { [weak self] in
-                guard let weakSelf = self else { return }
-                weakSelf.test()
-            }
-            .store(in: &cancellables)
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        dismiss(animated: true)
-    }
-    
-    func test() {
-        let vc = VC3()
-        vc.modalPresentationStyle = .pageSheet
-        present(vc, animated: true)
-    }
-}
-
-class VC3: UIViewController {
-    private var cancellables = Set<AnyCancellable>()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .gray
-        
-        
-        let button = UIButton()
-        button.setTitle("按钮", for: .normal)
-        button.backgroundColor = .red
-        view.addSubview(button)
-        button.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(CGSizeMake(100, 50))
-        }
-        button.tapPublisher
-            .sink { [weak self] in
-                guard let weakSelf = self else { return }
-                weakSelf.test()
-            }
-            .store(in: &cancellables)
-    }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        dismiss(animated: true)
-    }
-    
-    func test() {
-        let vc = VC4()
-        vc.modalPresentationStyle = .custom
-        present(vc, animated: true)
-    }
-}
-
-class VC4: UIViewController {
-    private var cancellables = Set<AnyCancellable>()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .green
-        
-        
-        let button = UIButton()
-        button.setTitle("按钮", for: .normal)
-        button.backgroundColor = .red
-        view.addSubview(button)
-        button.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(CGSizeMake(100, 50))
-        }
-        button.tapPublisher
-            .sink { [weak self] in
-                guard let weakSelf = self else { return }
-                weakSelf.test()
-            }
-            .store(in: &cancellables)
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        dismiss(animated: true)
-    }
-    
-    func test() {
-        let vc = VC3()
-        vc.modalPresentationStyle = .custom
-        present(vc, animated: true)
     }
 }

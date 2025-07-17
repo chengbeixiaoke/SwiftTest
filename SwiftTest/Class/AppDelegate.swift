@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         /// 初始化暗黑模式监听者
+        AppThemeModeManager.shared.changeAppThemeMode(.followingSystem)
         AppThemeModeManager.initUserInterfaceStyleListener()
         window?.overrideUserInterfaceStyle = AppThemeModeManager.shared.userInterfaceStyle()
         

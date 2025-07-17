@@ -8,10 +8,20 @@
 import UIKit
 import WebKit
 import SnapKit
+import YYKit
 
 class TestUIViewController: WYYUIViewViewController {
-    lazy var webview = {
-        return WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+    
+    lazy var nameLabel = {
+        let label = YYLabel()
+        return label
+    }()
+    
+    lazy var nameLabel2 = {
+        let label = YYLabel()
+        label.font = .systemFont(ofSize: 15)
+        label.textColor = UIColor.ColorBlack
+        return label
     }()
     
     override func viewDidLoad() {
@@ -21,22 +31,29 @@ class TestUIViewController: WYYUIViewViewController {
     }
     
     func setupUI() {
-        view.addSubview(webview)
-        webview.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        view.backgroundColor = UIColor.ColorWhite
+        
+        view.addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(60)
+            make.width.equalToSuperview().inset(30)
         }
         
-        // 加载 URL
-        if let url = URL(string: "http://www.baidu.com") {
-            let request = URLRequest(url: url)
-            webview.load(request)
-            
-            if #available(iOS 16.4, *) {
-                webview.isInspectable = true
-            } else {
-                // Fallback on earlier versions
-            }
+        let attr = NSMutableAttributedString(string: "测试代码")
+        attr.color = UIColor.ColorBlack
+        attr.font = UIFont.systemFont(ofSize: 30)
+        nameLabel.attributedText = attr
+        
+        view.addSubview(nameLabel2)
+        nameLabel2.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(70)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(60)
+            make.width.equalToSuperview().inset(30)
         }
+        nameLabel2.text = "哈哈哈哈哈上"
     }
 }
 
