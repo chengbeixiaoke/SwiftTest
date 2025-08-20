@@ -28,6 +28,9 @@ class BViewController: WYYUIViewViewController, UITableViewDelegate, UITableView
         tableView.sectionHeaderHeight = CGFLOAT_MIN
         tableView.sectionFooterHeight = CGFLOAT_MIN
         
+        // 允许在编辑模式下选择行
+        tableView.allowsSelectionDuringEditing = true
+        
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
@@ -42,6 +45,8 @@ class BViewController: WYYUIViewViewController, UITableViewDelegate, UITableView
         
         return tableView
     }()
+    
+    weak var editingCell: LeftSlideCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,27 +101,31 @@ class BViewController: WYYUIViewViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: BCell = tableView.dequeueReusableCell(withIdentifier: "BCell", for: indexPath) as! BCell
-        cell.backgroundColor = .white
-        cell.nameLabel.text = self.listArray[indexPath.row]
-        cell.longPress = {[weak self] view in
+        cell.selectionStyle = .none
+        cell.nameLabel.text = listArray[indexPath.row]
+        cell.messageLabel.text = "测试\(listArray[indexPath.row])"
+        cell.setupLeftSlideView([.delete, .mute, .top])
+        cell.changeEditingBlock = { [weak self] _cell in
             guard let weakSelf = self else { return }
-            guard let cell = weakSelf.tableView.cellForRow(at: indexPath) else { return }
-            let originFrame = cell.convert(cell.contentView.frame, to: weakSelf.view)
-            print(originFrame)
+            weakSelf.editingCell = _cell
         }
-        
-        cell.callingButton.tapPublisher
-            .sink { [weak self] in
-                guard let weakSelf = self else { return }
-                
-            }
-            .store(in: &cancellables)
-        
+        cell.clickDeleteBlock = { [weak self] in
+            guard let weakSelf = self else { return }
+            print("删除")
+        }
+        cell.clickMuteBlock = { [weak self] in
+            guard let weakSelf = self else { return }
+            print("静音")
+        }
+        cell.clickTopBlock = { [weak self] in
+            guard let weakSelf = self else { return }
+            print("置顶")
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 68.0
+        return UIScale(80)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -136,63 +145,23 @@ class BViewController: WYYUIViewViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        if let cell = editingCell {
+            cell.hideLeftSlideView(0.3) { _ in }
+        }
+        else {
+            if let cell = tableView.cellForRow(at: indexPath) as? BCell {
+                cell.hideWyy_backgroundView(0.3)
+            }
+            print("点击Cell")
+        }
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        var actions: [UIContextualAction] = []
-        
-        let deleteAction = UIContextualAction(style:.normal, title: "删除") { [weak self] (action, view, completion) in
-            guard let weakSelf = self else { return }
-            weakSelf.tableView.setEditing(false, animated: true)
-            weakSelf.tableView.reloadRows(at: [indexPath], with: .none)
-        }
-        deleteAction.backgroundColor = .red
-        actions.append(deleteAction)
-        
-        let silenceAction = UIContextualAction(style:.normal, title: "静音") { [weak self] (action, view, completion) in
-            guard let weakSelf = self else { return }
-            weakSelf.tableView.setEditing(false, animated: true)
-            weakSelf.tableView.reloadRows(at: [indexPath], with: .none)
-        }
-        silenceAction.backgroundColor = .blue
-        actions.append(silenceAction)
-        
-        let topAction = UIContextualAction(style:.normal, title: "置顶") { [weak self] (action, view, completion) in
-            guard let weakSelf = self else { return }
-            weakSelf.tableView.setEditing(false, animated: true)
-            weakSelf.tableView.reloadRows(at: [indexPath], with: .none)
-        }
-        topAction.backgroundColor = .green
-        actions.append(topAction)
-                
-        print("置顶")
-        
-        // 创建UISwipeActionsConfiguration对象并设置其属性
-        let swipeActionsConfiguration = UISwipeActionsConfiguration(actions: actions)
-        swipeActionsConfiguration.performsFirstActionWithFullSwipe = false
-        return swipeActionsConfiguration
-    }
-    
-    
-    
-    @objc func longPressAction(_ longPress: UILongPressGestureRecognizer) {
-        let point = longPress.location(in: self.tableView)
-        switch longPress.state {
-        case .began:
-            if let indexPath = self.tableView.indexPathForRow(at: point) {
-                let cell = self.tableView.cellForRow(at: indexPath)
-                cell?.setSelected(true, animated: false)
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        if editingCell == nil {
+            if let cell = tableView.cellForRow(at: indexPath) as? BCell {
+                cell.showWyy_backgroundView()
             }
-            
-        case .ended, .cancelled:
-            if let indexPath = self.tableView.indexPathForRow(at: point) {
-                let cell = self.tableView.cellForRow(at: indexPath)
-                cell?.setSelected(false, animated: false)
-            }
-            
-        default:
-            break
         }
+        return true
     }
 }

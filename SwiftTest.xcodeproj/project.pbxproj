@@ -60,11 +60,11 @@
 		43C2E2432E28FBB900F04297 /* AppDelegate+Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */; };
 		43C2E2452E290D6700F04297 /* YYLabel+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2442E290D6700F04297 /* YYLabel+Theme.swift */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
-		ABA827A812A8478632665BAB /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */; };
+		70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0FE3D3A84BCFFE5495C0CA05 /* Pods-SwiftTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.debug.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.debug.xcconfig"; sourceTree = "<group>"; };
+		2E62492FBA8854686AFD4BA0 /* Pods-SwiftTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.debug.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.debug.xcconfig"; sourceTree = "<group>"; };
 		4324E4EB2DA909F500C8971B /* TestUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUIViewController.swift; sourceTree = "<group>"; };
 		432699732D953FD70025EEAC /* SwiftTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432699CD2D9540390025EEAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -120,8 +120,8 @@
 		43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Other.swift"; sourceTree = "<group>"; };
 		43C2E2442E290D6700F04297 /* YYLabel+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YYLabel+Theme.swift"; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
-		BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C8250E9C7686A7369CF06319 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
+		7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
+		B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,20 +130,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */,
-				ABA827A812A8478632665BAB /* Pods_SwiftTest.framework in Frameworks */,
+				70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3FE3A15415E01446008251F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4326996A2D953FD70025EEAC = {
 			isa = PBXGroup;
 			children = (
 				432699D42D9540390025EEAC /* SwiftTest */,
 				432699742D953FD70025EEAC /* Products */,
 				4D93665770E4F5D2D0790FAB /* Pods */,
-				E6A590DD6785A2CC1F648B48 /* Frameworks */,
+				3FE3A15415E01446008251F5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -330,18 +338,10 @@
 		4D93665770E4F5D2D0790FAB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0FE3D3A84BCFFE5495C0CA05 /* Pods-SwiftTest.debug.xcconfig */,
-				C8250E9C7686A7369CF06319 /* Pods-SwiftTest.release.xcconfig */,
+				2E62492FBA8854686AFD4BA0 /* Pods-SwiftTest.debug.xcconfig */,
+				7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		E6A590DD6785A2CC1F648B48 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				BDC8C24280AAA08712D24A41 /* Pods_SwiftTest.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -351,11 +351,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 432699862D953FD80025EEAC /* Build configuration list for PBXNativeTarget "SwiftTest" */;
 			buildPhases = (
-				84AF7F018E146628AB91BF29 /* [CP] Check Pods Manifest.lock */,
+				19B1AFE65775A0AA6409A038 /* [CP] Check Pods Manifest.lock */,
 				4326996F2D953FD70025EEAC /* Sources */,
 				432699702D953FD70025EEAC /* Frameworks */,
 				432699712D953FD70025EEAC /* Resources */,
-				C5478F77335C143982AC0A8B /* [CP] Embed Pods Frameworks */,
+				54021ADD6E217029B9A129D0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -422,7 +422,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		84AF7F018E146628AB91BF29 /* [CP] Check Pods Manifest.lock */ = {
+		19B1AFE65775A0AA6409A038 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -444,7 +444,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C5478F77335C143982AC0A8B /* [CP] Embed Pods Frameworks */ = {
+		54021ADD6E217029B9A129D0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -543,7 +543,7 @@
 /* Begin XCBuildConfiguration section */
 		432699872D953FD80025EEAC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0FE3D3A84BCFFE5495C0CA05 /* Pods-SwiftTest.debug.xcconfig */;
+			baseConfigurationReference = 2E62492FBA8854686AFD4BA0 /* Pods-SwiftTest.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -551,6 +551,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/SwiftTest/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "我们要使用您的麦克风";
@@ -576,7 +577,7 @@
 		};
 		432699882D953FD80025EEAC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8250E9C7686A7369CF06319 /* Pods-SwiftTest.release.xcconfig */;
+			baseConfigurationReference = 7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -81,3 +81,12 @@ extension UIView {
         return gradientLayer
     }
 }
+
+
+extension UIView {
+    public func setCornerRadius(_ radius: CGFloat) {
+        self.layer.cornerRadius = radius
+        self.layer.cornerCurve = .continuous
+        self.layer.masksToBounds = true
+    }
+}
