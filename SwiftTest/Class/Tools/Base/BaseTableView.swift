@@ -1,5 +1,5 @@
 //
-//  DTableView.swift
+//  BaseTableView.swift
 //  SwiftTest
 //
 //  Created by yyw on 2025/1/3.
@@ -7,27 +7,36 @@
 
 import UIKit
 
-extension UIView {
-    func snapshotImage() -> UIImage? {
-        let renderer = UIGraphicsImageRenderer(bounds: self.bounds)
-        return renderer.image { _ in
-            self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+class BaseTableView: UITableView {
+    override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: frame, style: style)
+        
+        separatorStyle = .none
+        backgroundColor = .C_Clear
+        tableHeaderView = UIView()
+        tableFooterView = UIView()
+        contentInset = .zero
+        scrollIndicatorInsets = .zero
+        
+        estimatedRowHeight = 0
+        estimatedSectionHeaderHeight = 0
+        estimatedSectionFooterHeight = 0
+        sectionHeaderHeight = CGFLOAT_MIN
+        sectionFooterHeight = CGFLOAT_MIN
+        
+        showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
+        
+        contentInsetAdjustmentBehavior = .never
+        if #available(iOS 15.0, *) {
+            sectionHeaderTopPadding = 0
         }
     }
-}
-
-public extension UIEdgeInsets {
-    var vertical: CGFloat {
-        return top + bottom
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    var horizontal: CGFloat {
-        return left + right
-    }
-}
-
-
-class DTableView: UITableView {
-
+    
     public func reloadDataAndKeepOffset() {
         setContentOffset(contentOffset, animated: false)
         
@@ -46,22 +55,22 @@ class DTableView: UITableView {
         setContentOffset(contentOffset, animated: false)
         
         var animationView: UIView
-        if let snapshotView = self.superview?.resizableSnapshotView(from: self.superview?.frame ?? .zero, afterScreenUpdates: true, withCapInsets: .zero) {
-            snapshotView.frame = self.superview?.bounds ?? .zero
+        if let snapshotView = superview?.resizableSnapshotView(from: superview?.frame ?? .zero, afterScreenUpdates: true, withCapInsets: .zero) {
+            snapshotView.frame = superview?.bounds ?? .zero
             animationView = snapshotView
         }
         else {
-            let imageView = UIImageView(frame: self.superview?.bounds ?? .zero)
-            let image = self.superview?.snapshotImage()
+            let imageView = UIImageView(frame: superview?.bounds ?? .zero)
+            let image = superview?.snapshotImage()
             imageView.image = image
             animationView = imageView
         }
         
-        self.superview?.addSubview(animationView)
+        superview?.addSubview(animationView)
         let beforeContentSize = contentSize
-        self.performBatchUpdates({
+        performBatchUpdates {
             self.insertSections(indexSet, with: .none)
-        }) { success in
+        } completion: { success in
             animationView.removeFromSuperview()
         }
         layoutIfNeeded()
@@ -87,17 +96,17 @@ class DTableView: UITableView {
                 self.scrollToRow(at: indexPath, at: pos, animated: false)
             }
         } else {
-            self.scrollToRow(at: indexPath, at: pos, animated: false)
+            scrollToRow(at: indexPath, at: pos, animated: false)
         }
     }
     
     func setContentOffsetOfBottom(animated: Bool) {
-        if (self.bounds.size.height - self.contentInset.horizontal) < self.contentSize.height {
-            let bottomOffset = CGPoint(x: 0, y: self.contentSize.height - self.bounds.size.height + self.contentInset.bottom)
-            self.setContentOffset(bottomOffset, animated: animated)
+        if (bounds.size.height - contentInset.horizontal) < contentSize.height {
+            let bottomOffset = CGPoint(x: 0, y: contentSize.height - bounds.size.height + contentInset.bottom)
+            setContentOffset(bottomOffset, animated: animated)
         }
         else {
-            self.scrollToLastItem(animated: animated)
+            scrollToLastItem(animated: animated)
         }
     }
 }

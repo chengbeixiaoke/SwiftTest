@@ -1,5 +1,5 @@
 //
-//  SwiftNavigationViewController.swift
+//  BaseNavigationViewController.swift
 //  SwiftTest
 //
 //  Created by yyw on 2025/3/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SwiftNavigationViewController: UINavigationController {
+class BaseNavigationViewController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -51,7 +51,7 @@ class AppThemeModeManager {
         var style: AppThemeMode = .light
         
         
-        ChatIMExecuteOnMainThreadAndWait {
+        OnMainThreadIfNeeded {
             if let window = self.window {
                 if window.traitCollection.userInterfaceStyle == .dark {
                     style = .dark

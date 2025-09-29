@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 
-class BViewController: WYYUIViewViewController, UITableViewDelegate, UITableViewDataSource {
+class BViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
     var listArray: [String] = []
     private var cancellables = Set<AnyCancellable>()
     

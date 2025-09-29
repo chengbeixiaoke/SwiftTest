@@ -54,7 +54,7 @@ class DCell: UITableViewCell {
         
         self.idLabel.text = model.id
         self.nameLabel.text = model.name
-        self.timeLabel.text = ChatIMDateFormatter.shared.dateString(from: model.createTime)
+        self.timeLabel.text = AppDateFormatterManager.shared.dateString(from: model.createTime)
         
         let d = (Int(model.id) ?? 0) % 3
         self.contentView.backgroundColor = d == 0 ? .orange : (d == 1 ? .yellow : (d == 1 ? .yellow : .green))

@@ -16,6 +16,7 @@ def base_pod
   pod 'SwifterSwift'
   pod 'Kingfisher'
   pod 'YYKit'
+  pod 'Charts'
   
   pod 'WebRTC-SDK', '=125.6422.07'
   

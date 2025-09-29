@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 import SnapKit
 
-class MiniAppH5ContainerViewController: UIViewController, UIViewControllerTransitioningDelegate {
+class MiniAppH5ContainerViewController: BaseViewController, UIViewControllerTransitioningDelegate {
     lazy var navigationView = {
         return MiniAppContainerNavigationView(frame: .zero)
     }()
@@ -218,7 +218,7 @@ extension MiniAppH5ContainerViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         print("[MiniApp] 加载失败，URL:\(url), error:\(error.localizedDescription)")
-        ChatIMExecuteOnMainThreadIfNeeded {
+        OnMainThreadIfNeeded {
             self.webView.isHidden = true
             self.progressView.isHidden = true
         }
@@ -226,7 +226,7 @@ extension MiniAppH5ContainerViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         print("[MiniApp] 加载失败，URL:\(url), error:\(error.localizedDescription)")
-        ChatIMExecuteOnMainThreadIfNeeded {
+        OnMainThreadIfNeeded {
             self.webView.isHidden = true
             self.progressView.isHidden = true
         }

@@ -10,7 +10,7 @@ import ffmpegkit
 import BMPlayer
 import SwifterSwift
 
-class VideoPlayerViewController: ViewController {
+class VideoPlayerViewController: BaseViewController {
     var videoLocalPath: String = {
         return Bundle.main.path(forResource: "飞书20250120-095209", ofType: "mp4") ?? ""
     }()
@@ -33,7 +33,7 @@ class VideoPlayerViewController: ViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        view.backgroundColor = .white
         
         player.frame = self.view.bounds
         self.view.addSubview(player)
@@ -64,7 +64,7 @@ class VideoPlayerViewController: ViewController {
                 
                 if returnCode == 0 {
                     /// 转换成功
-                    ChatIMExecuteOnMainThreadAndWait {
+                    OnMainThreadIfNeeded {
                         let asset = BMPlayerResource(url: URL.FileURL(outputPath))
                         weakSelf.player.setVideo(resource: asset)
                         weakSelf.player.play()

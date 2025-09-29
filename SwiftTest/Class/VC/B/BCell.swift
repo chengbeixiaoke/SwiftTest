@@ -20,7 +20,7 @@ class LeftSlideCell: UITableViewCell {
     var clickDeleteBlock: (() -> ())?
     var clickMuteBlock: (() -> ())?
     var clickTopBlock: (() -> ())?
-        
+    
     private lazy var swipeGesture_left = {
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeGesture.direction = .left
@@ -42,7 +42,7 @@ class LeftSlideCell: UITableViewCell {
     lazy var wyy_backgroundView = {
         let view = UIView()
         view.setCornerRadius(UIScale(20))
-        view.backgroundColor = UIColor.ColorBG_F8F8F8_1_F1F1F1_005
+        view.backgroundColor = .BG_F8F8F8_1
         return view
     }()
     
@@ -85,7 +85,7 @@ class LeftSlideCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupUI() {        
+    func setupUI() {
         contentView.addSubview(wyy_backgroundView)
         wyy_backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: UIScale(8), bottom: 0, right: UIScale(8)))
@@ -101,7 +101,7 @@ class LeftSlideCell: UITableViewCell {
     func setupGesture() {
         panGesture.require(toFail: swipeGesture_left)
         panGesture.require(toFail: swipeGesture_right)
-
+        
         contentView.addGestureRecognizer(swipeGesture_left)
         contentView.addGestureRecognizer(swipeGesture_right)
         contentView.addGestureRecognizer(panGesture)

@@ -17,7 +17,7 @@ enum CryptoError: Error {
     case finalizationFailed
 }
 
-class EViewController: WYYUIViewViewController {
+class EViewController: BaseViewController {
     var cancellables = Set<AnyCancellable>()
     let fileEncryptor = FileEncryptor()
     

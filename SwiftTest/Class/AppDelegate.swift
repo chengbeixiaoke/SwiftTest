@@ -9,11 +9,11 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         
         /// 初始化暗黑模式监听者
@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         let _ = CoreDataManager.shared
-                
+        
         return true
     }
     
@@ -38,20 +38,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func initializeTabBarController() -> UITabBarController {
-        let vc1 = SwiftNavigationViewController.init(rootViewController: ViewController())
+        let vc1 = BaseNavigationViewController.init(rootViewController: AViewController())
         vc1.tabBarItem.title = "首页"
         
-        let vc2 = SwiftNavigationViewController.init(rootViewController: BViewController())
+        let vc2 = BaseNavigationViewController.init(rootViewController: BViewController())
         vc2.tabBarItem.title = "BVC"
         
-        
-        let vc3 = SwiftNavigationViewController.init(rootViewController: CViewController())
+        let vc3 = BaseNavigationViewController.init(rootViewController: CViewController())
         vc3.tabBarItem.title = "CVC"
         
-        let vc4 = SwiftNavigationViewController.init(rootViewController: DViewController())
+        let vc4 = BaseNavigationViewController.init(rootViewController: DViewController())
         vc4.tabBarItem.title = "DVC"
         
-        let vc5 = SwiftNavigationViewController.init(rootViewController: EViewController())
+        let vc5 = BaseNavigationViewController.init(rootViewController: EViewController())
         vc5.tabBarItem.title = "EVC"
         
         let tabbarVc = UITabBarController()
