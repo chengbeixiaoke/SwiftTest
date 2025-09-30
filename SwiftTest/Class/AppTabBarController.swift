@@ -9,7 +9,7 @@ import UIKit
 import RDVTabBarController
 
 @available(iOS 26.0, *)
-class AppTabBarController18: UITabBarController {
+class AppTabBarController26: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         

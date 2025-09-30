@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.overrideUserInterfaceStyle = AppThemeModeManager.shared.userInterfaceStyle()
         
         if #available(iOS 26.0, *) {
-            window?.rootViewController = AppTabBarController2()
+            window?.rootViewController = AppTabBarController26()
         } else {
             window?.rootViewController = AppTabBarController()
         }

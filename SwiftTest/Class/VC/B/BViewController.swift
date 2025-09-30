@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 import SnapKit
+import SwifterSwift
 
 class BViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
     var listArray: [String] = []
@@ -131,7 +132,11 @@ class BViewController: BaseViewController, UITableViewDelegate, UITableViewDataS
             if let cell = tableView.cellForRow(at: indexPath) as? BCell {
                 cell.hideWyy_backgroundView(0.3)
             }
-            print("点击Cell")
+            
+            let alert = UIAlertController(title: "测试", message: "测试Alert弹窗", preferredStyle: .alert)
+            alert.addAction(title: "确定", style: .destructive) { _ in }
+            alert.addAction(title: "取消", style: .cancel) { _ in }
+            present(alert, animated: true)
         }
     }
     
