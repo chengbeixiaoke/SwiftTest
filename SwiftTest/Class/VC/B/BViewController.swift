@@ -13,36 +13,16 @@ class BViewController: BaseViewController, UITableViewDelegate, UITableViewDataS
     var listArray: [String] = []
     private var cancellables = Set<AnyCancellable>()
     
-    let tableView: UITableView =  {
-        let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.separatorStyle = .none
-        tableView.tableHeaderView = UIView()
-        tableView.tableFooterView = UIView()
-        
-        tableView.contentInset = .zero
-        tableView.scrollIndicatorInsets = .zero
-        
-        tableView.estimatedRowHeight = 0
-        tableView.estimatedSectionHeaderHeight = 0
-        tableView.estimatedSectionFooterHeight = 0
-        tableView.sectionHeaderHeight = CGFLOAT_MIN
-        tableView.sectionFooterHeight = CGFLOAT_MIN
-        
+    lazy var tableView = {
+        let tableView = BaseTableView(frame: .zero, style: .plain)
         // 允许在编辑模式下选择行
         tableView.allowsSelectionDuringEditing = true
-        
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
-        
-        tableView.contentInsetAdjustmentBehavior = .always
         
         tableView.register(BCell.self,
                            forCellReuseIdentifier: "BCell")
         
-        tableView.register(UITableViewCell.self,
-                           forCellReuseIdentifier: "UITableViewCell")
-        
+        tableView.delegate = self
+        tableView.dataSource = self
         return tableView
     }()
     
@@ -50,10 +30,9 @@ class BViewController: BaseViewController, UITableViewDelegate, UITableViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "BVC"
         view.backgroundColor = .yellow
         
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

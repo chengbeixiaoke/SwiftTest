@@ -26,7 +26,7 @@
 		43269A182D95438A0025EEAC /* EntityUserModelV3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699E02D95438A0025EEAC /* EntityUserModelV3.swift */; };
 		43269A192D95438A0025EEAC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43269A032D95438A0025EEAC /* AppDelegate.swift */; };
 		43269A1A2D95438A0025EEAC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699E32D95438A0025EEAC /* User.swift */; };
-		43269A1B2D95438A0025EEAC /* BaseNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699EA2D95438A0025EEAC /* BaseNavigationViewController.swift */; };
+		43269A1B2D95438A0025EEAC /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699EA2D95438A0025EEAC /* BaseNavigationController.swift */; };
 		43269A1C2D95438A0025EEAC /* CCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699F92D95438A0025EEAC /* CCell.swift */; };
 		43269A1E2D95438A0025EEAC /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699FA2D95438A0025EEAC /* CustomFlowLayout.swift */; };
 		43269A1F2D95438A0025EEAC /* AViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699F22D95438A0025EEAC /* AViewController.swift */; };
@@ -37,7 +37,7 @@
 		43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */; };
 		43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A292D9544FB0025EEAC /* Main.storyboard */; };
 		43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A272D9544FB0025EEAC /* LaunchScreen.storyboard */; };
-		433065E92E8A1E46002E2018 /* LineChartDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065E82E8A1E46002E2018 /* LineChartDemoViewController.swift */; };
+		433065E92E8A1E46002E2018 /* GradientLineChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065E82E8A1E46002E2018 /* GradientLineChartViewController.swift */; };
 		433065EB2E8A1EBC002E2018 /* BarChartDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065EA2E8A1EBC002E2018 /* BarChartDemoViewController.swift */; };
 		433065ED2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065EC2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift */; };
 		433065F62E8A21E3002E2018 /* UIEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065F52E8A21E3002E2018 /* UIEdgeInsets+Extension.swift */; };
@@ -46,6 +46,10 @@
 		433065FC2E8A2444002E2018 /* UIWindow+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065FB2E8A2444002E2018 /* UIWindow+Extension.swift */; };
 		433065FE2E8A2D27002E2018 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065FD2E8A2D27002E2018 /* UIFont+Extension.swift */; };
 		433066002E8A2FE0002E2018 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065FF2E8A2FE0002E2018 /* CALayer+Extension.swift */; };
+		4330661C2E8B89DE002E2018 /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4330661B2E8B89DE002E2018 /* AppTabBarController.swift */; };
+		433066442E8BBC56002E2018 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433066432E8BBC56002E2018 /* SceneDelegate.swift */; };
+		433066562E8BC083002E2018 /* ACell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433066552E8BC083002E2018 /* ACell.swift */; };
+		433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433066572E8BC15A002E2018 /* BaseTableViewCell.swift */; };
 		4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4333CFA52E001CDB00ADDF38 /* String+Extension.swift */; };
 		435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B76512D9E345700093B91 /* VideoPlayerViewController.swift */; };
 		435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B766D2D9E411500093B91 /* Object+Extension.swift */; };
@@ -66,7 +70,7 @@
 		43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E23C2E28F3BC00F04297 /* AppThemeModeManager.swift */; };
 		43C2E23F2E28F5F000F04297 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E23E2E28F5F000F04297 /* BaseView.swift */; };
 		43C2E2412E28F5FC00F04297 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2402E28F5FC00F04297 /* BaseViewController.swift */; };
-		43C2E2432E28FBB900F04297 /* AppDelegate+Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */; };
+		43C2E2432E28FBB900F04297 /* SceneDelegate+Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */; };
 		43C2E2452E290D6700F04297 /* YYLabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
 		70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */; };
@@ -87,7 +91,7 @@
 		432699E72D95438A0025EEAC /* AppDateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDateFormatterManager.swift; sourceTree = "<group>"; };
 		432699E82D95438A0025EEAC /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		432699E92D95438A0025EEAC /* BaseTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableView.swift; sourceTree = "<group>"; };
-		432699EA2D95438A0025EEAC /* BaseNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationViewController.swift; sourceTree = "<group>"; };
+		432699EA2D95438A0025EEAC /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		432699EE2D95438A0025EEAC /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		432699EF2D95438A0025EEAC /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "飞书20250120-095209.mp4"; sourceTree = "<group>"; };
@@ -107,7 +111,7 @@
 		43269A072D95438A0025EEAC /* UserModelDataV2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserModelDataV2.xcdatamodel; sourceTree = "<group>"; };
 		43269A262D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43269A282D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
-		433065E82E8A1E46002E2018 /* LineChartDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartDemoViewController.swift; sourceTree = "<group>"; };
+		433065E82E8A1E46002E2018 /* GradientLineChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientLineChartViewController.swift; sourceTree = "<group>"; };
 		433065EA2E8A1EBC002E2018 /* BarChartDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartDemoViewController.swift; sourceTree = "<group>"; };
 		433065EC2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedChartDemoViewController.swift; sourceTree = "<group>"; };
 		433065F52E8A21E3002E2018 /* UIEdgeInsets+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
@@ -116,6 +120,10 @@
 		433065FB2E8A2444002E2018 /* UIWindow+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Extension.swift"; sourceTree = "<group>"; };
 		433065FD2E8A2D27002E2018 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		433065FF2E8A2FE0002E2018 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
+		4330661B2E8B89DE002E2018 /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
+		433066432E8BBC56002E2018 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		433066552E8BC083002E2018 /* ACell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACell.swift; sourceTree = "<group>"; };
+		433066572E8BC15A002E2018 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		4333CFA52E001CDB00ADDF38 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		435B76512D9E345700093B91 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		435B766D2D9E411500093B91 /* Object+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Object+Extension.swift"; sourceTree = "<group>"; };
@@ -135,7 +143,7 @@
 		43C2E23C2E28F3BC00F04297 /* AppThemeModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeModeManager.swift; sourceTree = "<group>"; };
 		43C2E23E2E28F5F000F04297 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		43C2E2402E28F5FC00F04297 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Other.swift"; sourceTree = "<group>"; };
+		43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SceneDelegate+Other.swift"; sourceTree = "<group>"; };
 		43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YYLabel+Extension.swift"; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
 		7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
@@ -231,6 +239,7 @@
 			children = (
 				433065EE2E8A1F89002E2018 /* Charts */,
 				435B76532D9E345B00093B91 /* Player */,
+				433066552E8BC083002E2018 /* ACell.swift */,
 				432699F22D95438A0025EEAC /* AViewController.swift */,
 				4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */,
 			);
@@ -299,7 +308,9 @@
 				432699F02D95438A0025EEAC /* Tools */,
 				43269A022D95438A0025EEAC /* VC */,
 				43269A032D95438A0025EEAC /* AppDelegate.swift */,
-				43C2E2422E28FBB900F04297 /* AppDelegate+Other.swift */,
+				433066432E8BBC56002E2018 /* SceneDelegate.swift */,
+				43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */,
+				4330661B2E8B89DE002E2018 /* AppTabBarController.swift */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -317,7 +328,7 @@
 			isa = PBXGroup;
 			children = (
 				43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */,
-				433065E82E8A1E46002E2018 /* LineChartDemoViewController.swift */,
+				433065E82E8A1E46002E2018 /* GradientLineChartViewController.swift */,
 				433065EA2E8A1EBC002E2018 /* BarChartDemoViewController.swift */,
 				433065EC2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift */,
 			);
@@ -356,7 +367,8 @@
 				43C2E23E2E28F5F000F04297 /* BaseView.swift */,
 				43C2E2402E28F5FC00F04297 /* BaseViewController.swift */,
 				432699E92D95438A0025EEAC /* BaseTableView.swift */,
-				432699EA2D95438A0025EEAC /* BaseNavigationViewController.swift */,
+				432699EA2D95438A0025EEAC /* BaseNavigationController.swift */,
+				433066572E8BC15A002E2018 /* BaseTableViewCell.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -539,6 +551,7 @@
 				43BEABAC2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift in Sources */,
 				43BEABAE2E02B45C00092EB3 /* MiniAppContainerButtonView.swift in Sources */,
 				43269A0B2D95438A0025EEAC /* BaseTableView.swift in Sources */,
+				4330661C2E8B89DE002E2018 /* AppTabBarController.swift in Sources */,
 				43C2E23F2E28F5F000F04297 /* BaseView.swift in Sources */,
 				43269A0C2D95438A0025EEAC /* BViewController.swift in Sources */,
 				433065FE2E8A2D27002E2018 /* UIFont+Extension.swift in Sources */,
@@ -546,16 +559,18 @@
 				433065F92E8A23DB002E2018 /* PublicFunction.swift in Sources */,
 				433065FA2E8A23DB002E2018 /* PublicMacro.swift in Sources */,
 				433066002E8A2FE0002E2018 /* CALayer+Extension.swift in Sources */,
+				433066562E8BC083002E2018 /* ACell.swift in Sources */,
 				43269A0E2D95438A0025EEAC /* C1ViewController.swift in Sources */,
 				43269A0F2D95438A0025EEAC /* UserModelData.xcdatamodeld in Sources */,
 				43BEABB02E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift in Sources */,
 				4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */,
 				43269A102D95438A0025EEAC /* EntityUserModelV2.swift in Sources */,
+				433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */,
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
 				43269A132D95438A0025EEAC /* AppDateFormatterManager.swift in Sources */,
 				433065FC2E8A2444002E2018 /* UIWindow+Extension.swift in Sources */,
 				433065F62E8A21E3002E2018 /* UIEdgeInsets+Extension.swift in Sources */,
-				433065E92E8A1E46002E2018 /* LineChartDemoViewController.swift in Sources */,
+				433065E92E8A1E46002E2018 /* GradientLineChartViewController.swift in Sources */,
 				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
 				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
 				43269A142D95438A0025EEAC /* CViewController.swift in Sources */,
@@ -567,12 +582,13 @@
 				43269A162D95438A0025EEAC /* C1TableView.swift in Sources */,
 				4324E4EC2DA909F500C8971B /* AppThemeViewController.swift in Sources */,
 				43269A182D95438A0025EEAC /* EntityUserModelV3.swift in Sources */,
-				43C2E2432E28FBB900F04297 /* AppDelegate+Other.swift in Sources */,
+				43C2E2432E28FBB900F04297 /* SceneDelegate+Other.swift in Sources */,
 				43269A192D95438A0025EEAC /* AppDelegate.swift in Sources */,
 				43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */,
+				433066442E8BBC56002E2018 /* SceneDelegate.swift in Sources */,
 				43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */,
 				43269A1A2D95438A0025EEAC /* User.swift in Sources */,
-				43269A1B2D95438A0025EEAC /* BaseNavigationViewController.swift in Sources */,
+				43269A1B2D95438A0025EEAC /* BaseNavigationController.swift in Sources */,
 				435D785E2E03E52900688F0E /* MiniAppTestView.swift in Sources */,
 				43269A1C2D95438A0025EEAC /* CCell.swift in Sources */,
 				43269A1E2D95438A0025EEAC /* CustomFlowLayout.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  BaseNavigationViewController.swift
+//  BaseNavigationController.swift
 //  SwiftTest
 //
 //  Created by yyw on 2025/3/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BaseNavigationViewController: UINavigationController {
+class BaseNavigationController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +22,8 @@ class BaseNavigationViewController: UINavigationController {
         navigationBar.tintColor = UIColor.white
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
         navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-        navigationBar.standardAppearance = appearance
-        navigationBar.scrollEdgeAppearance = appearance
+        interactivePopGestureRecognizer?.isEnabled = true
+        interactivePopGestureRecognizer?.delegate = self
     }
     
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
@@ -55,9 +55,13 @@ class BaseNavigationViewController: UINavigationController {
     }
 }
 
+extension BaseNavigationController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+}
 
 extension UIBarButtonItem {
-    
     static func back(_ target: Any, action: Selector) -> UIBarButtonItem {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         button.addTarget(target, action: action, for: .touchUpInside)
@@ -76,5 +80,4 @@ extension UIBarButtonItem {
         btn.sizeToFit()
         self.init(customView: btn)
     }
-
 }

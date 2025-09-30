@@ -90,8 +90,8 @@ class AppThemeModeManager {
     }
     
     fileprivate func changeKeyWindowUserInterfaceStyle(_ type: UIUserInterfaceStyle) {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.updateTraitCollection(type)
+        if let sceneDelegate = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first?.delegate as? SceneDelegate {
+                sceneDelegate.updateTraitCollection(type)
             print("SAVO - [Style] 主题颜色切换为: \(type == .light ? "浅色模式" : "深色模式")")
         }
     }

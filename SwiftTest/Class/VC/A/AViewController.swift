@@ -34,21 +34,42 @@ class AViewController: BaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.register(UITableViewCell.self,
-                           forCellReuseIdentifier: "UITableViewCell")
+        tableView.register(ACell.self,
+                           forCellReuseIdentifier: "ACell")
         return tableView
     }()
     
     var dataList: [Model] {
         return [Model(title: "主题色", vcClass: AppThemeViewController.self),
                 Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
-                Model(title: "折线图", vcClass: LineChartDemoViewController.self),
+                Model(title: "折线图", vcClass: GradientLineChartViewController.self),
+                Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
+                Model(title: "组合图", vcClass: CombinedChartDemoViewController.self),
+                Model(title: "主题色", vcClass: AppThemeViewController.self),
+                Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
+                Model(title: "折线图", vcClass: GradientLineChartViewController.self),
+                Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
+                Model(title: "组合图", vcClass: CombinedChartDemoViewController.self),
+                Model(title: "主题色", vcClass: AppThemeViewController.self),
+                Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
+                Model(title: "折线图", vcClass: GradientLineChartViewController.self),
+                Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
+                Model(title: "组合图", vcClass: CombinedChartDemoViewController.self),
+                Model(title: "主题色", vcClass: AppThemeViewController.self),
+                Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
+                Model(title: "折线图", vcClass: GradientLineChartViewController.self),
+                Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
+                Model(title: "组合图", vcClass: CombinedChartDemoViewController.self),
+                Model(title: "主题色", vcClass: AppThemeViewController.self),
+                Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
+                Model(title: "折线图", vcClass: GradientLineChartViewController.self),
                 Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
                 Model(title: "组合图", vcClass: CombinedChartDemoViewController.self)]
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "首页"
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -81,27 +102,14 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath)
-        if #available(iOS 14.0, *) {
-            var config = UIListContentConfiguration.cell()
-            config.text = dataList[indexPath.row].title
-            config.textProperties.color = .Text_000000_1
-            config.textProperties.font = .Medium(16)
-            
-            config.secondaryText = dataList[indexPath.row].vcClass.className()
-            config.secondaryTextProperties.color = .Text_0091FF_1
-            config.secondaryTextProperties.font = .Medium(16)
-            
-            cell.contentConfiguration = config
-        }
-        else {
-            cell.textLabel?.text = dataList[indexPath.row].title
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ACell", for: indexPath) as! ACell
+        cell.nameLabel.text = dataList[indexPath.row].title
+        cell.messageLabel.text = dataList[indexPath.row].vcClass.className()
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0.0
+        return CGFLOAT_MIN
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -109,7 +117,7 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.0
+        return CGFLOAT_MIN
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

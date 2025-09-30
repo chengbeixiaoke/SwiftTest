@@ -24,6 +24,11 @@ extension UIColor {
     static let BG_F8F8F8_1                      = ColorFromHex("F8F8F8")
     static let BG_E4E5E6_1                      = ColorFromHex("E4E5E6")
 
+    // 蓝色-浅
+    static let BG_0091FF_1                      = ColorFromHex("0091FF")
+    static let BG_0091FF_05                     = ColorFromHex("0091FF", 0.5)
+    static let BG_0091FF_01                     = ColorFromHex("0091FF", 0.1)
+
     
     
     // MARK: - 分割线

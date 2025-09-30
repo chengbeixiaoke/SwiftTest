@@ -23,6 +23,7 @@ class EViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "EVC"
         view.backgroundColor = .white
         
         let createRSAKeyPair = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))

@@ -10,15 +10,15 @@ import UIKit
 public let WidthScreen: CGFloat = UIScreen.main.bounds.width
 public let HeightScreen: CGFloat = UIScreen.main.bounds.height
 
-public let TabBarHeight: CGFloat = 86.0
+public let TabBarHeight: CGFloat = 83.0
 
 public let HeightOfLine: CGFloat = 1.0
 
 public let HeightOfBorderLine: CGFloat = 1.0
 
-public let VCTopMargin: CGFloat = 54.0
+public let VCTopMargin: CGFloat = 59.0
 
-public let VCNavighationHeight: CGFloat = 110.0
+public let VCNavighationHeight: CGFloat = 116.0
 
 public let LanguagePlaceholder = "${title}"
 

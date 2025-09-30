@@ -15,6 +15,7 @@ class DViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "DVC"
         view.backgroundColor = .white
         
         CoreDataManager.shared.initializeCoreData

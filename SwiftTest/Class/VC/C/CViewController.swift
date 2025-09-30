@@ -17,6 +17,7 @@ class CViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "CVC"
         view.backgroundColor = .orange
         
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))

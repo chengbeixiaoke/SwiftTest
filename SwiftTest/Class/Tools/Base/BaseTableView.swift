@@ -27,7 +27,6 @@ class BaseTableView: UITableView {
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
         
-        contentInsetAdjustmentBehavior = .never
         if #available(iOS 15.0, *) {
             sectionHeaderTopPadding = 0
         }
