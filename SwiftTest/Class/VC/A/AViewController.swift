@@ -64,7 +64,10 @@ class AViewController: BaseViewController {
                 Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
                 Model(title: "折线图", vcClass: GradientLineChartViewController.self),
                 Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
-                Model(title: "组合图", vcClass: CombinedChartDemoViewController.self)]
+                Model(title: "组合图", vcClass: CombinedChartDemoViewController.self),
+                Model(title: "3D模型", vcClass: T3DViewController.self),
+                Model(title: "3D模型-导入模型", vcClass: T3D2ViewController.self),
+                Model(title: "3D模型-导入模型2", vcClass: T3D3ViewController.self)]
     }
     
     override func viewDidLoad() {

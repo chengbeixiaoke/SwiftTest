@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430D94802EBB21C200D44522 /* AppRouterManager.swift */; };
 		4324E4EC2DA909F500C8971B /* AppThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */; };
 		432699DD2D9543780025EEAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 432699DC2D9543780025EEAC /* Assets.xcassets */; };
 		43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699DE2D95438A0025EEAC /* EntityUserModelV1.swift */; };
@@ -61,6 +62,12 @@
 		4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988472DBA061300A9BEE2 /* public_key.pem */; };
 		4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */ = {isa = PBXBuildFile; fileRef = 437988452DBA061300A9BEE2 /* decryptFile.py */; };
 		4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 4381FB6A2D9D48EF00BF4B93 /* MyPackage */; };
+		43AA20C72EC4259B000D1EAC /* T3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20C62EC4259B000D1EAC /* T3DViewController.swift */; };
+		43AA20C92EC42DD4000D1EAC /* T3D2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20C82EC42DD4000D1EAC /* T3D2ViewController.swift */; };
+		43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20CA2EC42E8D000D1EAC /* art.scnassets */; };
+		43AA20CF2EC433E7000D1EAC /* tinker_1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20CE2EC433E7000D1EAC /* tinker_1.obj */; };
+		43AA20D12EC433F1000D1EAC /* obj_1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20D02EC433F1000D1EAC /* obj_1.mtl */; };
+		43AA20D32EC4341A000D1EAC /* T3D3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* T3D3ViewController.swift */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
 		43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */; };
 		43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */; };
@@ -78,6 +85,7 @@
 
 /* Begin PBXFileReference section */
 		2E62492FBA8854686AFD4BA0 /* Pods-SwiftTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.debug.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.debug.xcconfig"; sourceTree = "<group>"; };
+		430D94802EBB21C200D44522 /* AppRouterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterManager.swift; sourceTree = "<group>"; };
 		4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeViewController.swift; sourceTree = "<group>"; };
 		432699732D953FD70025EEAC /* SwiftTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432699CD2D9540390025EEAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -134,6 +142,12 @@
 		437988452DBA061300A9BEE2 /* decryptFile.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = decryptFile.py; sourceTree = "<group>"; };
 		437988462DBA061300A9BEE2 /* private_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = private_key.pem; sourceTree = "<group>"; };
 		437988472DBA061300A9BEE2 /* public_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = public_key.pem; sourceTree = "<group>"; };
+		43AA20C62EC4259B000D1EAC /* T3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = T3DViewController.swift; sourceTree = "<group>"; };
+		43AA20C82EC42DD4000D1EAC /* T3D2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = T3D2ViewController.swift; sourceTree = "<group>"; };
+		43AA20CA2EC42E8D000D1EAC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		43AA20CE2EC433E7000D1EAC /* tinker_1.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = tinker_1.obj; sourceTree = "<group>"; };
+		43AA20D02EC433F1000D1EAC /* obj_1.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = obj_1.mtl; sourceTree = "<group>"; };
+		43AA20D22EC4341A000D1EAC /* T3D3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = T3D3ViewController.swift; sourceTree = "<group>"; };
 		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
 		43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerViewController.swift; sourceTree = "<group>"; };
 		43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavoPresentSwipeInteractionController.swift; sourceTree = "<group>"; };
@@ -171,6 +185,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		430D947F2EBB219300D44522 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				43269A032D95438A0025EEAC /* AppDelegate.swift */,
+				433066432E8BBC56002E2018 /* SceneDelegate.swift */,
+				43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */,
+				4330661B2E8B89DE002E2018 /* AppTabBarController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		4326996A2D953FD70025EEAC = {
 			isa = PBXGroup;
 			children = (
@@ -192,10 +217,12 @@
 		432699D42D9540390025EEAC /* SwiftTest */ = {
 			isa = PBXGroup;
 			children = (
+				43AA20CC2EC433AB000D1EAC /* OBJ_3D */,
 				43269A052D95438A0025EEAC /* Class */,
 				432699DC2D9543780025EEAC /* Assets.xcassets */,
 				43269A2A2D9544FB0025EEAC /* Base.lproj */,
 				432699CD2D9540390025EEAC /* Info.plist */,
+				43AA20CA2EC42E8D000D1EAC /* art.scnassets */,
 			);
 			path = SwiftTest;
 			sourceTree = "<group>";
@@ -237,6 +264,7 @@
 		432699F32D95438A0025EEAC /* A */ = {
 			isa = PBXGroup;
 			children = (
+				43AA20C52EC42584000D1EAC /* 3D */,
 				433065EE2E8A1F89002E2018 /* Charts */,
 				435B76532D9E345B00093B91 /* Player */,
 				433066552E8BC083002E2018 /* ACell.swift */,
@@ -303,14 +331,11 @@
 		43269A052D95438A0025EEAC /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				430D947F2EBB219300D44522 /* Main */,
 				43BEABA22E02B26400092EB3 /* MiniApp */,
 				432699E62D95438A0025EEAC /* CoreData */,
 				432699F02D95438A0025EEAC /* Tools */,
 				43269A022D95438A0025EEAC /* VC */,
-				43269A032D95438A0025EEAC /* AppDelegate.swift */,
-				433066432E8BBC56002E2018 /* SceneDelegate.swift */,
-				43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */,
-				4330661B2E8B89DE002E2018 /* AppTabBarController.swift */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -357,6 +382,7 @@
 			children = (
 				432699E72D95438A0025EEAC /* AppDateFormatterManager.swift */,
 				43C2E23C2E28F3BC00F04297 /* AppThemeModeManager.swift */,
+				430D94802EBB21C200D44522 /* AppRouterManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -390,6 +416,33 @@
 				437988472DBA061300A9BEE2 /* public_key.pem */,
 			);
 			path = RSA;
+			sourceTree = "<group>";
+		};
+		43AA20C52EC42584000D1EAC /* 3D */ = {
+			isa = PBXGroup;
+			children = (
+				43AA20C62EC4259B000D1EAC /* T3DViewController.swift */,
+				43AA20C82EC42DD4000D1EAC /* T3D2ViewController.swift */,
+				43AA20D22EC4341A000D1EAC /* T3D3ViewController.swift */,
+			);
+			path = 3D;
+			sourceTree = "<group>";
+		};
+		43AA20CC2EC433AB000D1EAC /* OBJ_3D */ = {
+			isa = PBXGroup;
+			children = (
+				43AA20CD2EC433D1000D1EAC /* 1 */,
+			);
+			path = OBJ_3D;
+			sourceTree = "<group>";
+		};
+		43AA20CD2EC433D1000D1EAC /* 1 */ = {
+			isa = PBXGroup;
+			children = (
+				43AA20D02EC433F1000D1EAC /* obj_1.mtl */,
+				43AA20CE2EC433E7000D1EAC /* tinker_1.obj */,
+			);
+			path = 1;
 			sourceTree = "<group>";
 		};
 		43BEABA22E02B26400092EB3 /* MiniApp */ = {
@@ -480,11 +533,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
+				43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */,
 				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
 				4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */,
 				4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */,
 				43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */,
+				43AA20CF2EC433E7000D1EAC /* tinker_1.obj in Resources */,
 				43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */,
+				43AA20D12EC433F1000D1EAC /* obj_1.mtl in Resources */,
 				437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */,
 				432699DD2D9543780025EEAC /* Assets.xcassets in Resources */,
 			);
@@ -554,6 +610,7 @@
 				4330661C2E8B89DE002E2018 /* AppTabBarController.swift in Sources */,
 				43C2E23F2E28F5F000F04297 /* BaseView.swift in Sources */,
 				43269A0C2D95438A0025EEAC /* BViewController.swift in Sources */,
+				43AA20C92EC42DD4000D1EAC /* T3D2ViewController.swift in Sources */,
 				433065FE2E8A2D27002E2018 /* UIFont+Extension.swift in Sources */,
 				43269A0D2D95438A0025EEAC /* DCell.swift in Sources */,
 				433065F92E8A23DB002E2018 /* PublicFunction.swift in Sources */,
@@ -571,13 +628,16 @@
 				433065FC2E8A2444002E2018 /* UIWindow+Extension.swift in Sources */,
 				433065F62E8A21E3002E2018 /* UIEdgeInsets+Extension.swift in Sources */,
 				433065E92E8A1E46002E2018 /* GradientLineChartViewController.swift in Sources */,
+				430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */,
 				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
 				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
 				43269A142D95438A0025EEAC /* CViewController.swift in Sources */,
 				43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */,
+				43AA20C72EC4259B000D1EAC /* T3DViewController.swift in Sources */,
 				43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */,
 				43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */,
 				43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */,
+				43AA20D32EC4341A000D1EAC /* T3D3ViewController.swift in Sources */,
 				43269A152D95438A0025EEAC /* CoreDataManager.swift in Sources */,
 				43269A162D95438A0025EEAC /* C1TableView.swift in Sources */,
 				4324E4EC2DA909F500C8971B /* AppThemeViewController.swift in Sources */,

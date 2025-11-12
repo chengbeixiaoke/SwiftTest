@@ -17,7 +17,8 @@ def base_pod
   pod 'Kingfisher'
   pod 'YYKit'
   pod 'Charts'
-  pod 'RDVTabBarController'
+  pod 'JMRouter'
+  pod 'TheRouterSwift'
   
   pod 'WebRTC-SDK', '=125.6422.07'
   

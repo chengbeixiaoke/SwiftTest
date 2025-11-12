@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RDVTabBarController
 
 @available(iOS 26.0, *)
 class AppTabBarController26: UITabBarController {
@@ -39,11 +38,6 @@ class AppTabBarController26: UITabBarController {
                               imageName: "tabbar_setting",
                               identifier: "me"))
         selectedTab = tabs.first
-        
-        // iOS26新增，向下滚动时，只显示第一个与UISearchTab的图标，中间显示辅助UITabAccessory
-//        tabBarMinimizeBehavior = .onScrollDown
-        // iOS26新增
-//        bottomAccessory = UITabAccessory(contentView: UIToolbar())
     }
     
     // MARK: 设置UITab
@@ -119,59 +113,6 @@ class AppTabBarController: UITabBarController {
         
         tabBar.backgroundColor = .white
         viewControllers = [vc1, vc2, vc3, vc4, vc5]
-    }
-}
-
-class AppTabBarController2: RDVTabBarController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        initializeTabBarController()
-    }
-    
-    func initializeTabBarController() {
-        let vc1 = BaseNavigationController.init(rootViewController: AViewController())
-        let vc2 = BaseNavigationController.init(rootViewController: BViewController())
-        let vc3 = BaseNavigationController.init(rootViewController: CViewController())
-        let vc4 = BaseNavigationController.init(rootViewController: DViewController())
-        let vc5 = BaseNavigationController.init(rootViewController: EViewController())
-
-        tabBar.backgroundColor = .white
-        viewControllers = [vc1, vc2, vc3, vc4, vc5]
-        
-        for (index, item) in tabBar.items.enumerated() {
-            guard let barItem = item as? RDVTabBarItem else { continue }
-            
-            if index == 0 {
-                barItem.title = "首页"
-                barItem.setFinishedSelectedImage(UIImage(named: "tabbar_home_1"),
-                                                 withFinishedUnselectedImage: UIImage(named: "tabbar_home"))
-            }
-            
-            if index == 1 {
-                barItem.title = "BVC"
-                barItem.setFinishedSelectedImage(UIImage(named: "tabbar_im_1"),
-                                                 withFinishedUnselectedImage: UIImage(named: "tabbar_im"))
-            }
-            
-            if index == 2 {
-                barItem.title = "CVC"
-                barItem.setFinishedSelectedImage(UIImage(named: "tabbar_im_setting_1"),
-                                                 withFinishedUnselectedImage: UIImage(named: "tabbar_im_setting"))
-            }
-            
-            if index == 3 {
-                barItem.title = "DVC"
-                barItem.setFinishedSelectedImage(UIImage(named: "tabbar_home_1"),
-                                                 withFinishedUnselectedImage: UIImage(named: "tabbar_home"))
-            }
-            
-            if index == 4 {
-                barItem.title = "EVC"
-                barItem.setFinishedSelectedImage(UIImage(named: "tabbar_setting_1"),
-                                                 withFinishedUnselectedImage: UIImage(named: "tabbar_setting"))
-            }
-        }
     }
 }
 
