@@ -72,31 +72,49 @@ class S3DModelView: BaseView {
         scene.rootNode.addChildNode(containerNode)
     }
     
+    private func loadModelInBackground(objURL: URL, completion: @escaping (SCNNode?) -> Void)
+    {
+        // 1. 派发到全局后台队列
+        DispatchQueue.global(qos: .userInitiated).async {
+            // 2. 在子线程中创建 MDLAsset 和 SCNNode
+            let asset = MDLAsset(url: objURL)
+            guard let object = asset.object(at: 0) as? MDLMesh else {
+                printLog("[3D] 无法加载 OBJ 模型")
+                // 确保回调也在主线程，方便更新UI
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
+            
+            let modelNode = SCNNode(mdlObject: object)
+            
+            // 3. 回到主线程，执行完成回调
+            DispatchQueue.main.async {
+                completion(modelNode)
+            }
+        }
+    }
+    
     private func loadOBJModel() {
         guard let objURL = objURL else {
             printLog("[3D] OBJ文件未找到，请确保 .obj 文件已添加到项目中")
             return
         }
-                
-        // 使用 ModelIO 加载 OBJ 模型
-        let asset = MDLAsset(url: objURL)
-        guard let object = asset.object(at: 0) as? MDLMesh else {
-            printLog("[3D] 无法加载 OBJ 模型")
-            return
+        
+        loadModelInBackground(objURL: objURL) { [weak self] modelNode in
+            guard let weakSelf = self else { return }
+            guard let modelNode = modelNode else { return }
+            // 调整模型缩放和位置
+            weakSelf.setupSceneWithModel(modelNode)
+            
+            // 设置 PBR 材质以更好地响应 HDR 光照
+            weakSelf.setupPBRMaterials(for: modelNode)
+            
+            // 添加到容器节点
+            weakSelf.containerNode.addChildNode(modelNode)
+            weakSelf.modelNode = modelNode
         }
-        
-        // 创建 SceneKit 节点
-        let modelNode = SCNNode(mdlObject: object)
-        
-        // 调整模型缩放和位置
-        setupSceneWithModel(modelNode)
-        
-        // 设置 PBR 材质以更好地响应 HDR 光照
-        setupPBRMaterials(for: modelNode)
-        
-        // 添加到容器节点
-        containerNode.addChildNode(modelNode)
-        self.modelNode = modelNode
     }
     
     func setupSceneWithModel(_ modelNode: SCNNode) {
@@ -201,15 +219,6 @@ class S3DModelView: BaseView {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panGesture.maximumNumberOfTouches = 1
         sceneView.addGestureRecognizer(panGesture)
-        
-        // 捏合手势 - 缩放模型
-        // let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
-        // sceneView.addGestureRecognizer(pinchGesture)
-        
-        // 双击手势 - 重置视图
-        // let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(resetView))
-        // doubleTapGesture.numberOfTapsRequired = 2
-        // sceneView.addGestureRecognizer(doubleTapGesture)
     }
     
     @objc private func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
