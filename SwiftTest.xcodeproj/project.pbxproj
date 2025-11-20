@@ -68,6 +68,12 @@
 		43AA20CF2EC433E7000D1EAC /* tinker_1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20CE2EC433E7000D1EAC /* tinker_1.obj */; };
 		43AA20D12EC433F1000D1EAC /* obj_1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20D02EC433F1000D1EAC /* obj_1.mtl */; };
 		43AA20D32EC4341A000D1EAC /* T3D3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* T3D3ViewController.swift */; };
+		43B5ADA72ECEAE1F00E03096 /* wd_obj.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 43B5ADA62ECEAE1F00E03096 /* wd_obj.hdr */; };
+		43B5ADC22ECEBFCA00E03096 /* S3DModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B5ADC12ECEBFCA00E03096 /* S3DModelView.swift */; };
+		43B5ADD52ECEEB4400E03096 /* wdobj1.png in Resources */ = {isa = PBXBuildFile; fileRef = 43B5ADD32ECEEB4400E03096 /* wdobj1.png */; };
+		43B5ADD62ECEEB4400E03096 /* wd_obj_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 43B5ADD42ECEEB4400E03096 /* wd_obj_2.png */; };
+		43B5ADDB2ECEFA4100E03096 /* 手环弯曲导出.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 43B5ADD92ECEFA4100E03096 /* 手环弯曲导出.mtl */; };
+		43B5ADDC2ECEFA4100E03096 /* wd_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 43B5ADDA2ECEFA4100E03096 /* wd_obj.obj */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
 		43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */; };
 		43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */; };
@@ -148,6 +154,12 @@
 		43AA20CE2EC433E7000D1EAC /* tinker_1.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = tinker_1.obj; sourceTree = "<group>"; };
 		43AA20D02EC433F1000D1EAC /* obj_1.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = obj_1.mtl; sourceTree = "<group>"; };
 		43AA20D22EC4341A000D1EAC /* T3D3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = T3D3ViewController.swift; sourceTree = "<group>"; };
+		43B5ADA62ECEAE1F00E03096 /* wd_obj.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_obj.hdr; sourceTree = "<group>"; };
+		43B5ADC12ECEBFCA00E03096 /* S3DModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView.swift; sourceTree = "<group>"; };
+		43B5ADD32ECEEB4400E03096 /* wdobj1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wdobj1.png; sourceTree = "<group>"; };
+		43B5ADD42ECEEB4400E03096 /* wd_obj_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wd_obj_2.png; sourceTree = "<group>"; };
+		43B5ADD92ECEFA4100E03096 /* 手环弯曲导出.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = "手环弯曲导出.mtl"; sourceTree = "<group>"; };
+		43B5ADDA2ECEFA4100E03096 /* wd_obj.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_obj.obj; sourceTree = "<group>"; };
 		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
 		43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerViewController.swift; sourceTree = "<group>"; };
 		43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavoPresentSwipeInteractionController.swift; sourceTree = "<group>"; };
@@ -421,6 +433,7 @@
 		43AA20C52EC42584000D1EAC /* 3D */ = {
 			isa = PBXGroup;
 			children = (
+				43B5ADC12ECEBFCA00E03096 /* S3DModelView.swift */,
 				43AA20C62EC4259B000D1EAC /* T3DViewController.swift */,
 				43AA20C82EC42DD4000D1EAC /* T3D2ViewController.swift */,
 				43AA20D22EC4341A000D1EAC /* T3D3ViewController.swift */,
@@ -431,6 +444,7 @@
 		43AA20CC2EC433AB000D1EAC /* OBJ_3D */ = {
 			isa = PBXGroup;
 			children = (
+				43B5ADA32ECEAA3300E03096 /* 2 */,
 				43AA20CD2EC433D1000D1EAC /* 1 */,
 			);
 			path = OBJ_3D;
@@ -443,6 +457,18 @@
 				43AA20CE2EC433E7000D1EAC /* tinker_1.obj */,
 			);
 			path = 1;
+			sourceTree = "<group>";
+		};
+		43B5ADA32ECEAA3300E03096 /* 2 */ = {
+			isa = PBXGroup;
+			children = (
+				43B5ADD32ECEEB4400E03096 /* wdobj1.png */,
+				43B5ADD42ECEEB4400E03096 /* wd_obj_2.png */,
+				43B5ADA62ECEAE1F00E03096 /* wd_obj.hdr */,
+				43B5ADD92ECEFA4100E03096 /* 手环弯曲导出.mtl */,
+				43B5ADDA2ECEFA4100E03096 /* wd_obj.obj */,
+			);
+			path = 2;
 			sourceTree = "<group>";
 		};
 		43BEABA22E02B26400092EB3 /* MiniApp */ = {
@@ -535,13 +561,18 @@
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
 				43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */,
 				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
+				43B5ADA72ECEAE1F00E03096 /* wd_obj.hdr in Resources */,
 				4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */,
 				4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */,
 				43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */,
+				43B5ADD52ECEEB4400E03096 /* wdobj1.png in Resources */,
+				43B5ADD62ECEEB4400E03096 /* wd_obj_2.png in Resources */,
 				43AA20CF2EC433E7000D1EAC /* tinker_1.obj in Resources */,
 				43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */,
 				43AA20D12EC433F1000D1EAC /* obj_1.mtl in Resources */,
 				437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */,
+				43B5ADDB2ECEFA4100E03096 /* 手环弯曲导出.mtl in Resources */,
+				43B5ADDC2ECEFA4100E03096 /* wd_obj.obj in Resources */,
 				432699DD2D9543780025EEAC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -654,6 +685,7 @@
 				43269A1E2D95438A0025EEAC /* CustomFlowLayout.swift in Sources */,
 				43C2E2412E28F5FC00F04297 /* BaseViewController.swift in Sources */,
 				43269A1F2D95438A0025EEAC /* AViewController.swift in Sources */,
+				43B5ADC22ECEBFCA00E03096 /* S3DModelView.swift in Sources */,
 				43269A202D95438A0025EEAC /* BCell.swift in Sources */,
 				43269A212D95438A0025EEAC /* DViewController.swift in Sources */,
 				43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */,
