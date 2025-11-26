@@ -35,14 +35,8 @@ class S3DModelView2: BaseView {
     // 惯性相关属性
     // 角速度
     private var angularVelocity: CGPoint = .zero
-    // 刷新链接
-    private var displayLink: CADisplayLink?
-    // 减速度系数
-    private var deceleration: CGFloat = 0.9
-    // 最后手势时间戳
-    private var lastPanTimestamp: TimeInterval = 0
-    // 最后手势位移
-    private var lastPanTranslation: CGPoint = .zero
+    // 惯性事件
+    private var inertiaAction: SCNAction?
     
     public init(frame: CGRect, objURL: URL?, hdrURL: URL?) {
         self.objURL = objURL
@@ -91,7 +85,7 @@ class S3DModelView2: BaseView {
             // 2. 在子线程中创建 MDLAsset 和 SCNNode
             let asset = MDLAsset(url: objURL)
             guard let object = asset.object(at: 0) as? MDLMesh else {
-                SLog("[3D] 无法加载 OBJ 模型")
+                printLog("[3D] 无法加载 OBJ 模型")
                 // 确保回调也在主线程，方便更新UI
                 DispatchQueue.main.async {
                     completion(nil)
@@ -110,7 +104,7 @@ class S3DModelView2: BaseView {
     
     private func loadOBJModel() {
         guard let objURL = objURL else {
-            SLog("[3D] OBJ文件未找到，请确保 .obj 文件已添加到项目中")
+            printLog("[3D] OBJ文件未找到，请确保 .obj 文件已添加到项目中")
             return
         }
         
@@ -216,7 +210,7 @@ class S3DModelView2: BaseView {
     // MARK: - HDR Environment Setup
     private func setupHDREnvironment() {
         guard let hdrURL = hdrURL else {
-            SLog("[3D] HDR文件未找到，请确保 .hdr 文件已添加到项目中")
+            printLog("[3D] HDR文件未找到，请确保 .hdr 文件已添加到项目中")
             return
         }
         
@@ -235,94 +229,107 @@ class S3DModelView2: BaseView {
     
     @objc private func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
         let translation = gestureRecognizer.translation(in: sceneView)
-        let currentTimestamp = CACurrentMediaTime()
         
         switch gestureRecognizer.state {
         case .began:
             isRotating = true
-            stopInertia() // 停止之前的惯性
-            lastPanTimestamp = currentTimestamp
-            lastPanTranslation = translation
+            stopInertia()
             
         case .changed:
-            let rotationY = Float(translation.x) * .pi / 180.0 * 0.5
-            let rotationX = Float(translation.y) * .pi / 180.0 * 0.5
+            let rotationY = Float(translation.x) * .pi / 180.0 * 0.3
+            let rotationX = Float(translation.y) * .pi / 180.0 * 0.3
             
             SCNTransaction.begin()
             SCNTransaction.animationDuration = 0.1
             SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .default)
             
-            // 直接使用欧拉角旋转容器节点
             containerNode.eulerAngles.x -= rotationX
             containerNode.eulerAngles.y -= rotationY
             
             SCNTransaction.commit()
             
-            // 计算速度（用于惯性）
-            let deltaTime = CGFloat(currentTimestamp - lastPanTimestamp)
-            if deltaTime > 0 {
-                let velocityX = (translation.x - lastPanTranslation.x) / deltaTime
-                let velocityY = (translation.y - lastPanTranslation.y) / deltaTime
-                angularVelocity = CGPoint(x: velocityX, y: velocityY)
-            }
+            // ⭐️ 方法1：使用系统提供的速度（推荐）
+            let systemVelocity = gestureRecognizer.velocity(in: sceneView)
+            angularVelocity = systemVelocity
             
-            lastPanTimestamp = currentTimestamp
-            lastPanTranslation = translation
+            printLog("[3D] 系统速度: (\(systemVelocity.x), \(systemVelocity.y))")
+            
+            gestureRecognizer.setTranslation(.zero, in: sceneView)
             
         case .ended, .cancelled:
             isRotating = false
             
-            // 只有当速度足够大时才启动惯性
-            let speed = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y)
-            if speed > 50 { // 速度阈值，可调整
-                startInertia()
-            } else {
-                stopInertia()
-            }
+            printLog("[3D] 手势结束，最终速度: (\(angularVelocity.x), \(angularVelocity.y))")
+            startInertia()
             
         default:
             break
         }
     }
     
-    // MARK: - Inertia Methods
-    private func startInertia() {
-        stopInertia() // 确保之前的惯性已停止
-        
-        displayLink = CADisplayLink(target: self, selector: #selector(updateInertia))
-        displayLink?.add(to: .main, forMode: .common)
-    }
-    
     private func stopInertia() {
-        displayLink?.invalidate()
-        displayLink = nil
+        containerNode.removeAction(forKey: "inertia")
+        inertiaAction = nil
         angularVelocity = .zero
     }
     
-    @objc private func updateInertia() {
-        // 当速度很小时停止惯性
+    private func startInertia() {
         let speed = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y)
-        guard speed > 1.0 else {
-            stopInertia()
+        printLog("[3D] 计算速度: \(speed)")
+        
+        // 调整启动阈值
+        let minSpeed: CGFloat = 50.0 // 提高阈值，因为系统速度值较大
+        guard speed > minSpeed else {
+            printLog("[3D] 速度不足，不启动惯性")
             return
         }
         
-        // 应用减速度
-        angularVelocity.x *= deceleration
-        angularVelocity.y *= deceleration
+        // 计算惯性持续时间
+        let duration = calculateInertiaDuration(speed: speed)
         
-        // 计算旋转角度（根据速度调整灵敏度）
-        let rotationY = Float(angularVelocity.x) * .pi / 180.0 * 0.01
-        let rotationX = Float(angularVelocity.y) * .pi / 180.0 * 0.01
+        // 创建惯性动画
+        let inertiaAction = createInertiaAction(duration: duration)
         
-        // 使用事务应用旋转，但不带动画以获得即时响应
-        SCNTransaction.begin()
-        SCNTransaction.disableActions = true // 禁用动画以获得平滑的惯性
+        // 计算之后，停止之前的惯性动画
+        stopInertia()
+        // 开始惯性动画
+        containerNode.runAction(inertiaAction, forKey: "inertia")
         
-        containerNode.eulerAngles.x -= rotationX
-        containerNode.eulerAngles.y -= rotationY
+        printLog("[3D] 启动惯性，速度: \(speed), 持续时间: \(duration)")
+    }
+    
+    private func calculateInertiaDuration(speed: CGFloat) -> TimeInterval {
+        // 根据速度计算持续时间
+        let minDuration: TimeInterval = 0.2
+        let maxDuration: TimeInterval = 0.5
+        let normalizedSpeed = min(speed / 1000.0, 0.5) // 标准化速度
         
-        SCNTransaction.commit()
+        return minDuration + (maxDuration - minDuration) * TimeInterval(normalizedSpeed)
+    }
+    
+    private func createInertiaAction(duration: TimeInterval) -> SCNAction {
+        // 根据速度动态调整灵敏度
+        let speed = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y)
+        
+        // 速度越大，灵敏度越高
+        let sensitivity: Double = 0.002
+        let speedFactor = min(speed / 500.0, 1.0) // 限制最大倍数
+        let dynamicSensitivity = sensitivity * (1.0 + speedFactor)
+        
+        let rotationY = Double(angularVelocity.x) * dynamicSensitivity * Double(duration)
+        let rotationX = Double(angularVelocity.y) * dynamicSensitivity * Double(duration)
+        
+        printLog("[3D] 动态惯性 - 速度: \(speed), 灵敏度: \(dynamicSensitivity), 旋转: (\(rotationX), \(rotationY))")
+        
+        let rotateAction = SCNAction.rotateBy(
+            x: CGFloat(-rotationX),
+            y: CGFloat(-rotationY),
+            z: 0,
+            duration: duration
+        )
+        rotateAction.timingMode = .easeOut
+        
+        return rotateAction
     }
     
     // MARK: - Enhanced Control Methods
@@ -354,69 +361,8 @@ class S3DModelView2: BaseView {
         SCNTransaction.commit()
     }
     
-    // MARK: - Public Methods
-    public func stopAllAnimations() {
-        stopInertia()
-        modelNode?.removeAllActions()
-        containerNode.removeAllActions()
-    }
-    
     // MARK: - Memory Management
     deinit {
         stopInertia()
-    }
-    
-    // MARK: - Advanced Inertia Configuration
-    public struct InertiaConfiguration {
-        public let deceleration: CGFloat      // 减速度 (0-1)
-        public let minSpeedThreshold: CGFloat // 最小速度阈值
-        public let sensitivity: CGFloat       // 灵敏度系数
-        
-        // 平衡模式
-        public static let `default` = InertiaConfiguration(deceleration: 0.92,
-                                                           minSpeedThreshold: 1.0,
-                                                           sensitivity: 0.015)
-        
-        // 快速响应
-        public static let fast = InertiaConfiguration(deceleration: 0.1,
-                                                      minSpeedThreshold: 2.0,
-                                                      sensitivity: 1)
-        
-        // 平滑流畅
-        public static let smooth = InertiaConfiguration(deceleration: 0.98,
-                                                        minSpeedThreshold: 0.2,
-                                                        sensitivity: 0.004)
-    }
-    
-    private var inertiaConfig: InertiaConfiguration = .default
-    
-    public func setInertiaConfiguration(_ config: InertiaConfiguration) {
-        inertiaConfig = config
-        deceleration = config.deceleration
-    }
-    
-    // 更新惯性计算方法以使用配置
-    @objc private func updateInertiaWithConfig() {
-        let speed = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y)
-        guard speed > inertiaConfig.minSpeedThreshold else {
-            stopInertia()
-            return
-        }
-        
-        // 应用配置的减速度
-        angularVelocity.x *= inertiaConfig.deceleration
-        angularVelocity.y *= inertiaConfig.deceleration
-        
-        // 使用配置的灵敏度
-        let rotationY = Float(angularVelocity.x) * .pi / 180.0 * Float(inertiaConfig.sensitivity)
-        let rotationX = Float(angularVelocity.y) * .pi / 180.0 * Float(inertiaConfig.sensitivity)
-        
-        SCNTransaction.begin()
-        SCNTransaction.disableActions = true
-        
-        containerNode.eulerAngles.x -= rotationX
-        containerNode.eulerAngles.y -= rotationY
-        
-        SCNTransaction.commit()
     }
 }
