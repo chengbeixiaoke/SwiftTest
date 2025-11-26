@@ -62,6 +62,7 @@
 		4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988472DBA061300A9BEE2 /* public_key.pem */; };
 		4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */ = {isa = PBXBuildFile; fileRef = 437988452DBA061300A9BEE2 /* decryptFile.py */; };
 		4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 4381FB6A2D9D48EF00BF4B93 /* MyPackage */; };
+		4385243D2ED706AE00C8F8C3 /* S3DModelView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385243C2ED706AE00C8F8C3 /* S3DModelView2.swift */; };
 		43AA20C72EC4259B000D1EAC /* T3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20C62EC4259B000D1EAC /* T3DViewController.swift */; };
 		43AA20C92EC42DD4000D1EAC /* T3D2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20C82EC42DD4000D1EAC /* T3D2ViewController.swift */; };
 		43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20CA2EC42E8D000D1EAC /* art.scnassets */; };
@@ -148,6 +149,7 @@
 		437988452DBA061300A9BEE2 /* decryptFile.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = decryptFile.py; sourceTree = "<group>"; };
 		437988462DBA061300A9BEE2 /* private_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = private_key.pem; sourceTree = "<group>"; };
 		437988472DBA061300A9BEE2 /* public_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = public_key.pem; sourceTree = "<group>"; };
+		4385243C2ED706AE00C8F8C3 /* S3DModelView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView2.swift; sourceTree = "<group>"; };
 		43AA20C62EC4259B000D1EAC /* T3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = T3DViewController.swift; sourceTree = "<group>"; };
 		43AA20C82EC42DD4000D1EAC /* T3D2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = T3D2ViewController.swift; sourceTree = "<group>"; };
 		43AA20CA2EC42E8D000D1EAC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 			isa = PBXGroup;
 			children = (
 				43B5ADC12ECEBFCA00E03096 /* S3DModelView.swift */,
+				4385243C2ED706AE00C8F8C3 /* S3DModelView2.swift */,
 				43AA20C62EC4259B000D1EAC /* T3DViewController.swift */,
 				43AA20C82EC42DD4000D1EAC /* T3D2ViewController.swift */,
 				43AA20D22EC4341A000D1EAC /* T3D3ViewController.swift */,
@@ -668,6 +671,7 @@
 				43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */,
 				43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */,
 				43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */,
+				4385243D2ED706AE00C8F8C3 /* S3DModelView2.swift in Sources */,
 				43AA20D32EC4341A000D1EAC /* T3D3ViewController.swift in Sources */,
 				43269A152D95438A0025EEAC /* CoreDataManager.swift in Sources */,
 				43269A162D95438A0025EEAC /* C1TableView.swift in Sources */,
