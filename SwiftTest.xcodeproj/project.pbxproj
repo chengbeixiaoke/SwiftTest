@@ -62,7 +62,7 @@
 		4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988472DBA061300A9BEE2 /* public_key.pem */; };
 		4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */ = {isa = PBXBuildFile; fileRef = 437988452DBA061300A9BEE2 /* decryptFile.py */; };
 		4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 4381FB6A2D9D48EF00BF4B93 /* MyPackage */; };
-		4385243D2ED706AE00C8F8C3 /* S3DModelView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385243C2ED706AE00C8F8C3 /* S3DModelView2.swift */; };
+		4385243D2ED706AE00C8F8C3 /* S3DModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */; };
 		438524442ED7074000C8F8C3 /* wd_1.psd in Resources */ = {isa = PBXBuildFile; fileRef = 4385243F2ED7074000C8F8C3 /* wd_1.psd */; };
 		438524452ED7074000C8F8C3 /* wd_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4385243E2ED7074000C8F8C3 /* wd_1.jpg */; };
 		438524462ED7074000C8F8C3 /* 手环弯曲低模.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 438524402ED7074000C8F8C3 /* 手环弯曲低模.mtl */; };
@@ -70,7 +70,6 @@
 		438524482ED7074000C8F8C3 /* wd_1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 438524412ED7074000C8F8C3 /* wd_1.obj */; };
 		43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20CA2EC42E8D000D1EAC /* art.scnassets */; };
 		43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */; };
-		43B5ADC22ECEBFCA00E03096 /* S3DModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B5ADC12ECEBFCA00E03096 /* S3DModelView.swift */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
 		43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */; };
 		43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */; };
@@ -145,7 +144,7 @@
 		437988452DBA061300A9BEE2 /* decryptFile.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = decryptFile.py; sourceTree = "<group>"; };
 		437988462DBA061300A9BEE2 /* private_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = private_key.pem; sourceTree = "<group>"; };
 		437988472DBA061300A9BEE2 /* public_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = public_key.pem; sourceTree = "<group>"; };
-		4385243C2ED706AE00C8F8C3 /* S3DModelView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView2.swift; sourceTree = "<group>"; };
+		4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView.swift; sourceTree = "<group>"; };
 		4385243E2ED7074000C8F8C3 /* wd_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wd_1.jpg; sourceTree = "<group>"; };
 		4385243F2ED7074000C8F8C3 /* wd_1.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = wd_1.psd; sourceTree = "<group>"; };
 		438524402ED7074000C8F8C3 /* 手环弯曲低模.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = "手环弯曲低模.mtl"; sourceTree = "<group>"; };
@@ -153,7 +152,6 @@
 		438524422ED7074000C8F8C3 /* wd_1.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1.hdr; sourceTree = "<group>"; };
 		43AA20CA2EC42E8D000D1EAC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3DViewController.swift; sourceTree = "<group>"; };
-		43B5ADC12ECEBFCA00E03096 /* S3DModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView.swift; sourceTree = "<group>"; };
 		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
 		43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerViewController.swift; sourceTree = "<group>"; };
 		43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavoPresentSwipeInteractionController.swift; sourceTree = "<group>"; };
@@ -439,8 +437,7 @@
 		43AA20C52EC42584000D1EAC /* 3D */ = {
 			isa = PBXGroup;
 			children = (
-				43B5ADC12ECEBFCA00E03096 /* S3DModelView.swift */,
-				4385243C2ED706AE00C8F8C3 /* S3DModelView2.swift */,
+				4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */,
 				43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */,
 			);
 			path = 3D;
@@ -647,7 +644,7 @@
 				43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */,
 				43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */,
 				43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */,
-				4385243D2ED706AE00C8F8C3 /* S3DModelView2.swift in Sources */,
+				4385243D2ED706AE00C8F8C3 /* S3DModelView.swift in Sources */,
 				43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */,
 				43269A152D95438A0025EEAC /* CoreDataManager.swift in Sources */,
 				43269A162D95438A0025EEAC /* C1TableView.swift in Sources */,
@@ -665,7 +662,6 @@
 				43269A1E2D95438A0025EEAC /* CustomFlowLayout.swift in Sources */,
 				43C2E2412E28F5FC00F04297 /* BaseViewController.swift in Sources */,
 				43269A1F2D95438A0025EEAC /* AViewController.swift in Sources */,
-				43B5ADC22ECEBFCA00E03096 /* S3DModelView.swift in Sources */,
 				43269A202D95438A0025EEAC /* BCell.swift in Sources */,
 				43269A212D95438A0025EEAC /* DViewController.swift in Sources */,
 				43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */,
