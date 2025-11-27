@@ -13,7 +13,7 @@ import SceneKit.ModelIO
 class S3DModelView: BaseView {
     public override var backgroundColor: UIColor? {
         didSet {
-//            scene.background.contents = backgroundColor
+            scene.background.contents = UIColor.C_Clear
         }
     }
     
@@ -41,16 +41,6 @@ class S3DModelView: BaseView {
         return containerNode
     }()
     
-    // 相机节点
-    private lazy var cameraNode: SCNNode = {
-        let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
-        cameraNode.position = cameraPosition
-        cameraNode.look(at: SCNVector3(0, 0, 0))
-        scene.rootNode.addChildNode(cameraNode)
-        return cameraNode
-    }()
-    
     // 模型节点
     private var modelNode: SCNNode?
     
@@ -60,7 +50,7 @@ class S3DModelView: BaseView {
     
     // 记录相机初始位置
     private var cameraPosition: SCNVector3 = SCNVector3Zero
-
+    
     // 惯性相关属性
     // 角速度
     private var angularVelocity: CGPoint = .zero
@@ -105,7 +95,7 @@ class S3DModelView: BaseView {
             return
         }
         
-        scene.background.contents = hdrURL
+        // scene.background.contents = hdrURL
         
         // 设置 HDR 环境贴图
         scene.lightingEnvironment.contents = hdrURL
@@ -179,64 +169,8 @@ class S3DModelView: BaseView {
         let center = SCNVector3((boundingBox.min.x + boundingBox.max.x) * 0.5,
                                 (boundingBox.min.y + boundingBox.max.y) * 0.5,
                                 (boundingBox.min.z + boundingBox.max.z) * 0.5)
-        
-        let size = SCNVector3(boundingBox.max.x - boundingBox.min.x,
-                              boundingBox.max.y - boundingBox.min.y,
-                              boundingBox.max.z - boundingBox.min.z)
-        
-        // 3. 根据模型尺寸动态设置相机位置
-        cameraPosition = calculateCameraPosition(modelSize: size,
-                                                 modelCenter: center)
-        
         // 5. 调整模型位置（居中显示）
         modelNode.position = SCNVector3(-center.x, -center.y, -center.z)
-        
-        cameraNode.position = cameraPosition
-    }
-    
-    /// 获取相机位置参数
-    /// - Parameters:
-    ///   - modelSize: 模型尺寸
-    ///   - modelCenter: 模型中心位置
-    ///   - desiredScreenCoverage: 模型希望占据屏幕的比例 (0-1)，默认0.8
-    ///   - cameraFOV: 相机视野角度(度)，默认60.0
-    /// - Returns: 相机位置
-    private func calculateCameraPosition(modelSize: SCNVector3,
-                                         modelCenter: SCNVector3,
-                                         desiredScreenCoverage: Float = 0.8,
-                                         cameraFOV: Float = 60.0) -> SCNVector3
-    {
-        
-        // 获取模型包围盒的最大尺寸
-        let modelMaxDimension = max(modelSize.x, modelSize.y, modelSize.z)
-        
-        // 根据FOV和期望的屏幕覆盖率计算理想相机距离
-        let fovRadians = cameraFOV * .pi / 180.0
-        let idealDistance = (modelMaxDimension / desiredScreenCoverage) / tan(fovRadians / 2)
-        
-        // 设置基础距离和最小安全距离
-        let baseDistance = max(idealDistance, 2.0) // 最小距离2.0避免穿模
-        let maxDistance: Float = 50.0 // 最大距离限制
-        
-        var cameraPosition: SCNVector3
-        
-        if modelMaxDimension < 0.5 {
-            // 微小模型：稍微拉远相机，让用户看到全貌
-            cameraPosition = SCNVector3(0, 0, min(baseDistance * 1.5, maxDistance))
-        } else if modelMaxDimension > 15.0 {
-            // 超大模型：拉远相机，确保完整显示
-            cameraPosition = SCNVector3(0, modelSize.y * 0.3, min(baseDistance * 1.2, maxDistance))
-        } else {
-            // 常规模型：标准观看距离，稍微俯视
-            cameraPosition = SCNVector3(0, modelSize.y * 0.2, min(baseDistance, maxDistance))
-        }
-        
-        // 将相机位置偏移到模型中心
-        cameraPosition = SCNVector3(modelCenter.x + cameraPosition.x,
-                                    modelCenter.y + cameraPosition.y,
-                                    modelCenter.z + cameraPosition.z)
-
-        return cameraPosition
     }
     
     /// 为3D模型的所有子节点统一配置基于物理的渲染材质，确保模型在SceneKit中具有真实的光照和材质表现。
@@ -435,25 +369,30 @@ extension S3DModelView {
 // MARK: - 缩放手势处理
 extension S3DModelView {
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        // 直接使用系统提供的相机节点
+        guard let systemCameraNode = sceneView.pointOfView else { return }
+        
         switch gesture.state {
         case .began:
-            // 手势开始：记录初始状态
-            stopInertia() // 停止旋转惯性
-            lastPinchScale = Float(gesture.scale)
+            stopInertia()
             
         case .changed:
-            // 手势进行中：计算缩放比例并更新相机距离
             let currentScale = Float(gesture.scale)
             let scaleFactor = currentScale / lastPinchScale
             
-            // 根据缩放比例调整相机距离（反向关系：缩小手势=拉远相机）
-            let newDistance = cameraNode.position.z / scaleFactor
+            // 移动系统相机而不是自定义相机
+            let currentZ = systemCameraNode.position.z
+            let newZ = currentZ / scaleFactor
             
-            // 更新相机位置
-            updateCameraPosition(distance: newDistance)
+            // 限制距离范围
+            let minDistance: Float = cameraPosition.z * 0.5
+            let maxDistance: Float = cameraPosition.z * 1.5
+            let clampedZ = max(minDistance, min(maxDistance, newZ))
+            
+            systemCameraNode.position.z = clampedZ
+            scene.rootNode.addChildNode(systemCameraNode)
             
             lastPinchScale = currentScale
-            gesture.scale = 1.0
             
         case .ended, .cancelled:
             lastPinchScale = 1.0
@@ -461,35 +400,6 @@ extension S3DModelView {
         default:
             break
         }
-    }
-    
-    /// 双击手势处理 - 重置视图
-    @objc private func handleDoubleTap(_ gesture: UITapGestureRecognizer) {
-        resetView()
-    }
-    
-    /// 更新相机位置
-    /// - Parameter distance: 目标距离
-    private func updateCameraPosition(distance: Float) {
-        // 限制距离在合理范围内
-        let clampedDistance = max(cameraPosition.y * 0.5, min(cameraPosition.y * 1.5, distance))
-        
-        // 保持相机的方向向量，只修改距离
-        let currentPosition = cameraNode.position
-        let newPosition = SCNVector3(currentPosition.x,
-                                     currentPosition.y,
-                                     clampedDistance)
-        
-        // 使用动画让缩放更平滑
-        SCNTransaction.begin()
-        SCNTransaction.animationDuration = 0.1
-        SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeOut)
-        
-        cameraNode.position = newPosition
-        
-        SCNTransaction.commit()
-        
-        printLog("[3D] 相机距离更新: \(String(format: "%.2f", clampedDistance))")
     }
 }
 
@@ -503,16 +413,23 @@ extension S3DModelView: SCNSceneRendererDelegate {
     public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
         // 场景渲染完成后调用
         if isModelLoaded {
+            self.isModelLoaded = false // 重置状态
+            
             // 延迟一帧确保完全渲染
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.notifyLoadCompletion(success: true)
-                self.isModelLoaded = false // 重置状态
             }
         }
     }
     
     private func notifyLoadCompletion(success: Bool, error: Error? = nil) {
         printLog("[3D] 模型加载完成: \(success ? "成功" : "失败")")
+        
+        if let cameraNode = sceneView.pointOfView {
+            cameraPosition = cameraNode.position
+            printLog("[3D] 相机初始位置: \(cameraPosition)")
+        }
+        
         onModelLoadComplete?(success)
     }
 }

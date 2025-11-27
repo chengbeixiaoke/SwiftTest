@@ -22,7 +22,7 @@ class Test3DViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .C_White
+        view.backgroundColor = .red
         
         let objURL = Bundle.main.url(forResource: "wd_1", withExtension: "obj")
         let hdrURL = Bundle.main.url(forResource: "wd_1", withExtension: "hdr")
@@ -32,6 +32,10 @@ class Test3DViewController: BaseViewController {
         view.addSubview(modelView)
         modelView.backgroundColor = .C_White
         modelView.center = CGPoint(x: WidthScreen / 2.0, y: HeightScreen / 2.0)
+        modelView.onModelLoadComplete = { [weak self] _ in
+            guard let weakSelf = self else { return }
+            weakSelf.view.backgroundColor = .C_White
+        }
         self.modelView = modelView
     }
 }
