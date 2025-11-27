@@ -58,14 +58,17 @@ class S3DModelView: BaseView {
     private var initialRotation: SCNVector4?
     private var isRotating = false
     
-    // 记录相机位置
+    // 记录相机初始位置
     private var cameraPosition: SCNVector3 = SCNVector3Zero
-    
+
     // 惯性相关属性
     // 角速度
     private var angularVelocity: CGPoint = .zero
     // 惯性事件
     private var inertiaAction: SCNAction?
+    
+    private var initialPinchDistance: Float = 0.0
+    private var lastPinchScale: Float = 1.0
     
     // 渲染完成回调
     private var isModelLoaded = false
@@ -95,7 +98,8 @@ class S3DModelView: BaseView {
     }
     
     /// 设置背景和光照模型
-    public func loadHDREnvironment() {
+    public func loadHDREnvironment()
+    {
         guard let hdrURL = hdrURL else {
             printLog("[3D] HDR文件未找到，请确保 .hdr 文件已添加到项目中")
             return
@@ -186,6 +190,8 @@ class S3DModelView: BaseView {
         
         // 5. 调整模型位置（居中显示）
         modelNode.position = SCNVector3(-center.x, -center.y, -center.z)
+        
+        cameraNode.position = cameraPosition
     }
     
     /// 获取相机位置参数
@@ -226,12 +232,10 @@ class S3DModelView: BaseView {
         }
         
         // 将相机位置偏移到模型中心
-        cameraPosition = SCNVector3(
-            modelCenter.x + cameraPosition.x,
-            modelCenter.y + cameraPosition.y,
-            modelCenter.z + cameraPosition.z
-        )
-        
+        cameraPosition = SCNVector3(modelCenter.x + cameraPosition.x,
+                                    modelCenter.y + cameraPosition.y,
+                                    modelCenter.z + cameraPosition.z)
+
         return cameraPosition
     }
     
@@ -266,10 +270,14 @@ class S3DModelView: BaseView {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panGesture.maximumNumberOfTouches = 1
         sceneView.addGestureRecognizer(panGesture)
+        
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
+        sceneView.addGestureRecognizer(pinchGesture)
     }
     
     /// 重置模型
-    @objc private func resetView() {
+    @objc private func resetView()
+    {
         stopInertia() // 重置时停止所有惯性
         
         SCNTransaction.begin()
@@ -286,7 +294,8 @@ class S3DModelView: BaseView {
         SCNTransaction.commit()
     }
     
-    deinit {
+    deinit
+    {
         stopInertia()
     }
 }
@@ -335,10 +344,7 @@ extension S3DModelView {
             break
         }
     }
-}
-
-// MARK: - 惯性动画
-extension S3DModelView {
+    
     /// 停止惯性动画
     private func stopInertia()
     {
@@ -426,6 +432,67 @@ extension S3DModelView {
     }
 }
 
+// MARK: - 缩放手势处理
+extension S3DModelView {
+    @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            // 手势开始：记录初始状态
+            stopInertia() // 停止旋转惯性
+            lastPinchScale = Float(gesture.scale)
+            
+        case .changed:
+            // 手势进行中：计算缩放比例并更新相机距离
+            let currentScale = Float(gesture.scale)
+            let scaleFactor = currentScale / lastPinchScale
+            
+            // 根据缩放比例调整相机距离（反向关系：缩小手势=拉远相机）
+            let newDistance = cameraNode.position.z / scaleFactor
+            
+            // 更新相机位置
+            updateCameraPosition(distance: newDistance)
+            
+            lastPinchScale = currentScale
+            gesture.scale = 1.0
+            
+        case .ended, .cancelled:
+            lastPinchScale = 1.0
+            
+        default:
+            break
+        }
+    }
+    
+    /// 双击手势处理 - 重置视图
+    @objc private func handleDoubleTap(_ gesture: UITapGestureRecognizer) {
+        resetView()
+    }
+    
+    /// 更新相机位置
+    /// - Parameter distance: 目标距离
+    private func updateCameraPosition(distance: Float) {
+        // 限制距离在合理范围内
+        let clampedDistance = max(cameraPosition.y * 0.5, min(cameraPosition.y * 1.5, distance))
+        
+        // 保持相机的方向向量，只修改距离
+        let currentPosition = cameraNode.position
+        let newPosition = SCNVector3(currentPosition.x,
+                                     currentPosition.y,
+                                     clampedDistance)
+        
+        // 使用动画让缩放更平滑
+        SCNTransaction.begin()
+        SCNTransaction.animationDuration = 0.1
+        SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeOut)
+        
+        cameraNode.position = newPosition
+        
+        SCNTransaction.commit()
+        
+        printLog("[3D] 相机距离更新: \(String(format: "%.2f", clampedDistance))")
+    }
+}
+
 // MARK: - SCNSceneRendererDelegate
 extension S3DModelView: SCNSceneRendererDelegate {
     // MARK: - SCNSceneRendererDelegate
@@ -447,6 +514,5 @@ extension S3DModelView: SCNSceneRendererDelegate {
     private func notifyLoadCompletion(success: Bool, error: Error? = nil) {
         printLog("[3D] 模型加载完成: \(success ? "成功" : "失败")")
         onModelLoadComplete?(success)
-        cameraNode.position = cameraPosition
     }
 }
