@@ -43,7 +43,7 @@ class S3DModelView: BaseView {
     
     // 模型节点
     private var modelNode: SCNNode?
-        
+    
     // 记录相机初始位置
     private var cameraPosition: SCNVector3 = SCNVector3Zero
     
@@ -165,14 +165,11 @@ class S3DModelView: BaseView {
         // 1. 首先将模型添加到场景
         scene.rootNode.addChildNode(modelNode)
         
-        // 2. 计算模型边界和中心
-        let boundingBox = modelNode.boundingBox
-        let center = SCNVector3((boundingBox.min.x + boundingBox.max.x) * 0.5,
-                                (boundingBox.min.y + boundingBox.max.y) * 0.5,
-                                (boundingBox.min.z + boundingBox.max.z) * 0.5)
-        // 5. 调整模型位置（居中显示）
-        modelNode.position = SCNVector3(-center.x, -center.y, -center.z)
+        // 设置相机
+        S3DCameraSystem.setupOptimalCamera(modelNode: modelNode,
+                                           sceneView: sceneView)
     }
+    
     /// 为3D模型的所有子节点统一配置基于物理的渲染材质，确保模型在SceneKit中具有真实的光照和材质表现。
     /// - Parameter modelNode: 模型节点
     private func setupPBRMaterials(for modelNode: SCNNode)
@@ -255,8 +252,8 @@ extension S3DModelView {
             stopAutoRotation()
             
         case .changed:
-            let rotationY = Float(translation.x) * .pi / 180.0 * 0.3
-            let rotationX = Float(translation.y) * .pi / 180.0 * 0.3
+            let rotationY = Float(translation.x) * .pi / 180.0 * 0.5
+            let rotationX = Float(translation.y) * .pi / 180.0 * 0.5
             
             // 计算新的欧拉角
             var newEulerX = containerNode.eulerAngles.x + rotationX
@@ -525,14 +522,14 @@ extension S3DModelView: SCNSceneRendererDelegate {
     
     private func notifyLoadCompletion(success: Bool, error: Error? = nil) {
         printLog("[3D] 模型加载完成: \(success ? "成功" : "失败")")
-
+        
         if success {
             if let cameraNode = sceneView.pointOfView {
                 cameraPosition = cameraNode.position
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                self?.startAutoRotation()
+//                self?.startAutoRotation()
             }
         }
         

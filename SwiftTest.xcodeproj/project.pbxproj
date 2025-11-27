@@ -68,6 +68,8 @@
 		438524462ED7074000C8F8C3 /* 手环弯曲低模.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 438524402ED7074000C8F8C3 /* 手环弯曲低模.mtl */; };
 		438524472ED7074000C8F8C3 /* wd_1.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 438524422ED7074000C8F8C3 /* wd_1.hdr */; };
 		438524482ED7074000C8F8C3 /* wd_1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 438524412ED7074000C8F8C3 /* wd_1.obj */; };
+		4385244E2ED8588800C8F8C3 /* S3DModelView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385244D2ED8588800C8F8C3 /* S3DModelView2.swift */; };
+		438524502ED860CF00C8F8C3 /* S3DCameraSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385244F2ED860CF00C8F8C3 /* S3DCameraSystem.swift */; };
 		43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20CA2EC42E8D000D1EAC /* art.scnassets */; };
 		43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
@@ -150,6 +152,8 @@
 		438524402ED7074000C8F8C3 /* 手环弯曲低模.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = "手环弯曲低模.mtl"; sourceTree = "<group>"; };
 		438524412ED7074000C8F8C3 /* wd_1.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1.obj; sourceTree = "<group>"; };
 		438524422ED7074000C8F8C3 /* wd_1.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1.hdr; sourceTree = "<group>"; };
+		4385244D2ED8588800C8F8C3 /* S3DModelView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView2.swift; sourceTree = "<group>"; };
+		4385244F2ED860CF00C8F8C3 /* S3DCameraSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DCameraSystem.swift; sourceTree = "<group>"; };
 		43AA20CA2EC42E8D000D1EAC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3DViewController.swift; sourceTree = "<group>"; };
 		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
@@ -439,6 +443,8 @@
 			children = (
 				4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */,
 				43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */,
+				4385244D2ED8588800C8F8C3 /* S3DModelView2.swift */,
+				4385244F2ED860CF00C8F8C3 /* S3DCameraSystem.swift */,
 			);
 			path = 3D;
 			sourceTree = "<group>";
@@ -629,6 +635,7 @@
 				43269A0F2D95438A0025EEAC /* UserModelData.xcdatamodeld in Sources */,
 				43BEABB02E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift in Sources */,
 				4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */,
+				4385244E2ED8588800C8F8C3 /* S3DModelView2.swift in Sources */,
 				43269A102D95438A0025EEAC /* EntityUserModelV2.swift in Sources */,
 				433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */,
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
@@ -647,6 +654,7 @@
 				4385243D2ED706AE00C8F8C3 /* S3DModelView.swift in Sources */,
 				43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */,
 				43269A152D95438A0025EEAC /* CoreDataManager.swift in Sources */,
+				438524502ED860CF00C8F8C3 /* S3DCameraSystem.swift in Sources */,
 				43269A162D95438A0025EEAC /* C1TableView.swift in Sources */,
 				4324E4EC2DA909F500C8971B /* AppThemeViewController.swift in Sources */,
 				43269A182D95438A0025EEAC /* EntityUserModelV3.swift in Sources */,
