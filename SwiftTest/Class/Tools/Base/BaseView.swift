@@ -8,6 +8,7 @@
 import UIKit
 
 class BaseView: UIView {
-
-
+    deinit {
+        SLog("[View] - deinit:\(self.className())")
+    }
 }

@@ -45,7 +45,7 @@ class S3DModelView: BaseView {
     private var modelNode: SCNNode?
     
     // 记录初始旋转状态
-    private var initialRotation: SCNVector4?
+    private var initialRotation: SCNVector4 = SCNVector4Zero
     private var isRotating = false
     
     // 记录相机初始位置
@@ -59,6 +59,11 @@ class S3DModelView: BaseView {
     
     private var initialPinchDistance: Float = 0.0
     private var lastPinchScale: Float = 1.0
+    
+    // 自动旋转相关属性
+    private var isAutoRotating = false
+    private var autoRotationAction: SCNAction?
+    private var autoRotationSpeed: Double = 5.0 // 旋转速度（秒/圈）
     
     // 渲染完成回调
     private var isModelLoaded = false
@@ -171,7 +176,44 @@ class S3DModelView: BaseView {
                                 (boundingBox.min.z + boundingBox.max.z) * 0.5)
         // 5. 调整模型位置（居中显示）
         modelNode.position = SCNVector3(-center.x, -center.y, -center.z)
+        
+        recordInitialRotation(for: modelNode)
     }
+    
+    var initialEulerAngles: SCNVector3 = SCNVector3Zero
+    var initialOrientation: SCNQuaternion =  SCNVector4Zero
+    /// 记录模型的初始旋转状态
+        private func recordInitialRotation(for modelNode: SCNNode) {
+            // 记录欧拉角
+            initialEulerAngles = modelNode.eulerAngles
+            
+            // 记录旋转（轴-角度）
+            initialRotation = modelNode.rotation
+            
+            // 记录四元数方向
+            initialOrientation = modelNode.orientation
+            
+            printLog("[3D] 模型初始旋转状态已记录")
+            printInitialRotationInfo()
+        }
+        
+        /// 打印初始旋转信息
+        private func printInitialRotationInfo() {
+            printLog("""
+            [3D] 模型初始旋转信息:
+            - 欧拉角: (\(String(format: "%.3f", initialEulerAngles.x)), 
+                      \(String(format: "%.3f", initialEulerAngles.y)), 
+                      \(String(format: "%.3f", initialEulerAngles.z)))
+            - 旋转(轴-角度): 轴(\(String(format: "%.3f", initialRotation.x)), 
+                              \(String(format: "%.3f", initialRotation.y)), 
+                              \(String(format: "%.3f", initialRotation.z))), 
+                        角度: \(String(format: "%.3f", initialRotation.w))弧度
+            - 四元数: (\(String(format: "%.3f", initialOrientation.x)), 
+                     \(String(format: "%.3f", initialOrientation.y)), 
+                     \(String(format: "%.3f", initialOrientation.z)), 
+                     \(String(format: "%.3f", initialOrientation.w)))
+            """)
+        }
     
     /// 为3D模型的所有子节点统一配置基于物理的渲染材质，确保模型在SceneKit中具有真实的光照和材质表现。
     /// - Parameter modelNode: 模型节点
@@ -210,9 +252,9 @@ class S3DModelView: BaseView {
     }
     
     /// 重置模型
-    @objc private func resetView()
-    {
+    @objc private func resetView() {
         stopInertia() // 重置时停止所有惯性
+        stopAutoRotation() // 停止自动旋转
         
         SCNTransaction.begin()
         SCNTransaction.animationDuration = 0.8
@@ -221,16 +263,26 @@ class S3DModelView: BaseView {
         // 重置容器旋转
         containerNode.eulerAngles = SCNVector3(0, 0, 0)
         
-        if let modelNode = modelNode {
-            setupSceneWithModel(modelNode)
+        // 重置相机位置
+        if let systemCameraNode = sceneView.pointOfView {
+            systemCameraNode.position = cameraPosition
+            scene.rootNode.addChildNode(systemCameraNode)
         }
         
         SCNTransaction.commit()
+        
+        // 重置后自动开始旋转
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.startAutoRotation()
+        }
     }
     
     deinit
     {
         stopInertia()
+        stopAutoRotation()
+        
+        SLog("[View] - deinit:\(self.className())")
     }
 }
 
@@ -243,6 +295,7 @@ extension S3DModelView {
         case .began:
             isRotating = true
             stopInertia()
+            stopAutoRotation()
             
         case .changed:
             let rotationY = Float(translation.x) * .pi / 180.0 * 0.3
@@ -375,6 +428,7 @@ extension S3DModelView {
         switch gesture.state {
         case .began:
             stopInertia()
+            stopAutoRotation()
             
         case .changed:
             let currentScale = Float(gesture.scale)
@@ -403,6 +457,97 @@ extension S3DModelView {
     }
 }
 
+// MARK: - 自动旋转动画
+extension S3DModelView {
+    /// 获取自动旋转状态
+    public var autoRotating: Bool {
+        return isAutoRotating
+    }
+    
+    /// 设置自动旋转方向
+    /// - Parameter clockwise: true为顺时针，false为逆时针
+    public func setAutoRotationDirection(clockwise: Bool) {
+        let direction: CGFloat = clockwise ? 1.0 : -1.0
+        
+        if isAutoRotating {
+            stopAutoRotation()
+            
+            // 创建指定方向的旋转动画
+            let rotateAction = SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2 * direction, z: 0, duration: autoRotationSpeed)
+            rotateAction.timingMode = .linear
+            let repeatAction = SCNAction.repeatForever(rotateAction)
+            
+            containerNode.runAction(repeatAction, forKey: "autoRotation")
+            autoRotationAction = repeatAction
+            
+            isAutoRotating = true
+        }
+    }
+    
+    public func startAutoRotation() {
+        guard !isAutoRotating else { return }
+        
+        stopInertia()
+        stopAutoRotation()
+        
+        isAutoRotating = true
+        
+        // 创建无限旋转动画
+        let rotateAction = SCNAction.rotateBy(x: CGFloat.pi, y: 0, z: 0, duration: autoRotationSpeed)
+        rotateAction.timingMode = .linear
+        
+        // 无限重复
+        let repeatAction = SCNAction.repeatForever(rotateAction)
+        
+        // 应用到容器节点
+        containerNode.runAction(repeatAction, forKey: "autoRotation")
+        autoRotationAction = repeatAction
+        
+        printLog("[3D] 开始自动旋转")
+    }
+    
+    /// 停止自动旋转
+    public func stopAutoRotation() {
+        guard isAutoRotating else { return }
+        
+        containerNode.removeAction(forKey: "autoRotation")
+        autoRotationAction = nil
+        isAutoRotating = false
+        
+        printLog("[3D] 停止自动旋转")
+    }
+    
+    /// 切换自动旋转状态
+    public func toggleAutoRotation() {
+        if isAutoRotating {
+            stopAutoRotation()
+        } else {
+            startAutoRotation()
+        }
+    }
+    
+    /// 设置自动旋转速度
+    /// - Parameter speed: 旋转一圈的秒数，越小越快
+    public func setAutoRotationSpeed(_ speed: Double) {
+        autoRotationSpeed = max(0.1, speed)
+        
+        if isAutoRotating {
+            stopAutoRotation()
+            startAutoRotation()
+        }
+    }
+    
+    /// 点击手势处理 - 控制自动旋转
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        guard gesture.state == .ended else { return }
+        
+        // 双击重置，单击切换自动旋转
+        if gesture.numberOfTapsRequired == 1 {
+            toggleAutoRotation()
+        }
+    }
+}
+
 // MARK: - SCNSceneRendererDelegate
 extension S3DModelView: SCNSceneRendererDelegate {
     // MARK: - SCNSceneRendererDelegate
@@ -416,7 +561,7 @@ extension S3DModelView: SCNSceneRendererDelegate {
             self.isModelLoaded = false // 重置状态
             
             // 延迟一帧确保完全渲染
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 self.notifyLoadCompletion(success: true)
             }
         }
@@ -424,10 +569,17 @@ extension S3DModelView: SCNSceneRendererDelegate {
     
     private func notifyLoadCompletion(success: Bool, error: Error? = nil) {
         printLog("[3D] 模型加载完成: \(success ? "成功" : "失败")")
-        
-        if let cameraNode = sceneView.pointOfView {
-            cameraPosition = cameraNode.position
-            printLog("[3D] 相机初始位置: \(cameraPosition)")
+
+        if success {
+            if let cameraNode = sceneView.pointOfView {
+                cameraPosition = cameraNode.position
+                printLog("[3D] 相机初始位置: \(cameraPosition)")
+                containerNode.eulerAngles = SCNVector3(10, 10, 10)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                self?.startAutoRotation()
+            }
         }
         
         onModelLoadComplete?(success)
