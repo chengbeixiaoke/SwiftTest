@@ -26,7 +26,7 @@ class Test3DViewController: BaseViewController {
     func load3DModel() {
         let objURL = Bundle.main.url(forResource: "wd_1", withExtension: "obj")
         let hdrURL = Bundle.main.url(forResource: "wd_1", withExtension: "hdr")
-        let modelView = S3DModelView(frame: CGRectMake(0, 0, WidthScreen * 2, WidthScreen * 2),
+        let modelView = S3DModelView(frame: CGRectMake(0, 0, WidthScreen, WidthScreen),
                                      objURL: objURL,
                                      hdrURL: hdrURL)
         view.addSubview(modelView)

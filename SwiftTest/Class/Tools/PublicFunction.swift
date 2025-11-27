@@ -49,6 +49,21 @@ public func printLog(_ messages: Any...,
 #endif
 }
 
+// MARK: - 打印文件名、函数名、行号及自定义信息
+public func SLog(_ messages: Any...,
+                     file: String = #file,
+                     line: Int = #line)
+{
+    var messageString: String = ""
+    for message in messages {
+        messageString.append("\(message)")
+    }
+    let log = "\((file as NSString).lastPathComponent)[\(line)] : \(messageString)"
+#if DEBUG
+    print(log)
+#endif
+}
+
 // MARK: - 计算文本最大高度
 public func labelSize(attributedText: NSAttributedString,
                       maxWidth: CGFloat? = nil,

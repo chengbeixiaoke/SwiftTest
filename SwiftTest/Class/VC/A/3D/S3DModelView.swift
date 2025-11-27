@@ -254,26 +254,30 @@ class S3DModelView: BaseView {
             let rotationY = Float(translation.x) * .pi / 180.0 * 0.3
             let rotationX = Float(translation.y) * .pi / 180.0 * 0.3
             
+            // 计算新的欧拉角
+            var newEulerX = containerNode.eulerAngles.x + rotationX
+            var newEulerY = containerNode.eulerAngles.y + rotationY
+            
+            // 限制X轴旋转在 -90° 到 90° 之间（±π/2）
+            let maxRotationX = Float.pi / 2  // 90度
+            newEulerX = max(-maxRotationX, min(maxRotationX, newEulerX))
+            
             SCNTransaction.begin()
             SCNTransaction.animationDuration = 0.1
             SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .default)
             
-            containerNode.eulerAngles.x += rotationX
-            containerNode.eulerAngles.y += rotationY
+            containerNode.eulerAngles.x = newEulerX
+            containerNode.eulerAngles.y = newEulerY
             
             SCNTransaction.commit()
             
             let systemVelocity = gestureRecognizer.velocity(in: sceneView)
             angularVelocity = systemVelocity
             
-            printLog("[3D] 系统速度: (\(systemVelocity.x), \(systemVelocity.y))")
-            
             gestureRecognizer.setTranslation(.zero, in: sceneView)
             
         case .ended, .cancelled:
             isRotating = false
-            
-            printLog("[3D] 手势结束，最终速度: (\(angularVelocity.x), \(angularVelocity.y))")
             startInertia()
             
         default:
@@ -327,17 +331,40 @@ class S3DModelView: BaseView {
         
         // 速度越大，灵敏度越高
         let sensitivity: Double = 0.002
-        let speedFactor = min(speed / 500.0, 1.0) // 限制最大倍数
+        let speedFactor = min(speed / 500.0, 1.0)
         let dynamicSensitivity = sensitivity * (1.0 + speedFactor)
         
-        let rotationY = Double(-angularVelocity.x) * dynamicSensitivity * Double(duration)
-        let rotationX = Double(-angularVelocity.y) * dynamicSensitivity * Double(duration)
+        var rotationY = Double(angularVelocity.x) * dynamicSensitivity * Double(duration)
+        var rotationX = Double(angularVelocity.y) * dynamicSensitivity * Double(duration)
         
-        printLog("[3D] 动态惯性 - 速度: \(speed), 灵敏度: \(dynamicSensitivity), 旋转: (\(rotationX), \(rotationY))")
+        printLog("[3D] 原始惯性旋转 - X: \(rotationX), Y: \(rotationY)")
+        
+        // 限制1：单次惯性旋转的最大增量角度（90度）
+        let maxIncrement = Double.pi / 2  // 90度
+        rotationX = max(-maxIncrement, min(maxIncrement, rotationX))
+        rotationY = max(-maxIncrement, min(maxIncrement, rotationY))
+        
+        printLog("[3D] 增量限制后 - X: \(rotationX), Y: \(rotationY)")
+        
+        // 限制2：X轴的绝对角度限制（90度）
+        let currentEulerX = Double(containerNode.eulerAngles.x)
+        let targetEulerX = currentEulerX + rotationX
+        let maxRotationX = Double.pi / 2  // 90度
+        
+        var clampedTargetX = 0.0
+        if targetEulerX > maxRotationX {
+            clampedTargetX = max(0, maxRotationX - currentEulerX)
+        } else if targetEulerX < -maxRotationX {
+            clampedTargetX = -maxRotationX - currentEulerX
+        } else {
+            clampedTargetX = rotationX
+        }
+        
+        printLog("[3D] 最终惯性旋转 - X: \(clampedTargetX), Y: \(rotationY)")
         
         let rotateAction = SCNAction.rotateBy(
-            x: CGFloat(-rotationX),
-            y: CGFloat(-rotationY),
+            x: CGFloat(clampedTargetX),
+            y: CGFloat(rotationY),
             z: 0,
             duration: duration
         )

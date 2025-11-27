@@ -68,6 +68,15 @@ class AViewController: BaseViewController {
                 Model(title: "3D模型", vcClass: Test3DViewController.self)]
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        delay(seconds: 0.1) {
+            let vc = Test3DViewController.init()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "首页"
