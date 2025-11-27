@@ -256,7 +256,7 @@ class S3DModelView: BaseView {
             
             // 计算新的欧拉角
             var newEulerX = containerNode.eulerAngles.x + rotationX
-            var newEulerY = containerNode.eulerAngles.y + rotationY
+            let newEulerY = containerNode.eulerAngles.y + rotationY
             
             // 限制X轴旋转在 -90° 到 90° 之间（±π/2）
             let maxRotationX = Float.pi / 2  // 90度
