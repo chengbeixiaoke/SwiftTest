@@ -13,15 +13,44 @@ import SceneKit.ModelIO
 class S3DModelView: BaseView {
     public override var backgroundColor: UIColor? {
         didSet {
-            scene.background.contents = backgroundColor
+//            scene.background.contents = backgroundColor
         }
     }
     
-    private var sceneView: SCNView!
+    // 主场景
+    private lazy var scene: SCNScene = {
+        return SCNScene()
+    }()
+    
+    // 主场景视图
+    private lazy var sceneView: SCNView = {
+        let sceneView = SCNView(frame: bounds)
+        sceneView.autoenablesDefaultLighting = false
+        sceneView.allowsCameraControl = false
+        sceneView.delegate = self
+        sceneView.scene = scene
+        return sceneView
+    }()
     
     // 容器节点，模型和灯光都将添加到此节点
-    private var scene: SCNScene!
-    private var containerNode: SCNNode!
+    private lazy var containerNode: SCNNode = {
+        let containerNode = SCNNode()
+        // 固定在场景中心
+        containerNode.position = SCNVector3Zero
+        scene.rootNode.addChildNode(containerNode)
+        return containerNode
+    }()
+    
+    // 相机节点
+    private lazy var cameraNode: SCNNode = {
+        let cameraNode = SCNNode()
+        cameraNode.camera = SCNCamera()
+        cameraNode.position = cameraPosition
+        cameraNode.look(at: SCNVector3(0, 0, 0))
+        scene.rootNode.addChildNode(cameraNode)
+        return cameraNode
+    }()
+    
     // 模型节点
     private var modelNode: SCNNode?
     
@@ -29,8 +58,8 @@ class S3DModelView: BaseView {
     private var initialRotation: SCNVector4?
     private var isRotating = false
     
-    private let objURL: URL?
-    private let hdrURL: URL?
+    // 记录相机位置
+    private var cameraPosition: SCNVector3 = SCNVector3Zero
     
     // 惯性相关属性
     // 角速度
@@ -38,19 +67,20 @@ class S3DModelView: BaseView {
     // 惯性事件
     private var inertiaAction: SCNAction?
     
-    public var onModelLoadComplete: ((Bool) -> Void)?
+    // 渲染完成回调
     private var isModelLoaded = false
+    public var onModelLoadComplete: ((Bool) -> Void)?
+    
+    // 模型
+    private let objURL: URL?
+    private let hdrURL: URL?
     
     public init(frame: CGRect, objURL: URL?, hdrURL: URL?) {
         self.objURL = objURL
         self.hdrURL = hdrURL
         super.init(frame: frame)
         
-        setupUI()
         setupScene()
-        setupContainerNode()
-        loadOBJModel()
-        setupHDREnvironment()
         setupGestureRecognizers()
     }
     
@@ -58,31 +88,29 @@ class S3DModelView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupUI() {
-        // 主场景视图
-        sceneView = SCNView(frame: bounds)
-        sceneView.backgroundColor = UIColor.black
-        // 禁用默认光照，使用自定义光照
-        sceneView.autoenablesDefaultLighting = false
-        // 禁用默认相机控制，使用自定义手势
-        sceneView.allowsCameraControl = false
-        sceneView.delegate = self
+    /// 设置场景
+    private func setupScene()
+    {
         addSubview(sceneView)
     }
     
-    private func setupScene() {
-        scene = SCNScene()
-        sceneView.scene = scene
+    /// 设置背景和光照模型
+    public func loadHDREnvironment() {
+        guard let hdrURL = hdrURL else {
+            printLog("[3D] HDR文件未找到，请确保 .hdr 文件已添加到项目中")
+            return
+        }
+        
+        scene.background.contents = hdrURL
+        
+        // 设置 HDR 环境贴图
+        scene.lightingEnvironment.contents = hdrURL
+        scene.lightingEnvironment.intensity = 1.0 // 调整强度
     }
     
-    private func setupContainerNode() {
-        // 创建容器节点，所有变换将应用于此节点
-        containerNode = SCNNode()
-        containerNode.position = SCNVector3Zero // 固定在场景中心
-        scene.rootNode.addChildNode(containerNode)
-    }
-    
-    func loadOBJModel() {
+    /// 加载模型
+    func loadOBJModel()
+    {
         guard let objURL = objURL else {
             printLog("[3D] OBJ文件未找到，请确保 .obj 文件已添加到项目中")
             onModelLoadComplete?(false)
@@ -112,15 +140,16 @@ class S3DModelView: BaseView {
         }
     }
     
+    /// 加载模型
+    /// - Parameters:
+    ///   - objURL: 模型URL
+    ///   - completion: 加载完成回调
     private func loadModelInBackground(objURL: URL, completion: @escaping (SCNNode?) -> Void)
     {
-        // 1. 派发到全局后台队列
         DispatchQueue.global(qos: .userInitiated).async {
-            // 2. 在子线程中创建 MDLAsset 和 SCNNode
             let asset = MDLAsset(url: objURL)
             guard let object = asset.object(at: 0) as? MDLMesh else {
                 printLog("[3D] 无法加载 OBJ 模型")
-                // 确保回调也在主线程，方便更新UI
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -128,78 +157,88 @@ class S3DModelView: BaseView {
             }
             
             let modelNode = SCNNode(mdlObject: object)
-            
-            // 3. 回到主线程，执行完成回调
             DispatchQueue.main.async {
                 completion(modelNode)
             }
         }
     }
     
-    func setupSceneWithModel(_ modelNode: SCNNode) {
+    /// 设置模型
+    /// - Parameter modelNode: 3D模型
+    func setupSceneWithModel(_ modelNode: SCNNode)
+    {
         // 1. 首先将模型添加到场景
         scene.rootNode.addChildNode(modelNode)
         
         // 2. 计算模型边界和中心
         let boundingBox = modelNode.boundingBox
-        let center = SCNVector3(
-            (boundingBox.min.x + boundingBox.max.x) * 0.5,
-            (boundingBox.min.y + boundingBox.max.y) * 0.5,
-            (boundingBox.min.z + boundingBox.max.z) * 0.5
-        )
+        let center = SCNVector3((boundingBox.min.x + boundingBox.max.x) * 0.5,
+                                (boundingBox.min.y + boundingBox.max.y) * 0.5,
+                                (boundingBox.min.z + boundingBox.max.z) * 0.5)
         
-        let size = SCNVector3(
-            boundingBox.max.x - boundingBox.min.x,
-            boundingBox.max.y - boundingBox.min.y,
-            boundingBox.max.z - boundingBox.min.z
-        )
+        let size = SCNVector3(boundingBox.max.x - boundingBox.min.x,
+                              boundingBox.max.y - boundingBox.min.y,
+                              boundingBox.max.z - boundingBox.min.z)
         
-        let maxDimension = max(size.x, max(size.y, size.z))
-        
-        // 3. 根据模型尺寸动态设置相机和缩放
-        let (cameraPosition, scale) = calculateCameraAndScale(
-            modelSize: maxDimension,
-            modelCenter: center
-        )
-        
-        // 4. 应用设置
-        setupCamera(at: cameraPosition)
-        modelNode.scale = SCNVector3(scale, scale, scale)
+        // 3. 根据模型尺寸动态设置相机位置
+        cameraPosition = calculateCameraPosition(modelSize: size,
+                                                 modelCenter: center)
         
         // 5. 调整模型位置（居中显示）
-        modelNode.position = SCNVector3(-center.x * scale, -center.y * scale, -center.z * scale)
+        modelNode.position = SCNVector3(-center.x, -center.y, -center.z)
     }
     
-    private func calculateCameraAndScale(modelSize: Float, modelCenter: SCNVector3) -> (SCNVector3, Float) {
-        var cameraPosition: SCNVector3
-        var scale: Float
+    /// 获取相机位置参数
+    /// - Parameters:
+    ///   - modelSize: 模型尺寸
+    ///   - modelCenter: 模型中心位置
+    ///   - desiredScreenCoverage: 模型希望占据屏幕的比例 (0-1)，默认0.8
+    ///   - cameraFOV: 相机视野角度(度)，默认60.0
+    /// - Returns: 相机位置
+    private func calculateCameraPosition(modelSize: SCNVector3,
+                                         modelCenter: SCNVector3,
+                                         desiredScreenCoverage: Float = 0.8,
+                                         cameraFOV: Float = 60.0) -> SCNVector3
+    {
         
-        if modelSize < 1.0 {
-            // 小模型：近距离观看，中等缩放
-            scale = 2.0 / modelSize
-            cameraPosition = SCNVector3(0, 0, 4)
-        } else if modelSize > 10.0 {
-            // 大模型：远距离观看，缩小
-            scale = 6.0 / modelSize
-            cameraPosition = SCNVector3(0, 2, 12)
+        // 获取模型包围盒的最大尺寸
+        let modelMaxDimension = max(modelSize.x, modelSize.y, modelSize.z)
+        
+        // 根据FOV和期望的屏幕覆盖率计算理想相机距离
+        let fovRadians = cameraFOV * .pi / 180.0
+        let idealDistance = (modelMaxDimension / desiredScreenCoverage) / tan(fovRadians / 2)
+        
+        // 设置基础距离和最小安全距离
+        let baseDistance = max(idealDistance, 2.0) // 最小距离2.0避免穿模
+        let maxDistance: Float = 50.0 // 最大距离限制
+        
+        var cameraPosition: SCNVector3
+        
+        if modelMaxDimension < 0.5 {
+            // 微小模型：稍微拉远相机，让用户看到全貌
+            cameraPosition = SCNVector3(0, 0, min(baseDistance * 1.5, maxDistance))
+        } else if modelMaxDimension > 15.0 {
+            // 超大模型：拉远相机，确保完整显示
+            cameraPosition = SCNVector3(0, modelSize.y * 0.3, min(baseDistance * 1.2, maxDistance))
         } else {
-            // 中等模型：标准设置
-            scale = 3.0 / modelSize
-            cameraPosition = SCNVector3(0, 1, 8)
+            // 常规模型：标准观看距离，稍微俯视
+            cameraPosition = SCNVector3(0, modelSize.y * 0.2, min(baseDistance, maxDistance))
         }
         
-        return (cameraPosition, scale)
+        // 将相机位置偏移到模型中心
+        cameraPosition = SCNVector3(
+            modelCenter.x + cameraPosition.x,
+            modelCenter.y + cameraPosition.y,
+            modelCenter.z + cameraPosition.z
+        )
+        
+        return cameraPosition
     }
     
-    private func setupCamera(at position: SCNVector3) {
-        let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
-        cameraNode.position = position
-        cameraNode.look(at: SCNVector3(0, 0, 0))
-        scene.rootNode.addChildNode(cameraNode)
-    }
-    
-    private func setupPBRMaterials(for modelNode: SCNNode) {
+    /// 为3D模型的所有子节点统一配置基于物理的渲染材质，确保模型在SceneKit中具有真实的光照和材质表现。
+    /// - Parameter modelNode: 模型节点
+    private func setupPBRMaterials(for modelNode: SCNNode)
+    {
         // 遍历所有子节点并设置 PBR 材质
         modelNode.enumerateChildNodes { node, _ in
             if let geometry = node.geometry {
@@ -220,28 +259,40 @@ class S3DModelView: BaseView {
         }
     }
     
-    // MARK: - HDR Environment Setup
-    private func setupHDREnvironment() {
-        guard let hdrURL = hdrURL else {
-            printLog("[3D] HDR文件未找到，请确保 .hdr 文件已添加到项目中")
-            return
-        }
-        
-        // scene.background.contents = hdrURL
-        
-        // 设置 HDR 环境贴图
-        scene.lightingEnvironment.contents = hdrURL
-        scene.lightingEnvironment.intensity = 1.0 // 调整强度
-    }
-    
-    // MARK: - Gesture Recognizers
-    private func setupGestureRecognizers() {
+    /// 设置手势
+    private func setupGestureRecognizers()
+    {
         // 平移手势 - 旋转模型
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panGesture.maximumNumberOfTouches = 1
         sceneView.addGestureRecognizer(panGesture)
     }
     
+    /// 重置模型
+    @objc private func resetView() {
+        stopInertia() // 重置时停止所有惯性
+        
+        SCNTransaction.begin()
+        SCNTransaction.animationDuration = 0.8
+        SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeOut)
+        
+        // 重置容器旋转
+        containerNode.eulerAngles = SCNVector3(0, 0, 0)
+        
+        if let modelNode = modelNode {
+            setupSceneWithModel(modelNode)
+        }
+        
+        SCNTransaction.commit()
+    }
+    
+    deinit {
+        stopInertia()
+    }
+}
+
+// MARK: - 旋转手势
+extension S3DModelView {
     @objc private func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
         let translation = gestureRecognizer.translation(in: sceneView)
         
@@ -284,39 +335,44 @@ class S3DModelView: BaseView {
             break
         }
     }
-    
-    private func stopInertia() {
+}
+
+// MARK: - 惯性动画
+extension S3DModelView {
+    /// 停止惯性动画
+    private func stopInertia()
+    {
         containerNode.removeAction(forKey: "inertia")
         inertiaAction = nil
         angularVelocity = .zero
     }
     
-    private func startInertia() {
+    /// 开始惯性动画
+    private func startInertia()
+    {
         let speed = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y)
-        printLog("[3D] 计算速度: \(speed)")
         
         // 调整启动阈值
         let minSpeed: CGFloat = 50.0 // 提高阈值，因为系统速度值较大
-        guard speed > minSpeed else {
-            printLog("[3D] 速度不足，不启动惯性")
-            return
-        }
+        guard speed > minSpeed else { return }
         
         // 计算惯性持续时间
         let duration = calculateInertiaDuration(speed: speed)
         
         // 创建惯性动画
-        let inertiaAction = createInertiaAction(duration: duration)
+        let inertiaAction = createInertiaAction(speed: speed, duration: duration)
         
         // 计算之后，停止之前的惯性动画
         stopInertia()
         // 开始惯性动画
         containerNode.runAction(inertiaAction, forKey: "inertia")
-        
-        printLog("[3D] 启动惯性，速度: \(speed), 持续时间: \(duration)")
     }
     
-    private func calculateInertiaDuration(speed: CGFloat) -> TimeInterval {
+    /// 计算惯性动画时间
+    /// - Parameter speed: 初始速度
+    /// - Returns: 动画时间
+    private func calculateInertiaDuration(speed: CGFloat) -> TimeInterval
+    {
         // 根据速度计算持续时间
         let minDuration: TimeInterval = 0.2
         let maxDuration: TimeInterval = 0.5
@@ -325,10 +381,12 @@ class S3DModelView: BaseView {
         return minDuration + (maxDuration - minDuration) * TimeInterval(normalizedSpeed)
     }
     
-    private func createInertiaAction(duration: TimeInterval) -> SCNAction {
-        // 根据速度动态调整灵敏度
-        let speed = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y)
-        
+    /// 惯性动画
+    /// - Parameter speed: 初始速度
+    /// - Parameter duration: 动画时间
+    /// - Returns: 惯性动画
+    private func createInertiaAction(speed: CGFloat, duration: TimeInterval) -> SCNAction
+    {
         // 速度越大，灵敏度越高
         let sensitivity: Double = 0.002
         let speedFactor = min(speed / 500.0, 1.0)
@@ -337,14 +395,10 @@ class S3DModelView: BaseView {
         var rotationY = Double(angularVelocity.x) * dynamicSensitivity * Double(duration)
         var rotationX = Double(angularVelocity.y) * dynamicSensitivity * Double(duration)
         
-        printLog("[3D] 原始惯性旋转 - X: \(rotationX), Y: \(rotationY)")
-        
         // 限制1：单次惯性旋转的最大增量角度（90度）
         let maxIncrement = Double.pi / 2  // 90度
         rotationX = max(-maxIncrement, min(maxIncrement, rotationX))
         rotationY = max(-maxIncrement, min(maxIncrement, rotationY))
-        
-        printLog("[3D] 增量限制后 - X: \(rotationX), Y: \(rotationY)")
         
         // 限制2：X轴的绝对角度限制（90度）
         let currentEulerX = Double(containerNode.eulerAngles.x)
@@ -360,8 +414,6 @@ class S3DModelView: BaseView {
             clampedTargetX = rotationX
         }
         
-        printLog("[3D] 最终惯性旋转 - X: \(clampedTargetX), Y: \(rotationY)")
-        
         let rotateAction = SCNAction.rotateBy(
             x: CGFloat(clampedTargetX),
             y: CGFloat(rotationY),
@@ -372,42 +424,9 @@ class S3DModelView: BaseView {
         
         return rotateAction
     }
-    
-    // MARK: - Enhanced Control Methods
-    @objc private func resetView() {
-        stopInertia() // 重置时停止所有惯性
-        
-        SCNTransaction.begin()
-        SCNTransaction.animationDuration = 0.8
-        SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeOut)
-        
-        // 重置容器旋转
-        containerNode.eulerAngles = SCNVector3(0, 0, 0)
-        
-        // 重置模型缩放（如果有的话）
-        if let modelNode = modelNode {
-            // 重新计算合适的缩放比例
-            let boundingBox = modelNode.boundingBox
-            let size = SCNVector3(
-                boundingBox.max.x - boundingBox.min.x,
-                boundingBox.max.y - boundingBox.min.y,
-                boundingBox.max.z - boundingBox.min.z
-            )
-            let maxDimension = max(size.x, max(size.y, size.z))
-            let targetScale: Float = 3.0 / maxDimension
-            
-            modelNode.scale = SCNVector3(targetScale, targetScale, targetScale)
-        }
-        
-        SCNTransaction.commit()
-    }
-    
-    // MARK: - Memory Management
-    deinit {
-        stopInertia()
-    }
 }
 
+// MARK: - SCNSceneRendererDelegate
 extension S3DModelView: SCNSceneRendererDelegate {
     // MARK: - SCNSceneRendererDelegate
     public func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
@@ -428,5 +447,6 @@ extension S3DModelView: SCNSceneRendererDelegate {
     private func notifyLoadCompletion(success: Bool, error: Error? = nil) {
         printLog("[3D] 模型加载完成: \(success ? "成功" : "失败")")
         onModelLoadComplete?(success)
+        cameraNode.position = cameraPosition
     }
 }

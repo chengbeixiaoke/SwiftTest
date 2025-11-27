@@ -15,15 +15,15 @@ class Test3DViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        load3DModel()
+        
+        modelView?.loadHDREnvironment()
+        modelView?.loadOBJModel()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .C_White
-    }
-    
-    func load3DModel() {
+        
         let objURL = Bundle.main.url(forResource: "wd_1", withExtension: "obj")
         let hdrURL = Bundle.main.url(forResource: "wd_1", withExtension: "hdr")
         let modelView = S3DModelView(frame: CGRectMake(0, 0, WidthScreen, WidthScreen),
