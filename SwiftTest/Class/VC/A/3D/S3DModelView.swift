@@ -43,11 +43,7 @@ class S3DModelView: BaseView {
     
     // 模型节点
     private var modelNode: SCNNode?
-    
-    // 记录初始旋转状态
-    private var initialRotation: SCNVector4 = SCNVector4Zero
-    private var isRotating = false
-    
+        
     // 记录相机初始位置
     private var cameraPosition: SCNVector3 = SCNVector3Zero
     
@@ -176,45 +172,7 @@ class S3DModelView: BaseView {
                                 (boundingBox.min.z + boundingBox.max.z) * 0.5)
         // 5. 调整模型位置（居中显示）
         modelNode.position = SCNVector3(-center.x, -center.y, -center.z)
-        
-        recordInitialRotation(for: modelNode)
     }
-    
-    var initialEulerAngles: SCNVector3 = SCNVector3Zero
-    var initialOrientation: SCNQuaternion =  SCNVector4Zero
-    /// 记录模型的初始旋转状态
-        private func recordInitialRotation(for modelNode: SCNNode) {
-            // 记录欧拉角
-            initialEulerAngles = modelNode.eulerAngles
-            
-            // 记录旋转（轴-角度）
-            initialRotation = modelNode.rotation
-            
-            // 记录四元数方向
-            initialOrientation = modelNode.orientation
-            
-            printLog("[3D] 模型初始旋转状态已记录")
-            printInitialRotationInfo()
-        }
-        
-        /// 打印初始旋转信息
-        private func printInitialRotationInfo() {
-            printLog("""
-            [3D] 模型初始旋转信息:
-            - 欧拉角: (\(String(format: "%.3f", initialEulerAngles.x)), 
-                      \(String(format: "%.3f", initialEulerAngles.y)), 
-                      \(String(format: "%.3f", initialEulerAngles.z)))
-            - 旋转(轴-角度): 轴(\(String(format: "%.3f", initialRotation.x)), 
-                              \(String(format: "%.3f", initialRotation.y)), 
-                              \(String(format: "%.3f", initialRotation.z))), 
-                        角度: \(String(format: "%.3f", initialRotation.w))弧度
-            - 四元数: (\(String(format: "%.3f", initialOrientation.x)), 
-                     \(String(format: "%.3f", initialOrientation.y)), 
-                     \(String(format: "%.3f", initialOrientation.z)), 
-                     \(String(format: "%.3f", initialOrientation.w)))
-            """)
-        }
-    
     /// 为3D模型的所有子节点统一配置基于物理的渲染材质，确保模型在SceneKit中具有真实的光照和材质表现。
     /// - Parameter modelNode: 模型节点
     private func setupPBRMaterials(for modelNode: SCNNode)
@@ -293,7 +251,6 @@ extension S3DModelView {
         
         switch gestureRecognizer.state {
         case .began:
-            isRotating = true
             stopInertia()
             stopAutoRotation()
             
@@ -324,7 +281,6 @@ extension S3DModelView {
             gestureRecognizer.setTranslation(.zero, in: sceneView)
             
         case .ended, .cancelled:
-            isRotating = false
             startInertia()
             
         default:
@@ -573,8 +529,6 @@ extension S3DModelView: SCNSceneRendererDelegate {
         if success {
             if let cameraNode = sceneView.pointOfView {
                 cameraPosition = cameraNode.position
-                printLog("[3D] 相机初始位置: \(cameraPosition)")
-                containerNode.eulerAngles = SCNVector3(10, 10, 10)
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
