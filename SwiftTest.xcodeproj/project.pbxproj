@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430D94802EBB21C200D44522 /* AppRouterManager.swift */; };
 		4324E4EC2DA909F500C8971B /* AppThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */; };
-		432699DD2D9543780025EEAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 432699DC2D9543780025EEAC /* Assets.xcassets */; };
 		43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699DE2D95438A0025EEAC /* EntityUserModelV1.swift */; };
 		43269A092D95438A0025EEAC /* EViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43269A002D95438A0025EEAC /* EViewController.swift */; };
 		43269A0A2D95438A0025EEAC /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699E42D95438A0025EEAC /* UserModel.swift */; };
@@ -86,6 +85,19 @@
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
 		70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		43983AE62EDFE3A90000CADA /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2E62492FBA8854686AFD4BA0 /* Pods-SwiftTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.debug.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.debug.xcconfig"; sourceTree = "<group>"; };
@@ -492,6 +504,7 @@
 				432699702D953FD70025EEAC /* Frameworks */,
 				432699712D953FD70025EEAC /* Resources */,
 				54021ADD6E217029B9A129D0 /* [CP] Embed Pods Frameworks */,
+				43983AE62EDFE3A90000CADA /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -527,7 +540,7 @@
 			mainGroup = 4326996A2D953FD70025EEAC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "../MyPackage" */,
+				4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "MyPackage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 432699742D953FD70025EEAC /* Products */;
@@ -557,7 +570,6 @@
 				43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */,
 				43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */,
 				437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */,
-				432699DD2D9543780025EEAC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,13 +606,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -709,9 +717,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/SavoFrameworks",
+					"$(PROJECT_DIR)/SwiftTest",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/SwiftTest/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "我们要使用您的麦克风";
@@ -729,6 +743,12 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = test.wyy.com.SwiftTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_SWIFT_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -743,8 +763,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/SavoFrameworks",
+					"$(PROJECT_DIR)/SwiftTest",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/SwiftTest/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "我们要使用您的麦克风";
@@ -761,6 +788,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = test.wyy.com.SwiftTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_SWIFT_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -910,7 +943,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "../MyPackage" */ = {
+		4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "MyPackage" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../MyPackage;
 		};

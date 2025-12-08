@@ -46,7 +46,7 @@ class CustomFlowLayout: UICollectionViewFlowLayout {
         }
         
         // 获取 collectionView 的内容高度
-        guard let collectionView = collectionView else {
+        guard let _ = collectionView else {
             return attribute
         }
         

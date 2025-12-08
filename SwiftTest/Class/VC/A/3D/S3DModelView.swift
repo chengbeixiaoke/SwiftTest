@@ -529,7 +529,7 @@ extension S3DModelView: SCNSceneRendererDelegate {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-//                self?.startAutoRotation()
+                self?.startAutoRotation()
             }
         }
         

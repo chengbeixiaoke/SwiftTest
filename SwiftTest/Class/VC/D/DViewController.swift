@@ -19,8 +19,7 @@ class DViewController: BaseViewController {
         view.backgroundColor = .white
         
         CoreDataManager.shared.initializeCoreData
-            .sink { [weak self] success in
-                guard let weakSelf = self else { return }
+            .sink { success in
                 if success {
                     print("DViewController - 数据库初始化完成")
                 }

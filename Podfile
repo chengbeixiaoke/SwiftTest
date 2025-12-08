@@ -1,6 +1,6 @@
-#source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
-source 'https://cdn.cocoapods.org/'
-source 'https://github.com/SumSubstance/Specs.git'
+#source 'https://cdn.cocoapods.org/'
+#source 'https://github.com/SumSubstance/Specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
 
 platform :ios, '13.0'
 use_frameworks!
