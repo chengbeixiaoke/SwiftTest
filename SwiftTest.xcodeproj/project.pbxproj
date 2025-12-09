@@ -32,7 +32,6 @@
 		43269A1F2D95438A0025EEAC /* AViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699F22D95438A0025EEAC /* AViewController.swift */; };
 		43269A202D95438A0025EEAC /* BCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699F42D95438A0025EEAC /* BCell.swift */; };
 		43269A212D95438A0025EEAC /* DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699FE2D95438A0025EEAC /* DViewController.swift */; };
-		43269A222D95438A0025EEAC /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699E82D95438A0025EEAC /* UIColor+Extension.swift */; };
 		43269A232D95438A0025EEAC /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699EF2D95438A0025EEAC /* UIView+Extension.swift */; };
 		43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */; };
 		43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A292D9544FB0025EEAC /* Main.storyboard */; };
@@ -54,6 +53,10 @@
 		435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B76512D9E345700093B91 /* VideoPlayerViewController.swift */; };
 		435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B766D2D9E411500093B91 /* Object+Extension.swift */; };
 		435D785E2E03E52900688F0E /* MiniAppTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D785D2E03E52900688F0E /* MiniAppTestView.swift */; };
+		436197D52EE6CEA3004932D6 /* SimplePieChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197D42EE6CEA3004932D6 /* SimplePieChartViewController.swift */; };
+		436197F02EE7C265004932D6 /* AnimatedLineGraphChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197EF2EE7C265004932D6 /* AnimatedLineGraphChartView.swift */; };
+		436197F22EE7C2AC004932D6 /* UIColor+SExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197F12EE7C2AC004932D6 /* UIColor+SExtension.swift */; };
+		436197F42EE7C382004932D6 /* ChatTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197F32EE7C382004932D6 /* ChatTestViewController.swift */; };
 		43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
 		437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */; };
@@ -113,7 +116,6 @@
 		432699E32D95438A0025EEAC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		432699E42D95438A0025EEAC /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		432699E72D95438A0025EEAC /* AppDateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDateFormatterManager.swift; sourceTree = "<group>"; };
-		432699E82D95438A0025EEAC /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		432699E92D95438A0025EEAC /* BaseTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableView.swift; sourceTree = "<group>"; };
 		432699EA2D95438A0025EEAC /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		432699EE2D95438A0025EEAC /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
@@ -152,6 +154,10 @@
 		435B76512D9E345700093B91 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		435B766D2D9E411500093B91 /* Object+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Object+Extension.swift"; sourceTree = "<group>"; };
 		435D785D2E03E52900688F0E /* MiniAppTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppTestView.swift; sourceTree = "<group>"; };
+		436197D42EE6CEA3004932D6 /* SimplePieChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePieChartViewController.swift; sourceTree = "<group>"; };
+		436197EF2EE7C265004932D6 /* AnimatedLineGraphChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedLineGraphChartView.swift; sourceTree = "<group>"; };
+		436197F12EE7C2AC004932D6 /* UIColor+SExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+SExtension.swift"; sourceTree = "<group>"; };
+		436197F32EE7C382004932D6 /* ChatTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTestViewController.swift; sourceTree = "<group>"; };
 		43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController.swift; sourceTree = "<group>"; };
 		43740CBF2DB7840E005119F4 /* TestRSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRSA.swift; sourceTree = "<group>"; };
 		437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2025-04-23_4029257634_Logs.log"; sourceTree = "<group>"; };
@@ -372,10 +378,13 @@
 		433065EE2E8A1F89002E2018 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				436197EF2EE7C265004932D6 /* AnimatedLineGraphChartView.swift */,
 				43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */,
 				433065E82E8A1E46002E2018 /* GradientLineChartViewController.swift */,
 				433065EA2E8A1EBC002E2018 /* BarChartDemoViewController.swift */,
 				433065EC2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift */,
+				436197D42EE6CEA3004932D6 /* SimplePieChartViewController.swift */,
+				436197F32EE7C382004932D6 /* ChatTestViewController.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -383,10 +392,10 @@
 		433065F22E8A210A002E2018 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				436197F12EE7C2AC004932D6 /* UIColor+SExtension.swift */,
 				433065FF2E8A2FE0002E2018 /* CALayer+Extension.swift */,
 				433065FD2E8A2D27002E2018 /* UIFont+Extension.swift */,
 				433065FB2E8A2444002E2018 /* UIWindow+Extension.swift */,
-				432699E82D95438A0025EEAC /* UIColor+Extension.swift */,
 				432699EE2D95438A0025EEAC /* UIImage+Extension.swift */,
 				432699EF2D95438A0025EEAC /* UIView+Extension.swift */,
 				435B766D2D9E411500093B91 /* Object+Extension.swift */,
@@ -540,7 +549,7 @@
 			mainGroup = 4326996A2D953FD70025EEAC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "MyPackage" */,
+				4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "../MyPackage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 432699742D953FD70025EEAC /* Products */;
@@ -606,9 +615,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -632,6 +645,8 @@
 				43269A0B2D95438A0025EEAC /* BaseTableView.swift in Sources */,
 				4330661C2E8B89DE002E2018 /* AppTabBarController.swift in Sources */,
 				43C2E23F2E28F5F000F04297 /* BaseView.swift in Sources */,
+				436197F02EE7C265004932D6 /* AnimatedLineGraphChartView.swift in Sources */,
+				436197F22EE7C2AC004932D6 /* UIColor+SExtension.swift in Sources */,
 				43269A0C2D95438A0025EEAC /* BViewController.swift in Sources */,
 				433065FE2E8A2D27002E2018 /* UIFont+Extension.swift in Sources */,
 				43269A0D2D95438A0025EEAC /* DCell.swift in Sources */,
@@ -644,6 +659,7 @@
 				43BEABB02E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift in Sources */,
 				4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */,
 				4385244E2ED8588800C8F8C3 /* S3DModelView2.swift in Sources */,
+				436197F42EE7C382004932D6 /* ChatTestViewController.swift in Sources */,
 				43269A102D95438A0025EEAC /* EntityUserModelV2.swift in Sources */,
 				433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */,
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
@@ -653,6 +669,7 @@
 				433065E92E8A1E46002E2018 /* GradientLineChartViewController.swift in Sources */,
 				430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */,
 				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
+				436197D52EE6CEA3004932D6 /* SimplePieChartViewController.swift in Sources */,
 				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
 				43269A142D95438A0025EEAC /* CViewController.swift in Sources */,
 				43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */,
@@ -681,7 +698,6 @@
 				43269A202D95438A0025EEAC /* BCell.swift in Sources */,
 				43269A212D95438A0025EEAC /* DViewController.swift in Sources */,
 				43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */,
-				43269A222D95438A0025EEAC /* UIColor+Extension.swift in Sources */,
 				43C2E2452E290D6700F04297 /* YYLabel+Extension.swift in Sources */,
 				43269A232D95438A0025EEAC /* UIView+Extension.swift in Sources */,
 			);
@@ -715,6 +731,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -743,6 +760,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = test.wyy.com.SwiftTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_SWIFT_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -761,6 +779,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -788,6 +807,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = test.wyy.com.SwiftTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_SWIFT_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -943,7 +963,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "MyPackage" */ = {
+		4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "../MyPackage" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../MyPackage;
 		};

@@ -13,14 +13,14 @@ class ACell: BaseTableViewCell {
     lazy var nameLabel = {
         let label = YYLabel()
         label.font = .Medium(16)
-        label.textColor = .Text_000000_1
+        label.textColor = .Text_000000
         return label
     }()
     
     lazy var messageLabel = {
         let label = YYLabel()
         label.font = .Medium(16)
-        label.textColor = .Text_0091FF_1
+        label.textColor = .Text_0091FF
         return label
     }()
     

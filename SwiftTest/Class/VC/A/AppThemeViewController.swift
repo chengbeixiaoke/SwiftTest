@@ -23,7 +23,7 @@ class AppThemeViewController: BaseViewController {
     lazy var nameLabel2 = {
         let label = YYLabel()
         label.font = .systemFont(ofSize: 15)
-        label.textColor = .Text_000000_1
+        label.textColor = .Text_000000
         return label
     }()
     
@@ -43,7 +43,7 @@ class AppThemeViewController: BaseViewController {
         }
         
         let attr = NSMutableAttributedString(string: "测试代码")
-        attr.color = .Text_000000_1
+        attr.color = .Text_000000
         attr.font = UIFont.systemFont(ofSize: 30)
         nameLabel.attributedText = attr
         

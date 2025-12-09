@@ -7,9 +7,9 @@
 
 import UIKit
 
-class BaseNavigationController: UINavigationController {
+open class BaseNavigationController: UINavigationController {
     
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         let appearance = UINavigationBarAppearance()
@@ -26,7 +26,7 @@ class BaseNavigationController: UINavigationController {
         interactivePopGestureRecognizer?.delegate = self
     }
     
-    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+    open override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         if children.count > 0 {
             viewController.hidesBottomBarWhenPushed = true
             viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.back(self, action: #selector(back))
@@ -46,7 +46,7 @@ class BaseNavigationController: UINavigationController {
        let _ =  popViewController(animated: true)
     }
     
-    override func popToRootViewController(animated: Bool) -> [UIViewController]? {
+    public override func popToRootViewController(animated: Bool) -> [UIViewController]? {
         if children.count > 1 {
             self.topViewController?.hidesBottomBarWhenPushed = false
         }
@@ -56,13 +56,13 @@ class BaseNavigationController: UINavigationController {
 }
 
 extension BaseNavigationController: UIGestureRecognizerDelegate {
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
 
 extension UIBarButtonItem {
-    static func back(_ target: Any, action: Selector) -> UIBarButtonItem {
+    public static func back(_ target: Any, action: Selector) -> UIBarButtonItem {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         button.addTarget(target, action: action, for: .touchUpInside)
         button.setImage(UIImage(named: "back"), for: .normal)

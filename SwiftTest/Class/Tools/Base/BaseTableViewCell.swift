@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BaseTableViewCell: UITableViewCell {
+open class BaseTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -15,16 +15,16 @@ class BaseTableViewCell: UITableViewCell {
         setupUI()
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateBackgroundColor(_ color: UIColor) {
+    public func updateBackgroundColor(_ color: UIColor) {
         backgroundColor = .C_Clear
         contentView.backgroundColor = color
     }
     
-    func setupUI() {
+    public func setupUI() {
         
     }
 }

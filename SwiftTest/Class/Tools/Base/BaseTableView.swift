@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BaseTableView: UITableView {
+open class BaseTableView: UITableView {
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         
@@ -32,7 +32,7 @@ class BaseTableView: UITableView {
         }
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -50,7 +50,7 @@ class BaseTableView: UITableView {
         setContentOffset(newOffset, animated: false)
     }
         
-    func insertSectionAndKeepOffset(_ indexSet: IndexSet) {
+    public func insertSectionAndKeepOffset(_ indexSet: IndexSet) {
         setContentOffset(contentOffset, animated: false)
         
         var animationView: UIView
@@ -99,7 +99,7 @@ class BaseTableView: UITableView {
         }
     }
     
-    func setContentOffsetOfBottom(animated: Bool) {
+    public func setContentOffsetOfBottom(animated: Bool) {
         if (bounds.size.height - contentInset.horizontal) < contentSize.height {
             let bottomOffset = CGPoint(x: 0, y: contentSize.height - bounds.size.height + contentInset.bottom)
             setContentOffset(bottomOffset, animated: animated)

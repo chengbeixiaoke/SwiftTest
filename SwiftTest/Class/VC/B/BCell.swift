@@ -42,7 +42,7 @@ class LeftSlideCell: UITableViewCell {
     lazy var wyy_backgroundView = {
         let view = UIView()
         view.setCornerRadius(UIScale(20))
-        view.backgroundColor = .BG_F8F8F8_1
+        view.backgroundColor = .BG_F8F8F8
         return view
     }()
     

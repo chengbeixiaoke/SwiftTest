@@ -8,10 +8,10 @@
 import UIKit
 import YYKit
 
-class BaseViewController: UIViewController {
+open class BaseViewController: UIViewController {
     
-    var viewBackgroundColor: UIColor {
-        return .BG_FFFFFF_1
+    public var viewBackgroundColor: UIColor {
+        return .C_White
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -24,38 +24,38 @@ class BaseViewController: UIViewController {
         }
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("[VC] viewWillAppear: \(className())")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("[VC] viewDidAppear: \(className())")
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("[VC] viewWillDisappear: \(className())")
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         print("[VC] viewDidDisappear: \(className())")
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         print("[VC] viewDidLoad: \(className())")
         
         view.backgroundColor = viewBackgroundColor
     }
     
-    func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    public func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         
     }
     

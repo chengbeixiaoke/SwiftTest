@@ -45,6 +45,9 @@ class AViewController: BaseViewController {
                 Model(title: "折线图", vcClass: GradientLineChartViewController.self),
                 Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
                 Model(title: "组合图", vcClass: CombinedChartDemoViewController.self),
+                Model(title: "饼状图", vcClass: SimplePieChartViewController.self),
+                Model(title: "饼状图", vcClass: SimplePieChartViewController2.self),
+                Model(title: "测试绘图", vcClass: ChatTestViewController.self),
                 Model(title: "3D模型", vcClass: Test3DViewController.self)]
     }
     

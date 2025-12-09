@@ -61,7 +61,7 @@ class MiniAppH5ContainerSmallView: UIView {
 
         let shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: frame.width / 2.0)
         shadowView.layer.shadowPath = shadowPath.cgPath
-        shadowView.layer.shadowThemeColor = .BG_E4E5E6_1
+        shadowView.layer.shadowThemeColor = .BG_E4E5E6
         shadowView.layer.shadowOpacity = 1
         shadowView.layer.shadowRadius = 8
         shadowView.layer.shadowOffset = CGSize(width: 0, height: 0)
@@ -70,7 +70,7 @@ class MiniAppH5ContainerSmallView: UIView {
         strokeView.frame = bounds.insetBy(dx: -1, dy: -1)
         strokeView.layer.cornerRadius = 25
         strokeView.layer.borderWidth = 1
-        strokeView.layer.borderLineThemeColor = .BL_F1F1F1_1
+        strokeView.layer.borderLineThemeColor = .BL_F1F1F1
         strokeView.layer.masksToBounds = true
         addSubview(strokeView)
         
