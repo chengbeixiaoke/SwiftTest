@@ -29,7 +29,7 @@ class AViewController: BaseViewController {
     lazy var tableView =  {
         let tableView = BaseTableView(frame: .zero, style: .grouped)
         tableView.backgroundColor = viewBackgroundColor
-        tableView.separatorStyle = .singleLine
+        tableView.separatorStyle = .none
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -43,6 +43,7 @@ class AViewController: BaseViewController {
         return [Model(title: "主题色", vcClass: AppThemeViewController.self),
                 Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
                 Model(title: "K线图2", vcClass: CandleStickDemoViewController2.self),
+                Model(title: "K线图3", vcClass: CandleStickDemoViewController3.self),
                 Model(title: "折线图", vcClass: GradientLineChartViewController.self),
                 Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
                 Model(title: "组合图", vcClass: CombinedChartDemoViewController.self),

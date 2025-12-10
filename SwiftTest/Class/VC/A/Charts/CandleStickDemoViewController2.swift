@@ -9,15 +9,16 @@ import UIKit
 import CoreGraphics
 
 class CandleStickDemoViewController2: BaseViewController {
-    
     private var klineView: KLineChartView!
-    private var dataCountLabel: UILabel!
-    private var operationLabel: UILabel!
+    private var dataSource: MockKLineDataSource!
+    private var statusLabel: UILabel!
+    private var loadingIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        loadData()
+        setupKLineView()
+        loadInitialData()
     }
     
     private func setupUI() {
@@ -25,33 +26,36 @@ class CandleStickDemoViewController2: BaseViewController {
         
         // 标题
         let titleLabel = UILabel()
-        titleLabel.text = "股票K线图Demo"
+        titleLabel.text = "无限滚动K线图Demo"
         titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
         titleLabel.textAlignment = .center
         titleLabel.frame = CGRect(x: 0, y: 50, width: view.bounds.width, height: 30)
         view.addSubview(titleLabel)
         
+        // 状态标签
+        statusLabel = UILabel()
+        statusLabel.text = "准备中..."
+        statusLabel.font = UIFont.systemFont(ofSize: 14)
+        statusLabel.textAlignment = .center
+        statusLabel.textColor = .gray
+        statusLabel.frame = CGRect(x: 0, y: 85, width: view.bounds.width, height: 20)
+        view.addSubview(statusLabel)
+        
         // 操作说明
-        operationLabel = UILabel()
-        operationLabel.text = "操作：拖拽滑动 | 捏合缩放 | 长按查看详情 | 双击重置"
-        operationLabel.font = UIFont.systemFont(ofSize: 12)
-        operationLabel.textAlignment = .center
-        operationLabel.textColor = .gray
-        operationLabel.frame = CGRect(x: 0, y: 85, width: view.bounds.width, height: 20)
-        view.addSubview(operationLabel)
+        let instructionLabel = UILabel()
+        instructionLabel.text = "操作说明：\n• 拖拽：左右滑动查看数据\n• 捏合：缩放K线图\n• 长按：显示详细信息\n• 双击：重置视图\n• 拖动到边界：加载更多数据"
+        instructionLabel.font = UIFont.systemFont(ofSize: 12)
+        instructionLabel.textAlignment = .left
+        instructionLabel.textColor = .darkGray
+        instructionLabel.numberOfLines = 0
+        instructionLabel.frame = CGRect(x: 20, y: 110, width: view.bounds.width - 40, height: 80)
+        view.addSubview(instructionLabel)
         
-        // 数据量显示
-        dataCountLabel = UILabel()
-        dataCountLabel.font = UIFont.systemFont(ofSize: 14)
-        dataCountLabel.textAlignment = .center
-        dataCountLabel.frame = CGRect(x: 0, y: 110, width: view.bounds.width, height: 20)
-        view.addSubview(dataCountLabel)
-        
-        // 创建K线图
-        klineView = KLineChartView(frame: CGRect(x: 0, y: 140,
-                                                 width: view.bounds.width,
-                                                 height: 500))
-        view.addSubview(klineView)
+        // 加载指示器
+        loadingIndicator = UIActivityIndicatorView(style: .medium)
+        loadingIndicator.center = CGPoint(x: view.bounds.width/2, y: 200)
+        loadingIndicator.hidesWhenStopped = true
+        view.addSubview(loadingIndicator)
         
         // 控制按钮
         setupControlButtons()
@@ -59,19 +63,9 @@ class CandleStickDemoViewController2: BaseViewController {
     
     private func setupControlButtons() {
         let buttonHeight: CGFloat = 40
-        let buttonWidth: CGFloat = 100
-        let spacing: CGFloat = 10
-        let startY = klineView.frame.maxY + 20
-        
-        // 加载更多数据按钮
-        let loadMoreButton = UIButton(type: .system)
-        loadMoreButton.setTitle("加载更多", for: .normal)
-        loadMoreButton.backgroundColor = .systemBlue
-        loadMoreButton.setTitleColor(.white, for: .normal)
-        loadMoreButton.layer.cornerRadius = 8
-        loadMoreButton.frame = CGRect(x: spacing, y: startY, width: buttonWidth, height: buttonHeight)
-        loadMoreButton.addTarget(self, action: #selector(loadMoreData), for: .touchUpInside)
-        view.addSubview(loadMoreButton)
+        let buttonWidth: CGFloat = 120
+        let spacing: CGFloat = 20
+        let startY = view.bounds.height - 100
         
         // 重置按钮
         let resetButton = UIButton(type: .system)
@@ -79,81 +73,99 @@ class CandleStickDemoViewController2: BaseViewController {
         resetButton.backgroundColor = .systemOrange
         resetButton.setTitleColor(.white, for: .normal)
         resetButton.layer.cornerRadius = 8
-        resetButton.frame = CGRect(x: view.bounds.width - buttonWidth - spacing,
-                                   y: startY,
-                                   width: buttonWidth,
-                                   height: buttonHeight)
+        resetButton.frame = CGRect(x: spacing, y: startY, width: buttonWidth, height: buttonHeight)
         resetButton.addTarget(self, action: #selector(resetView), for: .touchUpInside)
         view.addSubview(resetButton)
+        
+        // 跳转到最新
+        let jumpToLatestButton = UIButton(type: .system)
+        jumpToLatestButton.setTitle("跳转到最新", for: .normal)
+        jumpToLatestButton.backgroundColor = .systemBlue
+        jumpToLatestButton.setTitleColor(.white, for: .normal)
+        jumpToLatestButton.layer.cornerRadius = 8
+        jumpToLatestButton.frame = CGRect(x: view.bounds.width - buttonWidth - spacing,
+                                         y: startY,
+                                         width: buttonWidth,
+                                         height: buttonHeight)
+        jumpToLatestButton.addTarget(self, action: #selector(jumpToLatest), for: .touchUpInside)
+        view.addSubview(jumpToLatestButton)
     }
     
-    private func loadData() {
-        // 生成10000个示例数据
-        let count = 10000
-        let data = generateSampleData(count: count)
-        klineView.setKLineData(data)
+    private func setupKLineView() {
+        let klineHeight: CGFloat = 500
+        let klineY: CGFloat = 200
         
-        dataCountLabel.text = "数据量：\(count) 条K线"
+        klineView = KLineChartView(frame: CGRect(x: 0, y: klineY,
+                                                       width: view.bounds.width,
+                                                       height: klineHeight))
+        
+        // 配置
+        let config = KLineConfiguration()
+        config.showMA = false
+        config.showVolume = true
+        config.showCrosshair = true
+        config.backgroundColor = UIColor(white: 0.98, alpha: 1.0)
+        config.gridColor = UIColor(white: 0.9, alpha: 1.0)
+        klineView.updateConfig(config)
+        
+        // 设置数据源
+        dataSource = MockKLineDataSource()
+        klineView.setDataSource(dataSource)
+        
+        view.addSubview(klineView)
     }
     
-    @objc private func loadMoreData() {
-        // 模拟加载更多数据
-        let moreData = generateSampleData(count: 2000)
-        // 在实际应用中，这里应该是追加数据到现有数据
-        // klineView.appendKLineData(moreData)
+    private func loadInitialData() {
+        loadingIndicator.startAnimating()
+        statusLabel.text = "加载初始数据..."
         
-        let alert = UIAlertController(title: "提示",
-                                      message: "已生成2000条新数据",
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "确定", style: .default))
-        present(alert, animated: true)
+        // 从数据源获取初始数据
+        let initialData = dataSource.getInitialData(count: 100)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.loadingIndicator.stopAnimating()
+            self.klineView.setKLineData(initialData)
+            self.statusLabel.text = "已加载 \(initialData.count) 条K线数据"
+        }
     }
     
     @objc private func resetView() {
         klineView.resetView()
+        statusLabel.text = "视图已重置"
     }
     
-    private func generateSampleData(count: Int) -> [KLineData] {
-        var data: [KLineData] = []
-        var lastClose: CGFloat = 100.0
+    @objc private func jumpToLatest() {
+        // 这里可以添加跳转到最新数据的逻辑
+        statusLabel.text = "跳转到最新数据..."
         
-        let startDate = Date().addingTimeInterval(-Double(count) * 24 * 3600)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd"
-        
-        for i in 0..<count {
-            let date = Date(timeInterval: TimeInterval(i) * 24 * 3600, since: startDate)
-            let dateString = dateFormatter.string(from: date)
-            
-            // 模拟股票价格变化
-            let volatility: CGFloat = 0.02 // 波动率
-            let change = lastClose * volatility * (CGFloat.random(in: -1...1))
-            let open = lastClose
-            let close = open + change
-            
-            // 确保高价和低价合理
-            let maxChange = abs(change) * 1.5
-            let high = max(open, close) + CGFloat.random(in: 0...maxChange)
-            let low = min(open, close) - CGFloat.random(in: 0...maxChange)
-            
-            // 成交量与价格变化相关
-            let baseVolume: CGFloat = 10000
-            let volume = baseVolume * (1 + abs(change)/open * 10) * CGFloat.random(in: 0.8...1.2)
-            
-            let klineData = KLineData(
-                open: open,
-                close: close,
-                high: high,
-                low: low,
-                volume: volume,
-                date: dateString,
-                timestamp: date.timeIntervalSince1970
-            )
-            
-            data.append(klineData)
-            lastClose = close
+        // 模拟加载最新数据
+        let latestDate = Date()
+        dataSource.loadRecentData(after: latestDate, count: 100) { [weak self] newData in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if !newData.isEmpty {
+                    self.klineView.setKLineData(newData)
+                    self.statusLabel.text = "已跳转到最新数据 (\(newData.count)条)"
+                } else {
+                    self.statusLabel.text = "已经是最新数据"
+                }
+            }
         }
+    }
+    
+    // MARK: - 设备旋转处理
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         
-        return data
+        coordinator.animate { _ in
+            // 调整K线图大小
+            let klineHeight: CGFloat = 500
+            let klineY: CGFloat = 200
+            
+            self.klineView.frame = CGRect(x: 0, y: klineY,
+                                         width: size.width,
+                                         height: klineHeight)
+            self.klineView.setNeedsDisplay()
+        }
     }
 }

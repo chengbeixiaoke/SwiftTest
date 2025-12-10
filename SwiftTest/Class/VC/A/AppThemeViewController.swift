@@ -34,6 +34,8 @@ class AppThemeViewController: BaseViewController {
     }
     
     func setupUI() {
+        navigationItem.title = "主题色测试"
+        
         view.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()

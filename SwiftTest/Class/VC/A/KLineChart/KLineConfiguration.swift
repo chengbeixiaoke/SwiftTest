@@ -15,7 +15,7 @@ class KLineConfiguration: NSObject {
     // 下跌颜色
     var downColor: UIColor = UIColor(red: 40/255, green: 170/255, blue: 60/255, alpha: 1.0)
     
-    //
+    // 网格线条颜色
     var gridColor: UIColor = UIColor.lightGray
     
     // 文案颜色
@@ -30,21 +30,25 @@ class KLineConfiguration: NSObject {
     //
     var selectedColor: UIColor = UIColor.yellow.withAlphaComponent(0.2)
     
+    var loadingColor: UIColor = UIColor.blue.withAlphaComponent(0.3)
+    
     // MARK: 显示配置
     // 显示网格
     var showGrid: Bool = true
     
     // 显示成交量
     var showVolume: Bool = true
-    
-    // 显示
-    var showCrosshair: Bool = true
-    
+        
     // 显示MA
-    var showMA: Bool = true
+    var showMA: Bool = false
     
     // 显示时间
     var showDateLabel: Bool = true
+    
+    var showCrosshair: Bool = true
+    
+    // 显示Y轴
+    var showYAxis: Bool = false
     
     // MARK: K线配置
     // 最小线宽
@@ -60,10 +64,13 @@ class KLineConfiguration: NSObject {
     var maPeriods: [Int] = [5, 10, 20]
     var maColors: [UIColor] = [.orange, .purple, .cyan]
     
-    // MARK: 边距配置
     var topMargin: CGFloat = 40
     var bottomMargin: CGFloat = 30
     var leftMargin: CGFloat = 70
     var rightMargin: CGFloat = 30
     var volumeHeight: CGFloat = 60
+    
+    // MARK: 边距配置
+    var loadingThreshold: CGFloat = 100 // 加载阈值
+    var maxOverScroll: CGFloat = 50    // 最大过度滚动距离
 }

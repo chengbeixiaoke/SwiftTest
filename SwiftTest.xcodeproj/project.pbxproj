@@ -61,6 +61,8 @@
 		436197FE2EE81BB6004932D6 /* KLineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197FD2EE81BB6004932D6 /* KLineData.swift */; };
 		436198002EE81C1C004932D6 /* KLineConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197FF2EE81C1C004932D6 /* KLineConfiguration.swift */; };
 		436198022EE81D3F004932D6 /* KLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198012EE81D3F004932D6 /* KLineChartView.swift */; };
+		436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198082EE948AA004932D6 /* CandleStickDemoViewController3.swift */; };
+		4361980C2EE948DD004932D6 /* KLineChartView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980B2EE948DD004932D6 /* KLineChartView3.swift */; };
 		43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
 		437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */; };
@@ -166,6 +168,8 @@
 		436197FD2EE81BB6004932D6 /* KLineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineData.swift; sourceTree = "<group>"; };
 		436197FF2EE81C1C004932D6 /* KLineConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineConfiguration.swift; sourceTree = "<group>"; };
 		436198012EE81D3F004932D6 /* KLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineChartView.swift; sourceTree = "<group>"; };
+		436198082EE948AA004932D6 /* CandleStickDemoViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController3.swift; sourceTree = "<group>"; };
+		4361980B2EE948DD004932D6 /* KLineChartView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineChartView3.swift; sourceTree = "<group>"; };
 		43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController.swift; sourceTree = "<group>"; };
 		43740CBF2DB7840E005119F4 /* TestRSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRSA.swift; sourceTree = "<group>"; };
 		437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2025-04-23_4029257634_Logs.log"; sourceTree = "<group>"; };
@@ -298,6 +302,7 @@
 		432699F32D95438A0025EEAC /* A */ = {
 			isa = PBXGroup;
 			children = (
+				4361980A2EE948C4004932D6 /* KLineChart3 */,
 				436197FC2EE81B67004932D6 /* KLineChart */,
 				43AA20C52EC42584000D1EAC /* 3D */,
 				433065EE2E8A1F89002E2018 /* Charts */,
@@ -390,6 +395,7 @@
 				436197EF2EE7C265004932D6 /* AnimatedLineGraphChartView.swift */,
 				43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */,
 				436197FA2EE81221004932D6 /* CandleStickDemoViewController2.swift */,
+				436198082EE948AA004932D6 /* CandleStickDemoViewController3.swift */,
 				433065E82E8A1E46002E2018 /* GradientLineChartViewController.swift */,
 				433065EA2E8A1EBC002E2018 /* BarChartDemoViewController.swift */,
 				433065EC2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift */,
@@ -455,6 +461,14 @@
 				436198012EE81D3F004932D6 /* KLineChartView.swift */,
 			);
 			path = KLineChart;
+			sourceTree = "<group>";
+		};
+		4361980A2EE948C4004932D6 /* KLineChart3 */ = {
+			isa = PBXGroup;
+			children = (
+				4361980B2EE948DD004932D6 /* KLineChartView3.swift */,
+			);
+			path = KLineChart3;
 			sourceTree = "<group>";
 		};
 		437988482DBA061300A9BEE2 /* RSA */ = {
@@ -687,6 +701,7 @@
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
 				43269A132D95438A0025EEAC /* AppDateFormatterManager.swift in Sources */,
 				433065FC2E8A2444002E2018 /* UIWindow+Extension.swift in Sources */,
+				436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */,
 				433065F62E8A21E3002E2018 /* UIEdgeInsets+Extension.swift in Sources */,
 				433065E92E8A1E46002E2018 /* GradientLineChartViewController.swift in Sources */,
 				430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */,
@@ -710,6 +725,7 @@
 				43C2E2432E28FBB900F04297 /* SceneDelegate+Other.swift in Sources */,
 				43269A192D95438A0025EEAC /* AppDelegate.swift in Sources */,
 				43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */,
+				4361980C2EE948DD004932D6 /* KLineChartView3.swift in Sources */,
 				433066442E8BBC56002E2018 /* SceneDelegate.swift in Sources */,
 				43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */,
 				43269A1A2D95438A0025EEAC /* User.swift in Sources */,

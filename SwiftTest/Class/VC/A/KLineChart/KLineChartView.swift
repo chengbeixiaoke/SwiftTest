@@ -6,18 +6,34 @@
 //
 
 import UIKit
+import CoreGraphics
 
-class KLineChartView: BaseView {
+// MARK: - 数据源协议
+protocol KLineChartViewDataSource: AnyObject {
+    func loadHistoricalData(before date: Date, count: Int, completion: @escaping ([KLineData]) -> Void)
+    func loadRecentData(after date: Date, count: Int, completion: @escaping ([KLineData]) -> Void)
+}
+
+// MARK: - 状态枚举
+private enum KLineChartViewLoadingState {
+    case idle
+    case loadingLeft
+    case loadingRight
+}
+
+// MARK: - 主K线图类
+class KLineChartView: UIView {
     // MARK: - 属性
     private var klineDatas: [KLineData] = []
     private var config = KLineConfiguration()
+    private weak var dataSource: KLineChartViewDataSource?
     
     // 可见范围计算
     private var visiblePriceMax: CGFloat = 0
     private var visiblePriceMin: CGFloat = 0
     private var visibleVolumeMax: CGFloat = 0
     
-    // 手势状态
+    // 视图状态
     private var visibleStartIndex: Int = 0
     private var visibleCount: Int = 0
     private var klineWidth: CGFloat = 8
@@ -25,218 +41,72 @@ class KLineChartView: BaseView {
     private var offsetX: CGFloat = 0
     private var lastOffsetX: CGFloat = 0
     
-    // 缩放手势
-    private var lastPinchScale: CGFloat = 1.0
-    private var zoomCenterIndex: Int?
-    private var isPinching = false
-    
-    // 拖拽手势
+    // 手势状态
     private var panStartX: CGFloat = 0
     private var isDragging = false
+    private var isPinching = false
+    private var lastPinchScale: CGFloat = 1.0
+    private var zoomCenterIndex: Int?
+    
+    // 无限滚动状态
+    private var loadingState: KLineChartViewLoadingState = .idle
+    private var hasMoreLeftData = true
+    private var hasMoreRightData = true
+    private let pageSize = 50
     
     // 十字线
     private var showCrosshair = false
     private var crosshairPoint: CGPoint?
     private var selectedIndex: Int?
     
-    // 缓存
-    private var maCache: [Int: [CGFloat]] = [:]
-    private var priceCache: [String: CGFloat] = [:] // 简单缓存
-    
-    // 惯性动画
+    // 惯性滚动
     private var displayLink: CADisplayLink?
     private var inertialVelocity: CGFloat = 0
-    private var inertialDeceleration: CGFloat = 0.95
+    private let inertialDeceleration: CGFloat = 0.96
     
-    // 绘图层
-    private let gridLayer = CAShapeLayer()
-    private let klineLayer = CAShapeLayer()
-    private let volumeLayer = CAShapeLayer()
-    private let maLayer = CAShapeLayer()
-    private let crosshairLayer = CAShapeLayer()
-    private let infoLayer = CATextLayer()
+    // 缓存
+    private var maCache: [Int: [CGFloat]] = [:]
     
     // MARK: - 初始化
-    override init(frame: CGRect)
-    {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+        setupView()
     }
     
-    required init?(coder: NSCoder)
-    {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
-        commonInit()
+        setupView()
     }
     
-    private func commonInit()
-    {
+    private func setupView() {
         backgroundColor = config.backgroundColor
         klineWidth = config.defaultKLineWidth
         
-        setupLayers()
-        
-        // 手势
         setupPanGestures()
         setupPinchGestures()
-        setupLongGestures()
+        setupLongPressGestures()
         setupTapGestures()
     }
     
-    private func setupLayers()
-    {
-        // 网格层
-        gridLayer.frame = bounds
-        gridLayer.fillColor = nil
-        gridLayer.strokeColor = config.gridColor.withAlphaComponent(0.3).cgColor
-        gridLayer.lineWidth = 0.5
-        layer.addSublayer(gridLayer)
-        
-        // K线层
-        klineLayer.frame = bounds
-        klineLayer.fillColor = nil
-        layer.addSublayer(klineLayer)
-        
-        // 成交量层
-        volumeLayer.frame = bounds
-        volumeLayer.fillColor = nil
-        layer.addSublayer(volumeLayer)
-        
-        // MA指标层
-        maLayer.frame = bounds
-        maLayer.fillColor = nil
-        layer.addSublayer(maLayer)
-        
-        // 十字线层
-        crosshairLayer.frame = bounds
-        crosshairLayer.fillColor = nil
-        crosshairLayer.strokeColor = config.crosshairColor.cgColor
-        crosshairLayer.lineWidth = 0.5
-        crosshairLayer.isHidden = true
-        layer.addSublayer(crosshairLayer)
-        
-        // 信息层
-        infoLayer.frame = CGRect(x: config.leftMargin, y: 5,
-                                 width: 200, height: 30)
-        infoLayer.fontSize = 12
-        infoLayer.foregroundColor = config.textColor.cgColor
-        infoLayer.backgroundColor = UIColor.white.withAlphaComponent(0.8).cgColor
-        infoLayer.cornerRadius = 4
-        infoLayer.alignmentMode = .left
-        infoLayer.isHidden = true
-        layer.addSublayer(infoLayer)
+    // MARK: - 公开接口
+    public func setDataSource(_ dataSource: KLineChartViewDataSource) {
+        self.dataSource = dataSource
     }
     
-    // 数据设置
-    func setKLineData(_ data: [KLineData])
-    {
+    public func setKLineData(_ data: [KLineData]) {
         self.klineDatas = data.sorted { $0.timestamp < $1.timestamp }
         calculateMA()
         resetView()
     }
     
-    // 更新配置
-    func updateConfig(_ config: KLineConfiguration)
-    {
+    public func updateConfig(_ config: KLineConfiguration) {
         self.config = config
         backgroundColor = config.backgroundColor
         setNeedsDisplay()
     }
     
-    // 重置视图
-    func resetView()
-    {
-        scale = 1.0
-        klineWidth = config.defaultKLineWidth
-        offsetX = 0
-        updateVisibleRange()
-        redrawAll()
-    }
-    
-    // 更新可显示K线
-    private func updateVisibleRange()
-    {
-        let chartWidth = getChartRect().width
-        let totalWidthPerKline = klineWidth + config.klineSpacing
-        
-        // 计算可见K线数量
-        visibleCount = min(Int(chartWidth / totalWidthPerKline), klineDatas.count)
-        
-        // 计算起始索引
-        let totalKlinesWidth = CGFloat(klineDatas.count) * totalWidthPerKline
-        if totalKlinesWidth <= chartWidth {
-            visibleStartIndex = 0
-        } else {
-            let startIndexFloat = offsetX / totalWidthPerKline
-            visibleStartIndex = max(0, Int(floor(startIndexFloat)))
-            visibleStartIndex = min(visibleStartIndex, klineDatas.count - visibleCount)
-        }
-        
-        // 计算可见范围的价格极值
-        calculateVisibleExtremes()
-    }
-    
-    // 可显示K线边界条件
-    private func calculateVisibleExtremes()
-    {
-        guard visibleCount > 0 else { return }
-        
-        let endIndex = min(visibleStartIndex + visibleCount, klineDatas.count)
-        let visibleData = Array(klineDatas[visibleStartIndex..<endIndex])
-        
-        guard let first = visibleData.first else { return }
-        
-        visiblePriceMax = first.high
-        visiblePriceMin = first.low
-        visibleVolumeMax = first.volume
-        
-        for data in visibleData {
-            visiblePriceMax = max(visiblePriceMax, data.high)
-            visiblePriceMin = min(visiblePriceMin, data.low)
-            visibleVolumeMax = max(visibleVolumeMax, data.volume)
-        }
-        
-        // 添加边距
-        let priceRange = visiblePriceMax - visiblePriceMin
-        if priceRange > 0 {
-            visiblePriceMax += priceRange * 0.05
-            visiblePriceMin = max(0, visiblePriceMin - priceRange * 0.05)
-        }
-        
-        if visibleVolumeMax > 0 {
-            visibleVolumeMax *= 1.1
-        }
-    }
-    
-    // 技术指标计算
-    private func calculateMA()
-    {
-        guard !klineDatas.isEmpty else { return }
-        
-        for period in config.maPeriods {
-            var maValues: [CGFloat] = []
-            
-            for i in 0..<klineDatas.count {
-                if i < period - 1 {
-                    maValues.append(0)
-                } else {
-                    var sum: CGFloat = 0
-                    for j in 0..<period {
-                        sum += klineDatas[i - j].close
-                    }
-                    maValues.append(sum / CGFloat(period))
-                }
-            }
-            
-            maCache[period] = maValues
-        }
-    }
-    
     // MARK: - 绘图方法
     override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
-        // 使用Core Graphics重绘
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
         // 清空背景
@@ -260,81 +130,37 @@ class KLineChartView: BaseView {
         if config.showMA {
             drawMA(in: context)
         }
-    }
-    
-    private func redrawAll() {
-        setNeedsDisplay()
-    }
-    
-    private func drawGrid(in context: CGContext) {
-        let chartRect = getChartRect()
         
-        context.setStrokeColor(config.gridColor.withAlphaComponent(0.3).cgColor)
-        context.setLineWidth(0.5)
+        // 绘制加载效果
+        drawLoadingEffects(in: context)
         
-        // 水平网格线
-        let horizontalLines = 5
-        for i in 0...horizontalLines {
-            let y = chartRect.origin.y + CGFloat(i) * chartRect.height / CGFloat(horizontalLines)
-            
-            // 网格线
-            context.move(to: CGPoint(x: chartRect.origin.x, y: y))
-            context.addLine(to: CGPoint(x: chartRect.maxX, y: y))
-            
-            // 价格标签
-            let price = visiblePriceMax - CGFloat(i) * (visiblePriceMax - visiblePriceMin) / CGFloat(horizontalLines)
-            let priceText = formatPrice(price)
-            
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.monospacedDigitSystemFont(ofSize: 10, weight: .regular),
-                .foregroundColor: config.textColor
-            ]
-            
-            let textSize = priceText.size(withAttributes: attributes)
-            priceText.draw(at: CGPoint(x: chartRect.origin.x - textSize.width - 5,
-                                       y: y - textSize.height/2),
-                           withAttributes: attributes)
+        // 绘制十字线
+        if showCrosshair {
+            drawCrosshair(in: context)
         }
-        
-        // 垂直网格线（日期线）
-        guard visibleCount > 0 else { return }
-        
-        let dateLines = min(5, visibleCount)
-        let step = max(1, visibleCount / dateLines)
-        
-        for i in 0..<dateLines {
-            let dataIndex = visibleStartIndex + i * step
-            if dataIndex < klineDatas.count {
-                let x = getXPosition(for: dataIndex)
-                
-                context.move(to: CGPoint(x: x, y: chartRect.origin.y))
-                context.addLine(to: CGPoint(x: x, y: chartRect.maxY))
-                
-                // 日期标签
-                if config.showDateLabel {
-                    let dateText = klineDatas[dataIndex].date
-                    let attributes: [NSAttributedString.Key: Any] = [
-                        .font: UIFont.systemFont(ofSize: 10),
-                        .foregroundColor: config.textColor
-                    ]
-                    
-                    let textSize = dateText.size(withAttributes: attributes)
-                    dateText.draw(at: CGPoint(x: x - textSize.width/2,
-                                              y: chartRect.maxY + 5),
-                                  withAttributes: attributes)
-                }
-            }
-        }
-        
-        context.strokePath()
     }
     
     private func drawKlines(in context: CGContext) {
-        guard visibleCount > 0 else { return }
+        guard visibleCount > 0 else {
+            drawEmptyState(in: context)
+            return
+        }
         
         let chartRect = getChartRect()
         let priceRange = visiblePriceMax - visiblePriceMin
-        guard priceRange > 0 else { return }
+        
+        // 确保价格范围有效
+        guard priceRange > 0 else {
+            // 尝试重新计算价格范围
+            recalculateVisibleExtremes()
+            let newRange = visiblePriceMax - visiblePriceMin
+            guard newRange > 0 else {
+                drawPriceError(in: context)
+                return
+            }
+            // 使用重新计算的范围
+            return drawKlines(in: context) // 递归调用
+        }
         
         let endIndex = min(visibleStartIndex + visibleCount, klineDatas.count)
         
@@ -342,9 +168,18 @@ class KLineChartView: BaseView {
             let data = klineDatas[i]
             let x = getXPosition(for: i)
             
-            // 转换价格到坐标
+            // 安全的价格转换函数
             func priceToY(_ price: CGFloat) -> CGFloat {
-                return chartRect.maxY - (price - visiblePriceMin) / priceRange * chartRect.height
+                // 确保除数不为0
+                if priceRange <= 0 {
+                    return chartRect.midY
+                }
+                
+                let normalizedPrice = (price - visiblePriceMin) / priceRange
+                // 确保规范化后的价格在合理范围内
+                let clampedNormalizedPrice = min(max(normalizedPrice, 0), 1)
+                
+                return chartRect.maxY - clampedNormalizedPrice * chartRect.height
             }
             
             let openY = priceToY(data.open)
@@ -352,36 +187,42 @@ class KLineChartView: BaseView {
             let highY = priceToY(data.high)
             let lowY = priceToY(data.low)
             
+            // 确保Y坐标在绘图区域内
+            let clampedOpenY = min(max(openY, chartRect.minY), chartRect.maxY)
+            let clampedCloseY = min(max(closeY, chartRect.minY), chartRect.maxY)
+            let clampedHighY = min(max(highY, chartRect.minY), chartRect.maxY)
+            let clampedLowY = min(max(lowY, chartRect.minY), chartRect.maxY)
+            
             let color = data.isUp ? config.upColor : config.downColor
             
             // 绘制上下影线
             context.setStrokeColor(color.cgColor)
             context.setLineWidth(1)
             
-            let bodyTop = min(openY, closeY)
-            let bodyBottom = max(openY, closeY)
+            let bodyTop = min(clampedOpenY, clampedCloseY)
+            let bodyBottom = max(clampedOpenY, clampedCloseY)
             
             // 上影线
-            if highY < bodyTop {
-                context.move(to: CGPoint(x: x + klineWidth/2, y: highY))
+            if clampedHighY < bodyTop {
+                context.move(to: CGPoint(x: x + klineWidth/2, y: clampedHighY))
                 context.addLine(to: CGPoint(x: x + klineWidth/2, y: bodyTop))
             }
             
             // 下影线
-            if lowY > bodyBottom {
+            if clampedLowY > bodyBottom {
                 context.move(to: CGPoint(x: x + klineWidth/2, y: bodyBottom))
-                context.addLine(to: CGPoint(x: x + klineWidth/2, y: lowY))
+                context.addLine(to: CGPoint(x: x + klineWidth/2, y: clampedLowY))
             }
             
             context.strokePath()
             
             // 绘制实体
-            let bodyHeight = abs(closeY - openY)
+            let bodyHeight = abs(clampedCloseY - clampedOpenY)
             if bodyHeight > 0 {
                 let bodyRect = CGRect(x: x,
-                                      y: min(openY, closeY),
-                                      width: klineWidth,
-                                      height: bodyHeight)
+                                    y: min(clampedOpenY, clampedCloseY),
+                                    width: klineWidth,
+                                    height: bodyHeight)
                 
                 context.setFillColor(color.cgColor)
                 context.fill(bodyRect)
@@ -396,11 +237,59 @@ class KLineChartView: BaseView {
                 // 十字线
                 context.setStrokeColor(color.cgColor)
                 context.setLineWidth(klineWidth)
-                context.move(to: CGPoint(x: x + klineWidth/2, y: openY - 0.5))
-                context.addLine(to: CGPoint(x: x + klineWidth/2, y: openY + 0.5))
+                let centerY = clampedOpenY
+                context.move(to: CGPoint(x: x + klineWidth/2, y: centerY - 0.5))
+                context.addLine(to: CGPoint(x: x + klineWidth/2, y: centerY + 0.5))
                 context.strokePath()
             }
         }
+    }
+
+    // 添加错误状态绘制
+    private func drawEmptyState(in context: CGContext) {
+        let chartRect = getChartRect()
+        let message = "暂无K线数据"
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.gray
+        ]
+        let textSize = message.size(withAttributes: attributes)
+        message.draw(at: CGPoint(x: chartRect.midX - textSize.width/2,
+                               y: chartRect.midY - textSize.height/2),
+                    withAttributes: attributes)
+    }
+
+    private func drawPriceError(in context: CGContext) {
+        let chartRect = getChartRect()
+        let message = "价格数据异常"
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.red
+        ]
+        let textSize = message.size(withAttributes: attributes)
+        message.draw(at: CGPoint(x: chartRect.midX - textSize.width/2,
+                               y: chartRect.midY - textSize.height/2),
+                    withAttributes: attributes)
+    }
+
+    // 添加重新计算价格范围的方法
+    private func recalculateVisibleExtremes() {
+        guard !klineDatas.isEmpty else {
+            visiblePriceMax = 100
+            visiblePriceMin = 0
+            return
+        }
+        
+        // 使用所有数据重新计算价格范围
+        visiblePriceMax = klineDatas.first!.high
+        visiblePriceMin = klineDatas.first!.low
+        
+        for data in klineDatas {
+            visiblePriceMax = max(visiblePriceMax, data.high)
+            visiblePriceMin = min(visiblePriceMin, data.low)
+        }
+        
+        ensureValidPriceRange()
     }
     
     private func drawVolume(in context: CGContext) {
@@ -462,12 +351,142 @@ class KLineChartView: BaseView {
         }
     }
     
-    private func hideCrosshair() {
-        showCrosshair = false
-        crosshairPoint = nil
-        selectedIndex = nil
-        crosshairLayer.isHidden = true
-        infoLayer.isHidden = true
+    private func drawLoadingEffects(in context: CGContext) {
+        let chartRect = getChartRect()
+        
+        // 绘制左边界加载效果
+        if loadingState == .loadingLeft && offsetX < 0 {
+            let effectRect = CGRect(x: chartRect.origin.x - 20,
+                                    y: chartRect.origin.y,
+                                    width: 20,
+                                    height: chartRect.height)
+            
+            drawLoadingGradient(in: context, rect: effectRect, direction: .loadingLeft)
+            
+            // 绘制加载文字
+            let loadingText = "加载中..."
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 12),
+                .foregroundColor: config.loadingColor
+            ]
+            
+            let textSize = loadingText.size(withAttributes: attributes)
+            loadingText.draw(at: CGPoint(x: chartRect.origin.x - textSize.width - 25,
+                                         y: chartRect.midY - textSize.height/2),
+                             withAttributes: attributes)
+        }
+        
+        // 绘制右边界加载效果
+        if loadingState == .loadingRight {
+            let chartWidth = getChartRect().width
+            let totalWidth = CGFloat(klineDatas.count) * (klineWidth + config.klineSpacing)
+            let maxOffset = max(0, totalWidth - chartWidth)
+            
+            if offsetX > maxOffset {
+                let effectRect = CGRect(x: chartRect.maxX,
+                                        y: chartRect.origin.y,
+                                        width: 20,
+                                        height: chartRect.height)
+                
+                drawLoadingGradient(in: context, rect: effectRect, direction: .loadingRight)
+                
+                // 绘制加载文字
+                let loadingText = "加载中..."
+                let attributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.systemFont(ofSize: 12),
+                    .foregroundColor: config.loadingColor
+                ]
+                
+                let textSize = loadingText.size(withAttributes: attributes)
+                loadingText.draw(at: CGPoint(x: chartRect.maxX + 25,
+                                             y: chartRect.midY - textSize.height/2),
+                                 withAttributes: attributes)
+            }
+        }
+    }
+    
+    private func drawLoadingGradient(in context: CGContext, rect: CGRect, direction: KLineChartViewLoadingState) {
+        // 创建渐变
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let colors: [CGColor] = [
+            config.loadingColor.withAlphaComponent(0.2).cgColor,
+            config.loadingColor.withAlphaComponent(0.0).cgColor
+        ]
+        
+        let locations: [CGFloat] = direction == .loadingLeft ? [0.0, 1.0] : [1.0, 0.0]
+        
+        if let gradient = CGGradient(colorsSpace: colorSpace,
+                                     colors: colors as CFArray,
+                                     locations: locations) {
+            let startPoint = direction == .loadingLeft ?
+            CGPoint(x: rect.minX, y: rect.midY) :
+            CGPoint(x: rect.maxX, y: rect.midY)
+            let endPoint = direction == .loadingLeft ?
+            CGPoint(x: rect.maxX, y: rect.midY) :
+            CGPoint(x: rect.minX, y: rect.midY)
+            
+            context.saveGState()
+            context.addRect(rect)
+            context.clip()
+            context.drawLinearGradient(gradient,
+                                       start: startPoint,
+                                       end: endPoint,
+                                       options: [])
+            context.restoreGState()
+        }
+    }
+    
+    private func drawCrosshair(in context: CGContext) {
+        guard let point = crosshairPoint,
+              let index = selectedIndex,
+              index < klineDatas.count else {
+            return
+        }
+        
+        let chartRect = getChartRect()
+        let data = klineDatas[index]
+        
+        // 绘制十字线
+        context.setStrokeColor(config.crosshairColor.cgColor)
+        context.setLineWidth(0.5)
+        
+        // 垂直线
+        context.move(to: CGPoint(x: point.x, y: chartRect.origin.y))
+        context.addLine(to: CGPoint(x: point.x, y: chartRect.maxY))
+        
+        // 水平线
+        context.move(to: CGPoint(x: chartRect.origin.x, y: point.y))
+        context.addLine(to: CGPoint(x: chartRect.maxX, y: point.y))
+        
+        context.strokePath()
+        
+        // 绘制信息框
+        let priceRange = visiblePriceMax - visiblePriceMin
+        let price = visiblePriceMax - (point.y - chartRect.origin.y) / chartRect.height * priceRange
+        
+        let infoText = """
+        日期: \(data.date)
+        开: \(formatPrice(data.open))
+        收: \(formatPrice(data.close))
+        高: \(formatPrice(data.high))
+        低: \(formatPrice(data.low))
+        """
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 10),
+            .foregroundColor: UIColor.white
+        ]
+        
+        let textSize = infoText.size(withAttributes: attributes)
+        let infoRect = CGRect(x: point.x + 10, y: point.y - textSize.height/2,
+                              width: textSize.width + 10, height: textSize.height + 10)
+        
+        // 背景
+        context.setFillColor(UIColor.black.withAlphaComponent(0.7).cgColor)
+        context.fill(infoRect)
+        
+        // 文字
+        infoText.draw(in: infoRect.insetBy(dx: 5, dy: 5), withAttributes: attributes)
     }
     
     // MARK: - 辅助方法
@@ -506,6 +525,193 @@ class KLineChartView: BaseView {
         return (index >= 0 && index < klineDatas.count) ? index : nil
     }
     
+    private func getSafePinchCenter(for gesture: UIPinchGestureRecognizer) -> CGPoint? {
+        guard gesture.numberOfTouches >= 2 else { return nil }
+        
+        let touchPoint1 = gesture.location(ofTouch: 0, in: self)
+        let touchPoint2 = gesture.location(ofTouch: 1, in: self)
+        
+        return CGPoint(x: (touchPoint1.x + touchPoint2.x) / 2,
+                       y: (touchPoint1.y + touchPoint2.y) / 2)
+    }
+    
+    private func performZoom(scaleChange: CGFloat, centerIndex: Int?) {
+        guard scaleChange != 1.0 else { return }
+        
+        let oldKlineWidth = klineWidth
+        
+        // 更新缩放比例
+        var newScale = scale * scaleChange
+        newScale = min(max(0.5, newScale), 3.0)
+        
+        if newScale != scale {
+            scale = newScale
+            
+            // 计算新宽度
+            let targetWidth = config.defaultKLineWidth * scale
+            klineWidth = min(max(config.minKLineWidth, targetWidth), config.maxKLineWidth)
+            
+            // 保持中心点位置
+            if let centerIndex = centerIndex,
+               centerIndex >= 0 && centerIndex < klineDatas.count {
+                
+                let spacing = config.klineSpacing
+                let chartWidth = getChartRect().width
+                let totalWidth = CGFloat(klineDatas.count) * (klineWidth + spacing)
+                
+                // 计算中心点在新旧宽度下的位置
+                let oldCenterX = CGFloat(centerIndex) * (oldKlineWidth + spacing)
+                let newCenterX = CGFloat(centerIndex) * (klineWidth + spacing)
+                
+                // 调整偏移量
+                offsetX += (newCenterX - oldCenterX)
+                
+                // 边界检查
+                let maxOffset = max(0, totalWidth - chartWidth)
+                offsetX = max(0, min(offsetX, maxOffset))
+            }
+            
+            updateVisibleRange()
+            setNeedsDisplay()
+        }
+    }
+    
+    private func updateVisibleRange() {
+        let chartWidth = getChartRect().width
+        let totalWidthPerKline = klineWidth + config.klineSpacing
+        
+        // 计算可见K线数量
+        visibleCount = min(Int(chartWidth / totalWidthPerKline), klineDatas.count)
+        
+        // 计算起始索引
+        let totalKlinesWidth = CGFloat(klineDatas.count) * totalWidthPerKline
+        if totalKlinesWidth <= chartWidth {
+            visibleStartIndex = 0
+        } else {
+            let startIndexFloat = offsetX / totalWidthPerKline
+            visibleStartIndex = max(0, Int(floor(startIndexFloat)))
+            visibleStartIndex = min(visibleStartIndex, klineDatas.count - visibleCount)
+        }
+        
+        // 计算可见范围的价格极值
+        calculateVisibleExtremes()
+    }
+    
+    private func calculateVisibleExtremes() {
+        guard visibleCount > 0 else {
+            visiblePriceMax = 0
+            visiblePriceMin = 0
+            visibleVolumeMax = 0
+            return
+        }
+        
+        let endIndex = min(visibleStartIndex + visibleCount, klineDatas.count)
+        let visibleData = Array(klineDatas[visibleStartIndex..<endIndex])
+        
+        guard let first = visibleData.first else {
+            visiblePriceMax = 0
+            visiblePriceMin = 0
+            visibleVolumeMax = 0
+            return
+        }
+        
+        // 修复：这里应该用 first.high 初始化 visiblePriceMax，不是 first.low
+        visiblePriceMax = first.high  // ✅ 修复：改为 first.high
+        visiblePriceMin = first.low
+        visibleVolumeMax = first.volume
+        
+        for data in visibleData {
+            visiblePriceMax = max(visiblePriceMax, data.high)
+            visiblePriceMin = min(visiblePriceMin, data.low)
+            visibleVolumeMax = max(visibleVolumeMax, data.volume)
+        }
+        
+        // 添加边界安全检查
+        ensureValidPriceRange()
+        
+        if visibleVolumeMax > 0 {
+            visibleVolumeMax *= 1.1
+        }
+    }
+
+    // 新增：确保价格范围有效的辅助方法
+    private func ensureValidPriceRange() {
+        // 如果价格范围无效，进行修正
+        if visiblePriceMax <= visiblePriceMin {
+            // 如果两个值都是0，设置一个默认范围
+            if visiblePriceMax == 0 && visiblePriceMin == 0 {
+                visiblePriceMax = 100
+                visiblePriceMin = 0
+            } else if visiblePriceMax == visiblePriceMin {
+                // 如果价格相同，创建一个小的价格范围
+                let basePrice = visiblePriceMax
+                visiblePriceMax = basePrice * 1.001
+                visiblePriceMin = basePrice * 0.999
+            } else {
+                // 如果最大值小于最小值，交换它们
+                let temp = visiblePriceMax
+                visiblePriceMax = visiblePriceMin
+                visiblePriceMin = temp
+            }
+        }
+        
+        // 确保价格范围有足够的间距
+        let priceRange = visiblePriceMax - visiblePriceMin
+        if priceRange <= 0 {
+            // 如果价格范围仍然是0或负数，设置一个合理的范围
+            let midPrice = (visiblePriceMax + visiblePriceMin) / 2
+            visiblePriceMax = midPrice + 1
+            visiblePriceMin = midPrice - 1
+        }
+        
+        // 添加边距
+        let finalRange = visiblePriceMax - visiblePriceMin
+        if finalRange > 0 {
+            visiblePriceMax += finalRange * 0.05
+            visiblePriceMin -= finalRange * 0.05
+            
+            // 确保最低价格不为负（如果是股票价格）
+            visiblePriceMin = max(0, visiblePriceMin)
+        }
+    }
+    
+    private func calculateMA() {
+        guard !klineDatas.isEmpty else { return }
+        
+        for period in config.maPeriods {
+            var maValues: [CGFloat] = []
+            
+            for i in 0..<klineDatas.count {
+                if i < period - 1 {
+                    maValues.append(0)
+                } else {
+                    var sum: CGFloat = 0
+                    for j in 0..<period {
+                        sum += klineDatas[i - j].close
+                    }
+                    maValues.append(sum / CGFloat(period))
+                }
+            }
+            
+            maCache[period] = maValues
+        }
+    }
+    
+    public func resetView() {
+        scale = 1.0
+        klineWidth = config.defaultKLineWidth
+        offsetX = 0
+        updateVisibleRange()
+        setNeedsDisplay()
+    }
+    
+    private func hideCrosshair() {
+        showCrosshair = false
+        crosshairPoint = nil
+        selectedIndex = nil
+        setNeedsDisplay()
+    }
+    
     private func formatPrice(_ price: CGFloat) -> String {
         if price >= 100 {
             return String(format: "%.2f", price)
@@ -517,10 +723,89 @@ class KLineChartView: BaseView {
     }
 }
 
+// MARK: - 绘制虚线网格
+extension KLineChartView {
+    private func drawGrid(in context: CGContext) {
+        let chartRect = getChartRect()
+        
+        // 设置虚线样式
+        context.setStrokeColor(config.gridColor.withAlphaComponent(0.1).cgColor)
+        context.setLineWidth(0.5)
+        
+        // 定义虚线模式：绘制2点，跳过2点
+        let dashPattern: [CGFloat] = [2, 2]
+        context.setLineDash(phase: 0, lengths: dashPattern)
+        
+        // 水平虚线网格线
+        let horizontalLines = 5
+        for i in 0...horizontalLines {
+            let y = chartRect.origin.y + CGFloat(i) * chartRect.height / CGFloat(horizontalLines)
+            
+            // 虚线
+            context.move(to: CGPoint(x: chartRect.origin.x, y: y))
+            context.addLine(to: CGPoint(x: chartRect.maxX, y: y))
+            context.strokePath() // 每条线单独绘制，以便保持虚线样式
+            
+            // 价格标签
+            let price = visiblePriceMax - CGFloat(i) * (visiblePriceMax - visiblePriceMin) / CGFloat(horizontalLines)
+            let priceText = formatPrice(price)
+            
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.monospacedDigitSystemFont(ofSize: 10, weight: .regular),
+                .foregroundColor: config.textColor
+            ]
+            
+            let textSize = priceText.size(withAttributes: attributes)
+            priceText.draw(at: CGPoint(x: chartRect.origin.x - textSize.width - 5,
+                                     y: y - textSize.height/2),
+                         withAttributes: attributes)
+        }
+        
+        // 重置虚线设置，为垂直线做准备
+        context.setLineDash(phase: 0, lengths: [])
+        
+        // 垂直网格线（如果需要也改为虚线，取消下面注释）
+         context.setLineDash(phase: 0, lengths: dashPattern)
+        
+        // 垂直线（日期线）
+        guard visibleCount > 0 else { return }
+        
+        let dateLines = min(3, visibleCount)
+        let step = max(1, visibleCount / dateLines)
+        
+        for i in 0..<dateLines {
+            let dataIndex = visibleStartIndex + i * step
+            if dataIndex < klineDatas.count {
+                let x = getXPosition(for: dataIndex)
+                
+                context.move(to: CGPoint(x: x, y: chartRect.origin.y))
+                context.addLine(to: CGPoint(x: x, y: chartRect.maxY))
+                context.strokePath() // 每条线单独绘制
+                
+                // 日期标签
+                if config.showDateLabel {
+                    let dateText = klineDatas[dataIndex].date
+                    let attributes: [NSAttributedString.Key: Any] = [
+                        .font: UIFont.systemFont(ofSize: 10),
+                        .foregroundColor: config.textColor
+                    ]
+                    
+                    let textSize = dateText.size(withAttributes: attributes)
+                    dateText.draw(at: CGPoint(x: x - textSize.width/2,
+                                            y: chartRect.maxY + 5),
+                                withAttributes: attributes)
+                }
+            }
+        }
+        
+        // 重置虚线设置，为垂直线做准备
+        context.setLineDash(phase: 0, lengths: [])
+    }
+}
+
 // MARK: 拖拽手势
 extension KLineChartView {
-    private func setupPanGestures()
-    {
+    private func setupPanGestures() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panGesture.minimumNumberOfTouches = 1
         panGesture.maximumNumberOfTouches = 1
@@ -528,38 +813,37 @@ extension KLineChartView {
         addGestureRecognizer(panGesture)
     }
     
-    @objc private func handlePan(_ gesture: UIPanGestureRecognizer)
-    {
-        // 如果正在捏合缩放，则不处理拖拽
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        // 如果正在捏合，则不处理拖拽
         if isPinching {
             return
         }
         
+        // 停止惯性动画
+        stopInertialScroll()
+        
+        let translation = gesture.translation(in: self)
+        
         switch gesture.state {
         case .began:
             isDragging = true
-            panStartX = gesture.translation(in: self).x
+            panStartX = translation.x
             lastOffsetX = offsetX
             
-            // 停止惯性动画
-            stopInertialScroll()
-            
         case .changed:
-            let translation = gesture.translation(in: self)
             let deltaX = translation.x - panStartX
             
-            // 计算新的偏移量
-            let chartWidth = getChartRect().width
+            // 允许超出边界拖拽
             let totalWidth = CGFloat(klineDatas.count) * (klineWidth + config.klineSpacing)
-            let maxOffset = max(0, totalWidth - chartWidth)
+            let chartWidth = getChartRect().width
             
-            if maxOffset > 0 {
-                offsetX = lastOffsetX - deltaX
-                offsetX = min(max(0, offsetX), maxOffset)
-                
-                updateVisibleRange()
-                redrawAll()
-            }
+            offsetX = lastOffsetX - deltaX
+            
+            // 检查是否需要加载数据
+            checkBoundaryAndLoadData(chartWidth: chartWidth, totalWidth: totalWidth)
+            
+            updateVisibleRange()
+            setNeedsDisplay()
             
         case .ended:
             isDragging = false
@@ -568,20 +852,178 @@ extension KLineChartView {
             let velocity = gesture.velocity(in: self).x
             if abs(velocity) > 50 {
                 startInertialScroll(velocity: velocity)
+            } else {
+                // 如果没有惯性，检查是否需要回弹
+                checkAndSnapBack()
             }
             
         case .cancelled, .failed:
             isDragging = false
+            checkAndSnapBack()
             
         default:
             break
         }
     }
     
-    // 惯性滚动
-    private func startInertialScroll(velocity: CGFloat)
-    {
-        inertialVelocity = velocity * 0.5 // 降低速度系数
+    // MARK: - 无限滚动核心逻辑
+    private func checkBoundaryAndLoadData(chartWidth: CGFloat, totalWidth: CGFloat) {
+        let maxOffset = max(0, totalWidth - chartWidth)
+        
+        // 检查左边界
+        if offsetX < -config.loadingThreshold && loadingState == .idle && hasMoreLeftData {
+            loadMoreData(in: .loadingLeft)
+        }
+        
+        // 检查右边界
+        if offsetX > maxOffset + config.loadingThreshold && loadingState == .idle && hasMoreRightData {
+            loadMoreData(in: .loadingRight)
+        }
+    }
+    private func checkAndSnapBack() {
+        let chartWidth = getChartRect().width
+        let totalWidth = CGFloat(klineDatas.count) * (klineWidth + config.klineSpacing)
+        let maxOffset = max(0, totalWidth - chartWidth)
+        
+        // 如果没有在加载数据，则回弹到边界内
+        if loadingState == .idle {
+            if offsetX < 0 {
+                offsetX = 0
+            } else if offsetX > maxOffset {
+                offsetX = maxOffset
+            }
+            updateVisibleRange()
+            setNeedsDisplay()
+        }
+    }
+    
+    private func loadMoreData(in direction: KLineChartViewLoadingState) {
+        guard let dataSource = dataSource, loadingState == .idle else { return }
+        
+        loadingState = direction
+        
+        // 获取最早或最晚的数据时间
+        guard let targetDate = getTargetDate(for: direction) else {
+            loadingState = .idle
+            return
+        }
+        
+        // 定义完成处理
+        let handleCompletion = { [weak self] (newData: [KLineData]) in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                // 在这里根据返回的数据量判断是否还有更多数据
+                if direction == .loadingLeft {
+                    self.hasMoreLeftData = newData.count >= self.pageSize
+                } else {
+                    self.hasMoreRightData = newData.count >= self.pageSize
+                }
+                
+                self.handleLoadedData(newData, direction: direction)
+            }
+        }
+        
+        if direction == .loadingLeft {
+            dataSource.loadHistoricalData(before: targetDate,
+                                          count: pageSize,
+                                          completion: handleCompletion)
+        } else {
+            dataSource.loadRecentData(after: targetDate,
+                                      count: pageSize,
+                                      completion: handleCompletion)
+        }
+        
+        setNeedsDisplay()
+    }
+    
+    private func getTargetDate(for direction: KLineChartViewLoadingState) -> Date? {
+        guard !klineDatas.isEmpty else { return nil }
+        
+        if direction == .loadingLeft {
+            // 获取最早的数据日期
+            let earliestData = klineDatas.first!
+            return Date(timeIntervalSince1970: earliestData.timestamp - 1)
+        } else {
+            // 获取最新的数据日期
+            let latestData = klineDatas.last!
+            return Date(timeIntervalSince1970: latestData.timestamp + 1)
+        }
+    }
+    
+    private func handleLoadedData(_ newData: [KLineData], direction: KLineChartViewLoadingState) {
+        guard !newData.isEmpty else {
+            // 没有更多数据
+            if direction == .loadingLeft {
+                hasMoreLeftData = false
+            } else {
+                hasMoreRightData = false
+            }
+            loadingState = .idle
+            checkAndSnapBack()
+            return
+        }
+        
+        // 根据方向合并数据
+        let oldCount = klineDatas.count
+        let oldOffsetX = offsetX
+        let chartWidth = getChartRect().width
+        
+        if direction == .loadingLeft {
+            // 在开头插入数据
+            klineDatas = newData.reversed() + klineDatas
+            
+            // 调整offsetX以保持视觉位置
+            let addedWidth = CGFloat(newData.count) * (klineWidth + config.klineSpacing)
+            offsetX = oldOffsetX + addedWidth
+            
+        } else {
+            // 在末尾追加数据
+            klineDatas += newData
+            
+            // offsetX保持不变
+        }
+        
+        // 计算技术指标
+        calculateMA()
+        
+        // 加载完成，回弹到正常位置
+        loadingState = .idle
+        
+        // 如果是从左边界加载的，需要平滑过渡
+        if direction == .loadingLeft {
+            animateLeftBoundaryTransition(oldOffsetX: oldOffsetX,
+                                          oldCount: oldCount,
+                                          newCount: klineDatas.count,
+                                          chartWidth: chartWidth)
+        } else {
+            checkAndSnapBack()
+        }
+        
+        updateVisibleRange()
+        setNeedsDisplay()
+    }
+    
+    private func animateLeftBoundaryTransition(oldOffsetX: CGFloat,
+                                               oldCount: Int,
+                                               newCount: Int,
+                                               chartWidth: CGFloat) {
+        let totalWidth = CGFloat(newCount) * (klineWidth + config.klineSpacing)
+        
+        // 计算目标位置（显示新加载的数据）
+        let targetOffset: CGFloat = 0
+        
+        // 使用动画平滑过渡
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.offsetX = targetOffset
+            self.updateVisibleRange()
+            self.setNeedsDisplay()
+        })
+    }
+    
+    // MARK: - 惯性滚动
+    private func startInertialScroll(velocity: CGFloat) {
+        inertialVelocity = velocity * 0.3
         
         if displayLink == nil {
             displayLink = CADisplayLink(target: self, selector: #selector(updateInertialScroll))
@@ -589,59 +1031,76 @@ extension KLineChartView {
         }
     }
     
-    private func stopInertialScroll()
-    {
+    private func stopInertialScroll() {
         displayLink?.invalidate()
         displayLink = nil
         inertialVelocity = 0
     }
     
-    @objc private func updateInertialScroll()
-    {
-        guard abs(inertialVelocity) > 0.5 else {
+    @objc private func updateInertialScroll() {
+        guard abs(inertialVelocity) > 0.1 else {
             stopInertialScroll()
+            checkAndSnapBack()
             return
         }
         
         // 应用减速
         inertialVelocity *= inertialDeceleration
         
-        // 更新位置
+        // 获取边界信息
         let chartWidth = getChartRect().width
         let totalWidth = CGFloat(klineDatas.count) * (klineWidth + config.klineSpacing)
         let maxOffset = max(0, totalWidth - chartWidth)
         
-        if maxOffset > 0 {
-            offsetX -= inertialVelocity * 0.016 // 时间因子
-            
-            // 边界检查并反弹
-            if offsetX < 0 {
-                offsetX = 0
-                inertialVelocity = -inertialVelocity * 0.3 // 反弹
-            } else if offsetX > maxOffset {
-                offsetX = maxOffset
-                inertialVelocity = -inertialVelocity * 0.3 // 反弹
-            }
-            
-            updateVisibleRange()
-            redrawAll()
-        } else {
-            stopInertialScroll()
+        // 计算新位置
+        let deltaX = inertialVelocity * 0.016
+        var newOffsetX = offsetX - deltaX
+        
+        // 检查边界和加载
+        var shouldStop = false
+        
+        if newOffsetX < -config.loadingThreshold && loadingState == .idle && hasMoreLeftData {
+            // 触发左边界加载
+            loadMoreData(in: .loadingLeft)
+            shouldStop = true
+        } else if newOffsetX > maxOffset + config.loadingThreshold && loadingState == .idle && hasMoreRightData {
+            // 触发右边界加载
+            loadMoreData(in: .loadingRight)
+            shouldStop = true
+        } else if newOffsetX < 0 {
+            // 左边界阻尼
+            newOffsetX = 0
+            inertialVelocity *= 0.3
+            shouldStop = abs(inertialVelocity) < 1
+        } else if newOffsetX > maxOffset {
+            // 右边界阻尼
+            newOffsetX = maxOffset
+            inertialVelocity *= 0.3
+            shouldStop = abs(inertialVelocity) < 1
         }
+        
+        // 更新位置
+        offsetX = newOffsetX
+        
+        if shouldStop {
+            stopInertialScroll()
+            checkAndSnapBack()
+        }
+        
+        updateVisibleRange()
+        setNeedsDisplay()
     }
 }
 
 // MARK: 捏合手势
 extension KLineChartView {
-    private func setupPinchGestures()
-    {
+    private func setupPinchGestures() {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
         pinchGesture.delegate = self
         addGestureRecognizer(pinchGesture)
     }
     
-    @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer)
-    {
+    @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
         switch gesture.state {
         case .began:
             isPinching = true
@@ -697,92 +1156,23 @@ extension KLineChartView {
             }
             
             updateVisibleRange()
-            redrawAll()
+            setNeedsDisplay()
             
         default:
             break
         }
     }
-    
-    // 安全获取捏合中心点（修复crash的关键）
-    private func getSafePinchCenter(for gesture: UIPinchGestureRecognizer) -> CGPoint?
-    {
-        let touchCount = gesture.numberOfTouches
-        
-        guard touchCount >= 2 else {
-            return nil
-        }
-        
-        do {
-            // 使用try-catch保护
-            let touchPoint1 = gesture.location(ofTouch: 0, in: self)
-            let touchPoint2 = gesture.location(ofTouch: 1, in: self)
-            
-            return CGPoint(
-                x: (touchPoint1.x + touchPoint2.x) / 2,
-                y: (touchPoint1.y + touchPoint2.y) / 2
-            )
-        } catch {
-            // 如果出错，使用手势位置
-            return gesture.location(in: self)
-        }
-    }
-    
-    // 执行缩放操作
-    private func performZoom(scaleChange: CGFloat, centerIndex: Int?)
-    {
-        guard scaleChange != 1.0 else { return }
-        
-        let oldKlineWidth = klineWidth
-        
-        // 更新缩放比例
-        var newScale = scale * scaleChange
-        newScale = min(max(0.5, newScale), 3.0)
-        
-        if newScale != scale {
-            scale = newScale
-            
-            // 计算新宽度
-            let targetWidth = config.defaultKLineWidth * scale
-            klineWidth = min(max(config.minKLineWidth, targetWidth), config.maxKLineWidth)
-            
-            // 保持中心点位置
-            if let centerIndex = centerIndex,
-               centerIndex >= 0 && centerIndex < klineDatas.count {
-                
-                let spacing = config.klineSpacing
-                let chartWidth = getChartRect().width
-                let totalWidth = CGFloat(klineDatas.count) * (klineWidth + spacing)
-                
-                // 计算中心点在新旧宽度下的位置
-                let oldCenterX = CGFloat(centerIndex) * (oldKlineWidth + spacing)
-                let newCenterX = CGFloat(centerIndex) * (klineWidth + spacing)
-                
-                // 调整偏移量
-                offsetX += (newCenterX - oldCenterX)
-                
-                // 边界检查
-                let maxOffset = max(0, totalWidth - chartWidth)
-                offsetX = max(0, min(offsetX, maxOffset))
-            }
-            
-            updateVisibleRange()
-            redrawAll()
-        }
-    }
 }
 
-// MARK: 长按手势
+// MARK: - 长按手势
 extension KLineChartView {
-    private func setupLongGestures()
-    {
+    private func setupLongPressGestures() {
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        longPressGesture.delegate = self
+        longPressGesture.minimumPressDuration = 0.3
         addGestureRecognizer(longPressGesture)
     }
-    
-    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer)
-    {
+
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         let point = gesture.location(in: self)
         let chartRect = getChartRect()
         
@@ -801,8 +1191,7 @@ extension KLineChartView {
             let relativeIndex = Int(xInChart / (klineWidth + config.klineSpacing))
             selectedIndex = min(visibleStartIndex + relativeIndex, klineDatas.count - 1)
             
-            updateCrosshair()
-            showSelectedInfo()
+            setNeedsDisplay()
             
         case .ended, .cancelled:
             hideCrosshair()
@@ -811,114 +1200,48 @@ extension KLineChartView {
             break
         }
     }
-    
-    // 十字线
-    private func updateCrosshair() {
-        guard let point = crosshairPoint else { return }
-        
-        let chartRect = getChartRect()
-        let path = UIBezierPath()
-        
-        // 垂直线
-        path.move(to: CGPoint(x: point.x, y: chartRect.origin.y))
-        path.addLine(to: CGPoint(x: point.x, y: chartRect.maxY))
-        
-        // 水平线
-        path.move(to: CGPoint(x: chartRect.origin.x, y: point.y))
-        path.addLine(to: CGPoint(x: chartRect.maxX, y: point.y))
-        
-        crosshairLayer.path = path.cgPath
-        crosshairLayer.isHidden = false
-    }
-    
-    //
-    private func showSelectedInfo() {
-        guard let index = selectedIndex, index < klineDatas.count else { return }
-        
-        let data = klineDatas[index]
-        
-        let priceRange = visiblePriceMax - visiblePriceMin
-        let chartRect = getChartRect()
-        let price = visiblePriceMax - (crosshairPoint?.y ?? 0 - chartRect.origin.y) / chartRect.height * priceRange
-        
-        let infoText = """
-        日期: \(data.date)
-        价格: \(formatPrice(price))
-        开: \(formatPrice(data.open))  收: \(formatPrice(data.close))
-        高: \(formatPrice(data.high))  低: \(formatPrice(data.low))
-        涨幅: \(String(format: "%.2f%%", data.change/data.open*100))
-        """
-        
-        infoLayer.string = infoText
-        infoLayer.isHidden = false
-    }
-    
 }
 
 // MARK: 点击手势
 extension KLineChartView {
-    private func setupTapGestures()
-    {
+    private func setupTapGestures() {
         // 双击手势
         let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
         doubleTapGesture.numberOfTapsRequired = 2
-        doubleTapGesture.delegate = self
         addGestureRecognizer(doubleTapGesture)
         
         // 单击手势
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        tapGesture.delegate = self
-        tapGesture.require(toFail: doubleTapGesture) // 只有双击失败才识别单击
+        tapGesture.require(toFail: doubleTapGesture)
         addGestureRecognizer(tapGesture)
     }
     
-    @objc private func handleDoubleTap(_ gesture: UITapGestureRecognizer)
-    {
-        resetView()
+    
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        hideCrosshair()
     }
     
-    @objc private func handleTap(_ gesture: UITapGestureRecognizer)
-    {
-        hideCrosshair()
+    @objc private func handleDoubleTap(_ gesture: UITapGestureRecognizer) {
+        resetView()
     }
 }
 
-
 // MARK: - UIGestureRecognizerDelegate
 extension KLineChartView: UIGestureRecognizerDelegate {
-    // 允许某些手势同时识别
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
     {
-        
         // 允许拖拽和捏合同时识别
         let isPanAndPinch = (gestureRecognizer is UIPanGestureRecognizer && otherGestureRecognizer is UIPinchGestureRecognizer) ||
         (gestureRecognizer is UIPinchGestureRecognizer && otherGestureRecognizer is UIPanGestureRecognizer)
         
-        // 允许长按和其他手势同时识别
-        let involvesLongPress = gestureRecognizer is UILongPressGestureRecognizer ||
-        otherGestureRecognizer is UILongPressGestureRecognizer
-        
-        return isPanAndPinch || involvesLongPress
+        return isPanAndPinch
     }
     
-    // 控制手势是否应该开始
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool
     {
         if let panGesture = gestureRecognizer as? UIPanGestureRecognizer {
-            // 如果是拖拽手势，检查是否是多指触摸
-            if panGesture.numberOfTouches > 1 {
-                // 多指触摸时不开始拖拽
-                return false
-            }
+            return panGesture.numberOfTouches <= 1
         }
-        return true
-    }
-    
-    // 控制手势是否应该接收触摸
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldReceive touch: UITouch) -> Bool
-    {
         return true
     }
 }
