@@ -8,7 +8,6 @@
 import UIKit
 
 open class BaseNavigationController: UINavigationController {
-    
     open override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,16 +57,10 @@ open class BaseNavigationController: UINavigationController {
     {
         if children.count > 0 {
             viewController.hidesBottomBarWhenPushed = true
-            viewController.navigationItem.backBarButtonItem = UIBarButtonItem.back(self, action: #selector(back))
         } else {
             viewController.hidesBottomBarWhenPushed = false
-            viewController.navigationItem.backBarButtonItem = UIBarButtonItem()
         }
         super.pushViewController(viewController, animated: true)
-    }
-    
-    @objc func back() {
-       let _ =  popViewController(animated: true)
     }
     
     public override func popToRootViewController(animated: Bool) -> [UIViewController]?
@@ -85,14 +78,5 @@ extension BaseNavigationController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool
     {
         return true
-    }
-}
-
-extension UIBarButtonItem {
-    public static func back(_ target: Any, action: Selector) -> UIBarButtonItem {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-        button.addTarget(target, action: action, for: .touchUpInside)
-        button.setImage(UIImage(named: "back"), for: .normal)
-        return UIBarButtonItem(customView: button)
     }
 }

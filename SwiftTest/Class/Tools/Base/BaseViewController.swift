@@ -53,10 +53,24 @@ open class BaseViewController: UIViewController {
         print("[VC] viewDidLoad: \(className())")
         
         view.backgroundColor = viewBackgroundColor
+        
+        navigationItem.hidesBackButton = true
+        if navigationController?.children.count ?? 0 <= 1 {
+            navigationItem.leftBarButtonItem = UIBarButtonItem()
+        } else {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "normal_back"),
+                                                               style: .plain,
+                                                               target: self,
+                                                               action: #selector(backAction))
+        }
     }
     
     public func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         
+    }
+    
+    @objc public func backAction() {
+        let _ =  navigationController?.popViewController(animated: true)
     }
     
     deinit {

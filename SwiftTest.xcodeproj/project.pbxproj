@@ -63,6 +63,7 @@
 		436198022EE81D3F004932D6 /* KLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198012EE81D3F004932D6 /* KLineChartView.swift */; };
 		436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198082EE948AA004932D6 /* CandleStickDemoViewController3.swift */; };
 		4361980C2EE948DD004932D6 /* KLineChartView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980B2EE948DD004932D6 /* KLineChartView3.swift */; };
+		4361980D2EE95376004932D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 432699DC2D9543780025EEAC /* Assets.xcassets */; };
 		43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
 		437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */; };
@@ -600,6 +601,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4361980D2EE95376004932D6 /* Assets.xcassets in Resources */,
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
 				43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */,
 				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
