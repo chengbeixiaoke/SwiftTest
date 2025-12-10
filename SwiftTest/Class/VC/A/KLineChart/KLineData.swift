@@ -22,10 +22,7 @@ class KLineData {
     
     // 成交量
     let volume: CGFloat
-    
-    // 日期
-    let date: String
-    
+        
     // 时间戳
     let timestamp: TimeInterval
     
@@ -39,13 +36,12 @@ class KLineData {
         return change >= 0
     }
     
-    init(open: CGFloat, close: CGFloat, high: CGFloat, low: CGFloat, volume: CGFloat, date: String, timestamp: TimeInterval) {
+    init(open: CGFloat, close: CGFloat, high: CGFloat, low: CGFloat, volume: CGFloat, timestamp: TimeInterval) {
         self.open = open
         self.close = close
         self.high = high
         self.low = low
         self.volume = volume
-        self.date = date
         self.timestamp = timestamp
     }
 }
@@ -54,7 +50,6 @@ class KLineData {
 class MockKLineDataSource: KLineChartViewDataSource {
     
     private var allData: [KLineData] = []
-    private var currentStartIndex = 5000
     private let totalDataCount = 10000
     private let pageSize = 50
     
@@ -108,7 +103,6 @@ class MockKLineDataSource: KLineChartViewDataSource {
                 high: actualHigh,
                 low: max(0.01, actualLow), // 确保最低价不为负
                 volume: volume,
-                date: dateString,
                 timestamp: date.timeIntervalSince1970
             )
             

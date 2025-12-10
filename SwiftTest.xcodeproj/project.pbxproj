@@ -64,6 +64,7 @@
 		436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198082EE948AA004932D6 /* CandleStickDemoViewController3.swift */; };
 		4361980C2EE948DD004932D6 /* KLineChartView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980B2EE948DD004932D6 /* KLineChartView3.swift */; };
 		4361980D2EE95376004932D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 432699DC2D9543780025EEAC /* Assets.xcassets */; };
+		4361980F2EE95753004932D6 /* KLineConfiguration3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980E2EE95753004932D6 /* KLineConfiguration3.swift */; };
 		43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
 		437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */; };
@@ -171,6 +172,7 @@
 		436198012EE81D3F004932D6 /* KLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineChartView.swift; sourceTree = "<group>"; };
 		436198082EE948AA004932D6 /* CandleStickDemoViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController3.swift; sourceTree = "<group>"; };
 		4361980B2EE948DD004932D6 /* KLineChartView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineChartView3.swift; sourceTree = "<group>"; };
+		4361980E2EE95753004932D6 /* KLineConfiguration3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineConfiguration3.swift; sourceTree = "<group>"; };
 		43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController.swift; sourceTree = "<group>"; };
 		43740CBF2DB7840E005119F4 /* TestRSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRSA.swift; sourceTree = "<group>"; };
 		437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2025-04-23_4029257634_Logs.log"; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 			isa = PBXGroup;
 			children = (
 				4361980B2EE948DD004932D6 /* KLineChartView3.swift */,
+				4361980E2EE95753004932D6 /* KLineConfiguration3.swift */,
 			);
 			path = KLineChart3;
 			sourceTree = "<group>";
@@ -741,6 +744,7 @@
 				43269A212D95438A0025EEAC /* DViewController.swift in Sources */,
 				43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */,
 				43C2E2452E290D6700F04297 /* YYLabel+Extension.swift in Sources */,
+				4361980F2EE95753004932D6 /* KLineConfiguration3.swift in Sources */,
 				43269A232D95438A0025EEAC /* UIView+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
