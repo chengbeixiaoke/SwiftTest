@@ -25,7 +25,6 @@ class CandleStickDemoViewController3: BaseViewController {
     
     func setupUI() {
         navigationItem.title = "K线图"
-        
         view.addSubview(kLineView)
     }
 }

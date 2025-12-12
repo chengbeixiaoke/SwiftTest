@@ -465,7 +465,7 @@ class KLineChartView: UIView {
         let price = visiblePriceMax - (point.y - chartRect.origin.y) / chartRect.height * priceRange
         
         let infoText = """
-        日期: \(data.date)
+        日期: \(data.timestamp)
         开: \(formatPrice(data.open))
         收: \(formatPrice(data.close))
         高: \(formatPrice(data.high))
@@ -784,7 +784,7 @@ extension KLineChartView {
                 
                 // 日期标签
                 if config.showDateLabel {
-                    let dateText = klineDatas[dataIndex].date
+                    let dateText = String(klineDatas[dataIndex].timestamp)
                     let attributes: [NSAttributedString.Key: Any] = [
                         .font: UIFont.systemFont(ofSize: 10),
                         .foregroundColor: config.textColor

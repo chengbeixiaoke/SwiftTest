@@ -120,7 +120,6 @@ class MockKLineDataSource: KLineChartViewDataSource {
             let newData = Array(filteredData.suffix(count))
             
             // 更新索引
-            self.currentStartIndex = max(0, self.currentStartIndex - newData.count)
             
             completion(newData)
         }
@@ -133,14 +132,13 @@ class MockKLineDataSource: KLineChartViewDataSource {
             let newData = Array(filteredData.prefix(count))
             
             // 更新索引
-            self.currentStartIndex = min(self.totalDataCount - count, self.currentStartIndex + newData.count)
             
             completion(newData)
         }
     }
     
     func getInitialData(count: Int) -> [KLineData] {
-        let start = currentStartIndex
+        let start = 0
         let end = min(start + count, totalDataCount)
         return Array(allData[start..<end])
     }

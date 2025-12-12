@@ -14,15 +14,11 @@ open class KLineChartView3: BaseView {
         self.config = config
         super.init(frame: frame)
         
-        setupUI()
+        backgroundColor = config.backgroundColor
     }
     
     @MainActor required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setupUI() {
-        backgroundColor = config.backgroundColor
     }
     
     open override func draw(_ rect: CGRect) {
@@ -33,18 +29,14 @@ open class KLineChartView3: BaseView {
         context.fill(rect)
         
         // 画网格
-        drawGrid(in: context)
-        
         if config.showXAxis {
             drawXAxis(in: context)
         }
-        
         if config.showYAxis {
-            
+            drawYAxis(in: context)
         }
-        
         if config.showGrid {
-            
+            drawGrid(in: context)
         }
     }
     
@@ -62,91 +54,84 @@ open class KLineChartView3: BaseView {
     private func drawXAxis(in context: CGContext) {
         let chartRect = getChartRect()
         
+        context.setStrokeColor(config.xAxisColor.cgColor)
+        context.setLineWidth(config.xAxisLineWidth)
         
+        if config.xAxisSisplayDottedLines {
+            let dashPattern: [CGFloat] = [config.xAxisLineWidth * 2, config.xAxisLineWidth * 2]
+            context.setLineDash(phase: 0, lengths: dashPattern)
+        } else {
+            context.setLineDash(phase: 0, lengths: [])
+        }
+
+        context.move(to: CGPoint(x: chartRect.minX, y: chartRect.maxY))
+        context.addLine(to: CGPoint(x: chartRect.maxX, y: chartRect.maxY))
+        context.strokePath()
         
+        context.setLineDash(phase: 0, lengths: [])
+    }
+    
+    private func drawYAxis(in context: CGContext) {
+        let chartRect = getChartRect()
+        
+        context.setStrokeColor(config.yAxisColor.cgColor)
+        context.setLineWidth(config.yAxisLineWidth)
+        
+        if config.yAxisSisplayDottedLines {
+            let dashPattern: [CGFloat] = [config.yAxisLineWidth * 2, config.yAxisLineWidth * 2]
+            context.setLineDash(phase: 0, lengths: dashPattern)
+        } else {
+            context.setLineDash(phase: 0, lengths: [])
+        }
+
+        context.move(to: CGPoint(x: chartRect.minX, y: chartRect.maxY))
+        context.addLine(to: CGPoint(x: chartRect.minX, y: chartRect.minY))
+        context.strokePath()
+        
+        context.setLineDash(phase: 0, lengths: [])
     }
     
     private func drawGrid(in context: CGContext) {
         let chartRect = getChartRect()
         
+        // 水平网格线
+        context.setStrokeColor(config.gridXColor.cgColor)
+        context.setLineWidth(config.gridXLineWidth)
         
+        if config.gridXSisplayDottedLines {
+            let dashPattern: [CGFloat] = [config.gridXLineWidth * 2, config.gridXLineWidth * 2]
+            context.setLineDash(phase: 0, lengths: dashPattern)
+        } else {
+            context.setLineDash(phase: 0, lengths: [])
+        }
         
-        
-        
-        
-        
-        
-        // 设置虚线样式
-        context.setStrokeColor(config.gridColor.cgColor)
-        context.setLineWidth(config.gridLineWidth)
-        
-        // 定义虚线模式：绘制2点，跳过2点
-        let dashPattern: [CGFloat] = [config.gridLineWidth * 2, config.gridLineWidth * 2]
-        context.setLineDash(phase: 0, lengths: dashPattern)
-        
-        // 水平虚线网格线
-        let horizontalHeight = chartRect.height / CGFloat(config.gridHorizontalLines)
-        for i in 0...config.gridHorizontalLines {
-            let y = chartRect.origin.y + CGFloat(i + 1) * horizontalHeight
+        let horizontalHeight = chartRect.height / CGFloat(config.gridXLines)
+        for i in 1...config.gridXLines {
             
-            // 虚线
-            context.move(to: CGPoint(x: chartRect.origin.x, y: y))
+            let y = chartRect.maxY - CGFloat(i) * horizontalHeight
+            context.move(to: CGPoint(x: chartRect.minX, y: y))
             context.addLine(to: CGPoint(x: chartRect.maxX, y: y))
-            context.strokePath() // 每条线单独绘制，以便保持虚线样式
-            
-            // 价格标签
-            let price = visiblePriceMax - CGFloat(i) * (visiblePriceMax - visiblePriceMin) / CGFloat(horizontalLines)
-            let priceText = formatPrice(price)
-            
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.monospacedDigitSystemFont(ofSize: 10, weight: .regular),
-                .foregroundColor: config.textColor
-            ]
-            
-            let textSize = priceText.size(withAttributes: attributes)
-            priceText.draw(at: CGPoint(x: chartRect.origin.x - textSize.width - 5,
-                                       y: y - textSize.height/2),
-                           withAttributes: attributes)
+            context.strokePath()
         }
         
-        // 重置虚线设置，为垂直线做准备
-        context.setLineDash(phase: 0, lengths: [])
+        // 垂直网格线
+        context.setStrokeColor(config.gridYColor.cgColor)
+        context.setLineWidth(config.gridYLineWidth)
         
-        // 垂直网格线（如果需要也改为虚线，取消下面注释）
-        context.setLineDash(phase: 0, lengths: dashPattern)
-        
-        // 垂直线（日期线）
-        guard visibleCount > 0 else { return }
-        
-        let dateLines = min(3, visibleCount)
-        let step = max(1, visibleCount / dateLines)
-        
-        for i in 0..<dateLines {
-            let dataIndex = visibleStartIndex + i * step
-            if dataIndex < klineDatas.count {
-                let x = getXPosition(for: dataIndex)
-                
-                context.move(to: CGPoint(x: x, y: chartRect.origin.y))
-                context.addLine(to: CGPoint(x: x, y: chartRect.maxY))
-                context.strokePath() // 每条线单独绘制
-                
-                // 日期标签
-                if config.showDateLabel {
-                    let dateText = klineDatas[dataIndex].date
-                    let attributes: [NSAttributedString.Key: Any] = [
-                        .font: UIFont.systemFont(ofSize: 10),
-                        .foregroundColor: config.textColor
-                    ]
-                    
-                    let textSize = dateText.size(withAttributes: attributes)
-                    dateText.draw(at: CGPoint(x: x - textSize.width/2,
-                                              y: chartRect.maxY + 5),
-                                  withAttributes: attributes)
-                }
-            }
+        if config.gridYSisplayDottedLines {
+            let dashPattern: [CGFloat] = [config.gridYLineWidth * 2, config.gridYLineWidth * 2]
+            context.setLineDash(phase: 0, lengths: dashPattern)
+        } else {
+            context.setLineDash(phase: 0, lengths: [])
         }
         
-        // 重置虚线设置，为垂直线做准备
-        context.setLineDash(phase: 0, lengths: [])
+        let verticalWidth = chartRect.width / CGFloat(3)
+        for i in 0..<3 {
+            let x = chartRect.minX + CGFloat(i + 1) * verticalWidth
+            
+            context.move(to: CGPoint(x: x, y: chartRect.minY))
+            context.addLine(to: CGPoint(x: x, y: chartRect.maxY))
+            context.strokePath()
+        }
     }
 }
