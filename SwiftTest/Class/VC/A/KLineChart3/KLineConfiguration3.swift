@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum KLineType: CaseIterable {
+public enum KLineType: CaseIterable {
     // 分时
     case realTtime
     // 5日
@@ -57,13 +57,27 @@ enum KLineType: CaseIterable {
     }
 }
 
+struct KLineXAxisTitleModel {
+    let point: CGPoint
+    let title: String
+}
+
 open class KLineConfiguration3 {
     // K线图类型
-    var kLineType: KLineType = .dayK
+    let kLineType: KLineType
     
+    public init(kLineType: KLineType) {
+        self.kLineType = kLineType
+    }
+    
+    // 数据
+    public var dataList: [CandleStickData] = []
+
     // 背景色
     public var backgroundColor: UIColor = .BG_FE2B52_008
     
+    // K线图Rect
+    var kLineChartRect: CGRect = .zero
     
     // 显示X轴
     var showXAxis: Bool = true
@@ -73,8 +87,12 @@ open class KLineConfiguration3 {
     var xAxisSisplayDottedLines: Bool = false
     // X轴线宽
     var xAxisLineWidth: CGFloat = 1.0
-
+    // X轴文案颜色
+    var xAxisTextColor: UIColor = .Text_777790
+    // X轴坐标点
+    var xAxisTitles: [KLineXAxisTitleModel] = []
     
+
     // 显示Y轴
     var showYAxis: Bool = true
     // Y轴线条颜色
@@ -83,6 +101,8 @@ open class KLineConfiguration3 {
     var yAxisSisplayDottedLines: Bool = true
     // Y轴线宽
     var yAxisLineWidth: CGFloat = 1.0
+    // Y轴文案颜色
+    var yAxisTextColor: UIColor = .Text_777790
     
     
     // 显示网格
@@ -104,22 +124,151 @@ open class KLineConfiguration3 {
     // 垂直网格条数
     var gridYLines: Int = 4
     
+    // K线宽度
+    var kLineWidth: CGFloat = 8.0
+    // K线间隔
+    var kLineSpacing: CGFloat = 1.0
+    
+    // 偏移量
+    var offsetX: CGFloat = 0
+    // 可见K线数量
+    var visibleCount: Int = 0
+    // 可见K线起始位置
+    var visibleStartIndex: Int = 0
+    // 可见最高价
+    var visiblePriceMax: CGFloat = 0
+    // 可见最低价
+    var visiblePriceMin: CGFloat = 0
+    // 可见数据容量
+    var visibleVolumeMax: CGFloat = 0
     
     // 显示成交量
     var showVolume: Bool = true
     
-    
-    // 上边距
-    var topMargin: CGFloat = 10
-    // 下边距
-    var bottomMargin: CGFloat = 10
-    // 左边距
-    var leftMargin: CGFloat = 10
-    // 右边距
-    var rightMargin: CGFloat = 10
+    // 边距
+    var margin: UIEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     // 成交量视图高度
     var volumeHeight: CGFloat = 60
     // 成交量视图上边距
     var volumeTopMargin: CGFloat = 10
+    
+    
+    
+    
+    
+    
+}
 
+
+extension KLineConfiguration3 {
+    // 计算图表范围
+    func calculateChartRect(chartView: KLineChartView3?)
+    {
+        guard let chartView = chartView else {
+            kLineChartRect = .zero
+            return
+        }
+        
+        let height = showVolume ?
+        chartView.bounds.height - margin.horizontal - volumeHeight - volumeTopMargin :
+        chartView.bounds.height - margin.horizontal
+        
+        let width = chartView.bounds.width - margin.vertical
+        kLineChartRect = CGRect(x: margin.left,
+                           y: margin.right,
+                           width: width,
+                           height: height)
+    }
+    
+    // 数据处理
+    func calculateVisible()
+    {
+        let totalWidthPerKline = kLineWidth + kLineSpacing
+        
+        // 计算可见K线数量
+        visibleCount = min(Int(kLineChartRect.width / totalWidthPerKline), dataList.count)
+        
+        // 计算起始索引
+        let totalKlinesWidth = CGFloat(dataList.count) * totalWidthPerKline
+        if totalKlinesWidth <= kLineChartRect.width {
+            visibleStartIndex = 0
+        } else {
+            let startIndexFloat = offsetX / totalWidthPerKline
+            visibleStartIndex = max(0, Int(floor(startIndexFloat)))
+            visibleStartIndex = min(visibleStartIndex, dataList.count - visibleCount)
+        }
+        
+        guard visibleCount > 0 else {
+            visiblePriceMax = 0
+            visiblePriceMin = 0
+            visibleVolumeMax = 0
+            return
+        }
+        
+        let endIndex = min(visibleStartIndex + visibleCount, dataList.count)
+        let visibleData = Array(dataList[visibleStartIndex..<endIndex])
+        
+        guard let first = visibleData.first else {
+            visiblePriceMax = 0
+            visiblePriceMin = 0
+            visibleVolumeMax = 0
+            return
+        }
+        
+        visiblePriceMax = first.high
+        visiblePriceMin = first.low
+        visibleVolumeMax = first.volume
+        
+        for data in visibleData {
+            visiblePriceMax = max(visiblePriceMax, data.high)
+            visiblePriceMin = min(visiblePriceMin, data.low)
+            visibleVolumeMax = max(visibleVolumeMax, data.volume)
+        }
+        
+        // 计算X轴坐标点
+        calculateVisibleXAxisTitles()
+    }
+    
+    // 计算X轴日期显示
+    func calculateVisibleXAxisTitles() {
+        switch kLineType {
+        case .realTtime:
+            xAxisTitles = [KLineXAxisTitleModel(point: CGPointMake(kLineChartRect.minX, 0), title: "09:30"),
+                           KLineXAxisTitleModel(point: CGPointMake(kLineChartRect.minX + kLineChartRect.width / 2.0, 0), title: "11:30/13:00") ,
+                           KLineXAxisTitleModel(point: CGPointMake(kLineChartRect.maxX, 0), title: "15:00")]
+        case .fiveDay:
+            xAxisTitles = []
+        case .dayK:
+            var list: [KLineXAxisTitleModel] = []
+            let subDataList = dataList[visibleStartIndex...(visibleStartIndex + visibleCount)]
+            
+            var next: CandleStickData? = nil
+            for (index, data) in subDataList.enumerated() {
+                if let next = next {
+                    if next.date_yyyymm != data.date_yyyymm {
+                        let x = CGFloat(index) * (kLineWidth + kLineSpacing)
+                        list.append(KLineXAxisTitleModel(point: CGPointMake(x, 0), title: next.date_yyyymm))
+                    }
+                }
+                
+                next = data
+            }
+            xAxisTitles = list
+            
+        case .weekK:
+            xAxisTitles = []
+        case .monthK:
+            xAxisTitles = []
+        case .minute_1_K:
+            xAxisTitles = []
+        case .minute_5_K:
+            xAxisTitles = []
+        case .minute_15_K:
+            xAxisTitles = []
+        case .minute_30_K:
+            xAxisTitles = []
+        case .minute_60_K:
+            xAxisTitles = []
+        }
+    }
 }

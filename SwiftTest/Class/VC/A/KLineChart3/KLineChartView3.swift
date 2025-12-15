@@ -8,17 +8,24 @@
 import UIKit
 
 open class KLineChartView3: BaseView {
-    private let config: KLineConfiguration3
-    
-    public init(frame: CGRect, config: KLineConfiguration3) {
-        self.config = config
+    private let drawModel: KLineDrawModel
+    public init(frame: CGRect, drawModel: KLineDrawModel) {
+        self.drawModel = drawModel
         super.init(frame: frame)
         
         backgroundColor = config.backgroundColor
+        drawModel.chartView = self
+        drawModel.loadData()
     }
     
-    @MainActor required public init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private var config: KLineConfiguration3 {
+        get {
+            return drawModel.currentConfig
+        }
     }
     
     open override func draw(_ rect: CGRect) {
@@ -38,22 +45,15 @@ open class KLineChartView3: BaseView {
         if config.showGrid {
             drawGrid(in: context)
         }
-    }
-    
-    private func getChartRect() -> CGRect {
-        let height = config.showVolume ?
-        bounds.height - config.topMargin - config.bottomMargin - config.volumeHeight - config.volumeTopMargin :
-        bounds.height - config.topMargin - config.bottomMargin
         
-        return CGRect(x: config.leftMargin,
-                      y: config.topMargin,
-                      width: bounds.width - config.leftMargin - config.rightMargin,
-                      height: height)
+        // 画K线
+        
     }
-    
+}
+
+// MARK: 画网格
+extension KLineChartView3 {
     private func drawXAxis(in context: CGContext) {
-        let chartRect = getChartRect()
-        
         context.setStrokeColor(config.xAxisColor.cgColor)
         context.setLineWidth(config.xAxisLineWidth)
         
@@ -63,17 +63,15 @@ open class KLineChartView3: BaseView {
         } else {
             context.setLineDash(phase: 0, lengths: [])
         }
-
-        context.move(to: CGPoint(x: chartRect.minX, y: chartRect.maxY))
-        context.addLine(to: CGPoint(x: chartRect.maxX, y: chartRect.maxY))
+        
+        context.move(to: CGPoint(x: config.kLineChartRect.minX, y: config.kLineChartRect.maxY))
+        context.addLine(to: CGPoint(x: config.kLineChartRect.maxX, y: config.kLineChartRect.maxY))
         context.strokePath()
         
         context.setLineDash(phase: 0, lengths: [])
     }
     
     private func drawYAxis(in context: CGContext) {
-        let chartRect = getChartRect()
-        
         context.setStrokeColor(config.yAxisColor.cgColor)
         context.setLineWidth(config.yAxisLineWidth)
         
@@ -83,17 +81,15 @@ open class KLineChartView3: BaseView {
         } else {
             context.setLineDash(phase: 0, lengths: [])
         }
-
-        context.move(to: CGPoint(x: chartRect.minX, y: chartRect.maxY))
-        context.addLine(to: CGPoint(x: chartRect.minX, y: chartRect.minY))
+        
+        context.move(to: CGPoint(x: config.kLineChartRect.minX, y: config.kLineChartRect.maxY))
+        context.addLine(to: CGPoint(x: config.kLineChartRect.minX, y: config.kLineChartRect.minY))
         context.strokePath()
         
         context.setLineDash(phase: 0, lengths: [])
     }
     
     private func drawGrid(in context: CGContext) {
-        let chartRect = getChartRect()
-        
         // 水平网格线
         context.setStrokeColor(config.gridXColor.cgColor)
         context.setLineWidth(config.gridXLineWidth)
@@ -105,13 +101,28 @@ open class KLineChartView3: BaseView {
             context.setLineDash(phase: 0, lengths: [])
         }
         
-        let horizontalHeight = chartRect.height / CGFloat(config.gridXLines)
-        for i in 1...config.gridXLines {
+        let horizontalHeight = config.kLineChartRect.height / CGFloat(config.gridXLines)
+        for i in 0...config.gridXLines {
+            let y = config.kLineChartRect.minY + CGFloat(i) * horizontalHeight
+            if i < config.gridXLines {
+                context.move(to: CGPoint(x: config.kLineChartRect.minX, y: y))
+                context.addLine(to: CGPoint(x: config.kLineChartRect.maxX, y: y))
+                context.strokePath()
+            }
+        }
+        
+        // Y轴Title
+        for i in 0...config.gridXLines {
+            let y = config.kLineChartRect.minY + CGFloat(i) * horizontalHeight
+            let price = config.visiblePriceMax - CGFloat(i) * (config.visiblePriceMax - config.visiblePriceMin) / CGFloat(config.gridXLines)
+            let priceText = drawModel.formatPrice(price)
             
-            let y = chartRect.maxY - CGFloat(i) * horizontalHeight
-            context.move(to: CGPoint(x: chartRect.minX, y: y))
-            context.addLine(to: CGPoint(x: chartRect.maxX, y: y))
-            context.strokePath()
+            let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 12),
+                                                             .foregroundColor: config.yAxisTextColor]
+            
+            let textSize = priceText.size(withAttributes: attributes)
+            priceText.draw(at: CGPoint(x: config.kLineChartRect.minX + 5, y: y - textSize.height / 2.0),
+                           withAttributes: attributes)
         }
         
         // 垂直网格线
@@ -125,13 +136,33 @@ open class KLineChartView3: BaseView {
             context.setLineDash(phase: 0, lengths: [])
         }
         
-        let verticalWidth = chartRect.width / CGFloat(3)
-        for i in 0..<3 {
-            let x = chartRect.minX + CGFloat(i + 1) * verticalWidth
-            
-            context.move(to: CGPoint(x: x, y: chartRect.minY))
-            context.addLine(to: CGPoint(x: x, y: chartRect.maxY))
+        for title in config.xAxisTitles {
+            context.move(to: CGPoint(x: title.point.x, y: config.kLineChartRect.minY))
+            context.addLine(to: CGPoint(x: title.point.x, y: config.kLineChartRect.maxY))
             context.strokePath()
         }
+        
+        // X轴Title
+        for title in config.xAxisTitles {
+            let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 12),
+                                                             .foregroundColor: config.xAxisTextColor]
+            
+            let textSize = title.title.size(withAttributes: attributes)
+            var x = title.point.x - textSize.width / 2.0
+            if x < config.kLineChartRect.minX {
+                x = config.kLineChartRect.minX
+            }
+            if x + textSize.width > config.kLineChartRect.maxX {
+                x = config.kLineChartRect.maxX - textSize.width
+            }
+            title.title.draw(at: CGPoint(x: x, y: config.kLineChartRect.maxY + 5),
+                             withAttributes: attributes)
+        }
     }
+}
+
+// MARK: - 画K线
+extension KLineChartView3 {
+    
+    
 }

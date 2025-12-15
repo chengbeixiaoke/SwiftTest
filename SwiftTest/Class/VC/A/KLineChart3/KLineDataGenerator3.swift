@@ -9,31 +9,45 @@ import UIKit
 import Foundation
 
 // MARK: - K线数据结构
-struct CandleStickData: Identifiable {
-    let id = UUID()
-    let date: Date
-    let open: Double
-    let high: Double
-    let low: Double
-    let close: Double
-    let volume: Double
-    let amount: Double? // 成交额（可选）
+open class CandleStickData: Identifiable {
+    public let id = UUID()
+    public let date: Date
+    public let open: Double
+    public let high: Double
+    public let low: Double
+    public let close: Double
+    public let volume: Double
+    public let amount: Double? // 成交额（可选）
     
-    var isIncrease: Bool {
+    public init(date: Date, open: Double, high: Double, low: Double, close: Double, volume: Double, amount: Double?) {
+        self.date = date
+        self.open = open
+        self.high = high
+        self.low = low
+        self.close = close
+        self.volume = volume
+        self.amount = amount
+    }
+    
+    public var isIncrease: Bool {
         return close >= open
     }
     
-    var change: Double {
+    public var change: Double {
         return close - open
     }
     
-    var changePercent: Double {
+    public var changePercent: Double {
         return (close - open) / open * 100
     }
     
     // 为了方便时间序列分析，添加时间戳
-    var timestamp: TimeInterval {
+    public var timestamp: TimeInterval {
         return date.timeIntervalSince1970
+    }
+    
+    public var date_yyyymm: String {
+        return AppDateFormatterManager.shared.dateString(date, formatter: .yyyyMM)
     }
 }
 

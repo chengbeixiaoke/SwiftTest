@@ -11,6 +11,19 @@ let unitFlags = Set<Calendar.Component>([.year, .month, .day, .hour, .minute, .s
 //公历
 let calendarGregorian = Calendar(identifier: Calendar.Identifier.gregorian)
 
+enum AppFormatterType {
+    case hhmma
+    case dd
+    case ddMM
+    case mm月dd日
+    case ddMMyy
+    case yy年MM月DD日
+    case yyyyMM
+    case mmDDHHMM
+    case yyyyMMDDHHMM
+    case MMMMDD
+}
+
 open class AppDateFormatterManager {
     public static let shared = AppDateFormatterManager()
     
@@ -94,6 +107,33 @@ open class AppDateFormatterManager {
         formatter.locale = Locale(identifier: "en")
         return formatter
     }()
+    
+    func dateString(_ date: Date,
+                    formatter: AppFormatterType) -> String
+    {
+        switch formatter {
+        case .hhmma:
+            return hhmmaFormatter.string(from: date)
+        case .dd:
+            return ddFormatter.string(from: date)
+        case .ddMM:
+            return ddMMFormatter.string(from: date)
+        case .mm月dd日:
+            return mm月dd日Formatter.string(from: date)
+        case .ddMMyy:
+            return ddMMyyFormatter.string(from: date)
+        case .yy年MM月DD日:
+            return yy年MM月DD日Formatter.string(from: date)
+        case .yyyyMM:
+            return yyyyMMFormatter.string(from: date)
+        case .mmDDHHMM:
+            return mmDDHHMMFormatter.string(from: date)
+        case .yyyyMMDDHHMM:
+            return yyyyMMDDHHMMFormatter.string(from: date)
+        case .MMMMDD:
+            return MMMMDDFormatter.string(from: date)
+        }
+    }
     
     func dateString(_ date: Int64,
                     formatter: DateFormatter) -> String
