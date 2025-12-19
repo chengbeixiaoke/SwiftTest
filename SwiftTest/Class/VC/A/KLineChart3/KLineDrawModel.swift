@@ -77,9 +77,16 @@ class KLineDrawViewModel {
     // 是否正在缩放
     var isPinching = false
     // 最后缩放的倍数
-    private var lastPinchScale: CGFloat = 1.0
+    var lastPinchScale: CGFloat = 1.0
     //
-    private var zoomCenterIndex: Int?
+    var zoomCenterIndex: Int?
+    
+    // 惯性滚动定时器
+    var displayLink: CADisplayLink?
+    // 惯性速度
+    var inertialVelocity: CGFloat = 0
+    // 惯性减速系数
+    let inertialDeceleration: CGFloat = 0.95
     
     // 单条数据宽度
     var itemWidth: CGFloat {
@@ -127,7 +134,7 @@ extension KLineDrawViewModel {
         guard let dataSource = dataSource else { return }
         dataSource.loadHistoricalData(lineType: config.kLineType,
                                       before: dataList.last?.date ?? Date(),
-                                      count: dataList.count > 0 ? 50 : 100)
+                                      count: dataList.count > 0 ? 100 : 1000)
         { [weak self] dataList in
             guard let weakSelf = self else { return }
             
@@ -165,7 +172,7 @@ extension KLineDrawViewModel {
             visibleStartIndex = max(0, dataList.count - offsetCount)
         }
         
-        let endIndex = min(visibleStartIndex + visibleCount, dataList.count)
+        let endIndex = min(visibleStartIndex + visibleCount, dataList.count-1)
         let visibleData = Array(dataList[max(visibleStartIndex, 0)..<endIndex])
         
         guard let first = visibleData.first else {

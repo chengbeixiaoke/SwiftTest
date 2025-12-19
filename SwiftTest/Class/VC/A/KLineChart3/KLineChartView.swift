@@ -173,7 +173,7 @@ extension KLineChartView {
             return chartRect.maxY - clampedNormalizedPrice * chartRect.height
         }
         
-        printLog(viewModel.visibleStartIndex)
+//        printLog(viewModel.visibleStartIndex)
         
         for i in viewModel.visibleStartIndex..<endIndex {
             let data = viewModel.dataList[i]
@@ -257,7 +257,7 @@ extension KLineChartView {
         }
         
         // 停止惯性动画
-//        stopInertialScroll()
+        stopInertialScroll()
         
         let translation = gesture.translation(in: self)
         
@@ -277,36 +277,98 @@ extension KLineChartView {
             } else {
                 viewModel.offsetX = offsetX
             }
-            printLog(offsetX)
+//            printLog(offsetX)
             viewModel.calculateVisible()
             setNeedsDisplay()
             
         case .ended:
             viewModel.isDragging = false
-            if viewModel.offsetX > 0 {
-                viewModel.offsetX = 0
+            checkAndSnapBack()
+            // 计算惯性速度
+            let velocity = gesture.velocity(in: self).x
+            if abs(velocity) > 50 {
+                startInertialScroll(velocity: velocity)
+            } else {
+                // 如果没有惯性，检查是否需要回弹
+                checkAndSnapBack()
             }
-            
-            if viewModel.offsetX < viewModel.minOffsetX {
-                viewModel.offsetX = viewModel.minOffsetX
-            }
-            viewModel.calculateVisible()
-            setNeedsDisplay()
             
         case .cancelled, .failed:
             viewModel.isDragging = false
-            if viewModel.offsetX > 0 {
-                viewModel.offsetX = 0
-            }
-            if viewModel.offsetX < viewModel.minOffsetX {
-                viewModel.offsetX = viewModel.minOffsetX
-            }
-            viewModel.calculateVisible()
-            setNeedsDisplay()
+            checkAndSnapBack()
             
         default:
             break
         }
+    }
+    
+    // MARK: - 惯性滚动
+    func startInertialScroll(velocity: CGFloat) {
+        viewModel.inertialVelocity = velocity * 0.3
+        
+        if viewModel.displayLink == nil {
+            viewModel.displayLink = CADisplayLink(target: self, selector: #selector(updateInertialScroll))
+            viewModel.displayLink?.add(to: .main, forMode: .common)
+        }
+    }
+    
+    func stopInertialScroll() {
+        viewModel.displayLink?.invalidate()
+        viewModel.displayLink = nil
+        viewModel.inertialVelocity = 0
+    }
+    
+    @objc private func updateInertialScroll() {
+        guard abs(viewModel.inertialVelocity) > 0.1 else {
+            stopInertialScroll()
+            checkAndSnapBack()
+            return
+        }
+        
+        // 应用减速
+        viewModel.inertialVelocity *= viewModel.inertialDeceleration
+        printLog(viewModel.inertialVelocity)
+
+        
+        // 计算新位置
+        let deltaX = viewModel.inertialVelocity * 0.016
+        var newOffsetX = viewModel.offsetX - deltaX
+        
+        // 检查边界和加载
+        var shouldStop = false
+        
+        if newOffsetX > 0 {
+            newOffsetX = 0
+            shouldStop = true
+        } else if newOffsetX < viewModel.minOffsetX {
+            newOffsetX = viewModel.minOffsetX
+            shouldStop = true
+        } else {
+            shouldStop = abs(viewModel.inertialVelocity) < 1
+        }
+        
+        // 更新位置
+        viewModel.offsetX = newOffsetX
+        
+        if shouldStop {
+            stopInertialScroll()
+            checkAndSnapBack()
+        }
+        
+        viewModel.calculateVisible()
+        setNeedsDisplay()
+    }
+    
+    func checkAndSnapBack() {
+        if viewModel.offsetX > 0 {
+            viewModel.offsetX = 0
+        }
+        
+        if viewModel.offsetX < viewModel.minOffsetX {
+            viewModel.offsetX = viewModel.minOffsetX
+        }
+        viewModel.calculateVisible()
+        setNeedsDisplay()
     }
     
 //    // MARK: - 无限滚动核心逻辑
@@ -323,22 +385,7 @@ extension KLineChartView {
 //            loadMoreData(in: .loadingRight)
 //        }
 //    }
-//    private func checkAndSnapBack() {
-//        let chartWidth = getChartRect().width
-//        let totalWidth = CGFloat(klineDatas.count) * (klineWidth + config.klineSpacing)
-//        let maxOffset = max(0, totalWidth - chartWidth)
-//        
-//        // 如果没有在加载数据，则回弹到边界内
-//        if loadingState == .idle {
-//            if offsetX < 0 {
-//                offsetX = 0
-//            } else if offsetX > maxOffset {
-//                offsetX = maxOffset
-//            }
-//            updateVisibleRange()
-//            setNeedsDisplay()
-//        }
-//    }
+    
 //    
 //    private func loadMoreData(in direction: KLineChartViewLoadingState) {
 //        guard let dataSource = dataSource, loadingState == .idle else { return }
@@ -463,78 +510,7 @@ extension KLineChartView {
 //            self.setNeedsDisplay()
 //        })
 //    }
-//    
-//    // MARK: - 惯性滚动
-//    private func startInertialScroll(velocity: CGFloat) {
-//        inertialVelocity = velocity * 0.3
-//        
-//        if displayLink == nil {
-//            displayLink = CADisplayLink(target: self, selector: #selector(updateInertialScroll))
-//            displayLink?.add(to: .main, forMode: .common)
-//        }
-//    }
-//    
-//    private func stopInertialScroll() {
-//        displayLink?.invalidate()
-//        displayLink = nil
-//        inertialVelocity = 0
-//    }
-//    
-//    @objc private func updateInertialScroll() {
-//        guard abs(inertialVelocity) > 0.1 else {
-//            stopInertialScroll()
-//            checkAndSnapBack()
-//            return
-//        }
-//        
-//        // 应用减速
-//        inertialVelocity *= inertialDeceleration
-//        
-//        // 获取边界信息
-//        let chartWidth = getChartRect().width
-//        let totalWidth = CGFloat(klineDatas.count) * (klineWidth + config.klineSpacing)
-//        let maxOffset = max(0, totalWidth - chartWidth)
-//        
-//        // 计算新位置
-//        let deltaX = inertialVelocity * 0.016
-//        var newOffsetX = offsetX - deltaX
-//        
-//        // 检查边界和加载
-//        var shouldStop = false
-//        
-//        if newOffsetX < -config.loadingThreshold && loadingState == .idle && hasMoreLeftData {
-//            // 触发左边界加载
-//            loadMoreData(in: .loadingLeft)
-//            shouldStop = true
-//        } else if newOffsetX > maxOffset + config.loadingThreshold && loadingState == .idle && hasMoreRightData {
-//            // 触发右边界加载
-//            loadMoreData(in: .loadingRight)
-//            shouldStop = true
-//        } else if newOffsetX < 0 {
-//            // 左边界阻尼
-//            newOffsetX = 0
-//            inertialVelocity *= 0.3
-//            shouldStop = abs(inertialVelocity) < 1
-//        } else if newOffsetX > maxOffset {
-//            // 右边界阻尼
-//            newOffsetX = maxOffset
-//            inertialVelocity *= 0.3
-//            shouldStop = abs(inertialVelocity) < 1
-//        }
-//        
-//        // 更新位置
-//        offsetX = newOffsetX
-//        
-//        if shouldStop {
-//            stopInertialScroll()
-//            checkAndSnapBack()
-//        }
-//        
-//        updateVisibleRange()
-//        setNeedsDisplay()
-//    }
 }
-
 
 // MARK: - UIGestureRecognizerDelegate
 extension KLineChartView: UIGestureRecognizerDelegate {
