@@ -10,11 +10,9 @@ import UIKit
 class CandleStickDemoViewController3: BaseViewController {
     lazy var kLineView = {
         let rect = CGRectMake(0, 100, WidthScreen, WidthScreen)
-        let config = KLineConfiguration3(kLineType: .realTtime)
-        let drawModel = KLineDrawModel()
-        drawModel.dataSource = self
-        
-        let view = KLineChartView3(frame: rect, drawModel: drawModel)
+        let viewModel = KLineDrawViewModel(config: KLineConfig(kLineType: .dayK))
+        viewModel.dataSource = self
+        let view = KLineChartView(frame: rect, viewModel: viewModel)
         return view
     }()
     

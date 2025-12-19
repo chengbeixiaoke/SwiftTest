@@ -9,7 +9,7 @@ import UIKit
 import CoreGraphics
 
 class CandleStickDemoViewController2: BaseViewController {
-    private var klineView: KLineChartView!
+    private var klineView: KLineChartViewXX!
     private var dataSource: MockKLineDataSource!
     private var statusLabel: UILabel!
     private var loadingIndicator: UIActivityIndicatorView!
@@ -95,7 +95,7 @@ class CandleStickDemoViewController2: BaseViewController {
         let klineHeight: CGFloat = 500
         let klineY: CGFloat = 200
         
-        klineView = KLineChartView(frame: CGRect(x: 0, y: klineY,
+        klineView = KLineChartViewXX(frame: CGRect(x: 0, y: klineY,
                                                        width: view.bounds.width,
                                                        height: klineHeight))
         

@@ -17,10 +17,9 @@ def base_pod
   pod 'Kingfisher'
   pod 'YYKit'
   pod 'Charts'
-  pod 'JMRouter'
-  pod 'TheRouterSwift'
-  
   pod 'WebRTC-SDK', '=125.6422.07'
+  
+  pod 'SavoBaseModule', :git => 'https://codeup.aliyun.com/5ffe89797c4a6a0f9774e738/SavoBaseModule.git'
   
   pod 'BMPlayer', :path => './Frameworks/BMPlayer', :inhibit_warnings => false
   pod 'ffmpeg-kit-ios-full', :path => './Frameworks/ffmpeg-kit-ios-full', :inhibit_warnings => false

@@ -9,7 +9,7 @@ import UIKit
 import Foundation
 
 // MARK: - K线数据结构
-open class CandleStickData: Identifiable {
+class CandleStickData: Identifiable {
     public let id = UUID()
     public let date: Date
     public let open: Double
@@ -35,6 +35,11 @@ open class CandleStickData: Identifiable {
     
     public var change: Double {
         return close - open
+    }
+    
+    // 是否是上涨
+    var isUp: Bool {
+        return change >= 0
     }
     
     public var changePercent: Double {

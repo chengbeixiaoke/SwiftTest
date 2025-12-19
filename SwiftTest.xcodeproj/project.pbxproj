@@ -60,12 +60,12 @@
 		436197FB2EE81221004932D6 /* CandleStickDemoViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197FA2EE81221004932D6 /* CandleStickDemoViewController2.swift */; };
 		436197FE2EE81BB6004932D6 /* KLineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197FD2EE81BB6004932D6 /* KLineData.swift */; };
 		436198002EE81C1C004932D6 /* KLineConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436197FF2EE81C1C004932D6 /* KLineConfiguration.swift */; };
-		436198022EE81D3F004932D6 /* KLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198012EE81D3F004932D6 /* KLineChartView.swift */; };
+		436198022EE81D3F004932D6 /* KLineChartViewXX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198012EE81D3F004932D6 /* KLineChartViewXX.swift */; };
 		436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198082EE948AA004932D6 /* CandleStickDemoViewController3.swift */; };
-		4361980C2EE948DD004932D6 /* KLineChartView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980B2EE948DD004932D6 /* KLineChartView3.swift */; };
+		4361980C2EE948DD004932D6 /* KLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980B2EE948DD004932D6 /* KLineChartView.swift */; };
 		4361980D2EE95376004932D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 432699DC2D9543780025EEAC /* Assets.xcassets */; };
-		4361980F2EE95753004932D6 /* KLineConfiguration3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980E2EE95753004932D6 /* KLineConfiguration3.swift */; };
-		436198222EEB010D004932D6 /* KLineDataGenerator3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198212EEB010D004932D6 /* KLineDataGenerator3.swift */; };
+		4361980F2EE95753004932D6 /* KLineConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980E2EE95753004932D6 /* KLineConfig.swift */; };
+		436198222EEB010D004932D6 /* KLineDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198212EEB010D004932D6 /* KLineDataGenerator.swift */; };
 		436198242EEBEFB4004932D6 /* KLineDrawModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198232EEBEFB4004932D6 /* KLineDrawModel.swift */; };
 		43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
@@ -84,6 +84,7 @@
 		438524502ED860CF00C8F8C3 /* S3DCameraSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385244F2ED860CF00C8F8C3 /* S3DCameraSystem.swift */; };
 		43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20CA2EC42E8D000D1EAC /* art.scnassets */; };
 		43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */; };
+		43B188B82EF298B900AC8168 /* AppPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B188B72EF298B900AC8168 /* AppPage.swift */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
 		43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */; };
 		43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */; };
@@ -171,11 +172,11 @@
 		436197FA2EE81221004932D6 /* CandleStickDemoViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController2.swift; sourceTree = "<group>"; };
 		436197FD2EE81BB6004932D6 /* KLineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineData.swift; sourceTree = "<group>"; };
 		436197FF2EE81C1C004932D6 /* KLineConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineConfiguration.swift; sourceTree = "<group>"; };
-		436198012EE81D3F004932D6 /* KLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineChartView.swift; sourceTree = "<group>"; };
+		436198012EE81D3F004932D6 /* KLineChartViewXX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineChartViewXX.swift; sourceTree = "<group>"; };
 		436198082EE948AA004932D6 /* CandleStickDemoViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController3.swift; sourceTree = "<group>"; };
-		4361980B2EE948DD004932D6 /* KLineChartView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineChartView3.swift; sourceTree = "<group>"; };
-		4361980E2EE95753004932D6 /* KLineConfiguration3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineConfiguration3.swift; sourceTree = "<group>"; };
-		436198212EEB010D004932D6 /* KLineDataGenerator3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDataGenerator3.swift; sourceTree = "<group>"; };
+		4361980B2EE948DD004932D6 /* KLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineChartView.swift; sourceTree = "<group>"; };
+		4361980E2EE95753004932D6 /* KLineConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineConfig.swift; sourceTree = "<group>"; };
+		436198212EEB010D004932D6 /* KLineDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDataGenerator.swift; sourceTree = "<group>"; };
 		436198232EEBEFB4004932D6 /* KLineDrawModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDrawModel.swift; sourceTree = "<group>"; };
 		43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController.swift; sourceTree = "<group>"; };
 		43740CBF2DB7840E005119F4 /* TestRSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRSA.swift; sourceTree = "<group>"; };
@@ -193,6 +194,7 @@
 		4385244F2ED860CF00C8F8C3 /* S3DCameraSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DCameraSystem.swift; sourceTree = "<group>"; };
 		43AA20CA2EC42E8D000D1EAC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3DViewController.swift; sourceTree = "<group>"; };
+		43B188B72EF298B900AC8168 /* AppPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPage.swift; sourceTree = "<group>"; };
 		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
 		43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerViewController.swift; sourceTree = "<group>"; };
 		43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavoPresentSwipeInteractionController.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				433065F32E8A212A002E2018 /* Manager */,
 				433065F72E8A23DB002E2018 /* PublicFunction.swift */,
 				433065F82E8A23DB002E2018 /* PublicMacro.swift */,
+				43B188B72EF298B900AC8168 /* AppPage.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -465,7 +468,7 @@
 			children = (
 				436197FD2EE81BB6004932D6 /* KLineData.swift */,
 				436197FF2EE81C1C004932D6 /* KLineConfiguration.swift */,
-				436198012EE81D3F004932D6 /* KLineChartView.swift */,
+				436198012EE81D3F004932D6 /* KLineChartViewXX.swift */,
 			);
 			path = KLineChart;
 			sourceTree = "<group>";
@@ -473,9 +476,9 @@
 		4361980A2EE948C4004932D6 /* KLineChart3 */ = {
 			isa = PBXGroup;
 			children = (
-				4361980B2EE948DD004932D6 /* KLineChartView3.swift */,
-				4361980E2EE95753004932D6 /* KLineConfiguration3.swift */,
-				436198212EEB010D004932D6 /* KLineDataGenerator3.swift */,
+				436198212EEB010D004932D6 /* KLineDataGenerator.swift */,
+				4361980B2EE948DD004932D6 /* KLineChartView.swift */,
+				4361980E2EE95753004932D6 /* KLineConfig.swift */,
 				436198232EEBEFB4004932D6 /* KLineDrawModel.swift */,
 			);
 			path = KLineChart3;
@@ -707,7 +710,7 @@
 				4385244E2ED8588800C8F8C3 /* S3DModelView2.swift in Sources */,
 				436197F42EE7C382004932D6 /* ChatTestViewController.swift in Sources */,
 				436198002EE81C1C004932D6 /* KLineConfiguration.swift in Sources */,
-				436198222EEB010D004932D6 /* KLineDataGenerator3.swift in Sources */,
+				436198222EEB010D004932D6 /* KLineDataGenerator.swift in Sources */,
 				43269A102D95438A0025EEAC /* EntityUserModelV2.swift in Sources */,
 				433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */,
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
@@ -720,7 +723,7 @@
 				430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */,
 				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
 				436197D52EE6CEA3004932D6 /* SimplePieChartViewController.swift in Sources */,
-				436198022EE81D3F004932D6 /* KLineChartView.swift in Sources */,
+				436198022EE81D3F004932D6 /* KLineChartViewXX.swift in Sources */,
 				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
 				43269A142D95438A0025EEAC /* CViewController.swift in Sources */,
 				43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */,
@@ -738,13 +741,14 @@
 				43C2E2432E28FBB900F04297 /* SceneDelegate+Other.swift in Sources */,
 				43269A192D95438A0025EEAC /* AppDelegate.swift in Sources */,
 				43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */,
-				4361980C2EE948DD004932D6 /* KLineChartView3.swift in Sources */,
+				4361980C2EE948DD004932D6 /* KLineChartView.swift in Sources */,
 				433066442E8BBC56002E2018 /* SceneDelegate.swift in Sources */,
 				43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */,
 				43269A1A2D95438A0025EEAC /* User.swift in Sources */,
 				43269A1B2D95438A0025EEAC /* BaseNavigationController.swift in Sources */,
 				435D785E2E03E52900688F0E /* MiniAppTestView.swift in Sources */,
 				43269A1C2D95438A0025EEAC /* CCell.swift in Sources */,
+				43B188B82EF298B900AC8168 /* AppPage.swift in Sources */,
 				43269A1E2D95438A0025EEAC /* CustomFlowLayout.swift in Sources */,
 				43C2E2412E28F5FC00F04297 /* BaseViewController.swift in Sources */,
 				43269A1F2D95438A0025EEAC /* AViewController.swift in Sources */,
@@ -752,7 +756,7 @@
 				43269A212D95438A0025EEAC /* DViewController.swift in Sources */,
 				43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */,
 				43C2E2452E290D6700F04297 /* YYLabel+Extension.swift in Sources */,
-				4361980F2EE95753004932D6 /* KLineConfiguration3.swift in Sources */,
+				4361980F2EE95753004932D6 /* KLineConfig.swift in Sources */,
 				43269A232D95438A0025EEAC /* UIView+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -790,6 +794,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = TSNC7TNG22;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -838,6 +843,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = TSNC7TNG22;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (

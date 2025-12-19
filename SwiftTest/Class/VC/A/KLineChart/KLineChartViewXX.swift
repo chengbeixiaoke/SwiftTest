@@ -22,7 +22,7 @@ private enum KLineChartViewLoadingState {
 }
 
 // MARK: - 主K线图类
-class KLineChartView: UIView {
+class KLineChartViewXX: UIView {
     // MARK: - 属性
     private var klineDatas: [KLineData] = []
     private var config = KLineConfiguration()
@@ -724,7 +724,7 @@ class KLineChartView: UIView {
 }
 
 // MARK: - 绘制虚线网格
-extension KLineChartView {
+extension KLineChartViewXX {
     private func drawGrid(in context: CGContext) {
         let chartRect = getChartRect()
         
@@ -804,7 +804,7 @@ extension KLineChartView {
 }
 
 // MARK: 拖拽手势
-extension KLineChartView {
+extension KLineChartViewXX {
     private func setupPanGestures() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panGesture.minimumNumberOfTouches = 1
@@ -1093,7 +1093,7 @@ extension KLineChartView {
 }
 
 // MARK: 捏合手势
-extension KLineChartView {
+extension KLineChartViewXX {
     private func setupPinchGestures() {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
         pinchGesture.delegate = self
@@ -1165,7 +1165,7 @@ extension KLineChartView {
 }
 
 // MARK: - 长按手势
-extension KLineChartView {
+extension KLineChartViewXX {
     private func setupLongPressGestures() {
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         longPressGesture.minimumPressDuration = 0.3
@@ -1203,7 +1203,7 @@ extension KLineChartView {
 }
 
 // MARK: 点击手势
-extension KLineChartView {
+extension KLineChartViewXX {
     private func setupTapGestures() {
         // 双击手势
         let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
@@ -1227,7 +1227,7 @@ extension KLineChartView {
 }
 
 // MARK: - UIGestureRecognizerDelegate
-extension KLineChartView: UIGestureRecognizerDelegate {
+extension KLineChartViewXX: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
     {
         // 允许拖拽和捏合同时识别
