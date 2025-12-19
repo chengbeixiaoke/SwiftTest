@@ -173,9 +173,15 @@ extension KLineChartView {
             return chartRect.maxY - clampedNormalizedPrice * chartRect.height
         }
         
+        printLog(viewModel.visibleStartIndex)
+        
         for i in viewModel.visibleStartIndex..<endIndex {
             let data = viewModel.dataList[i]
-            let x = viewModel.getXPosition(for: i)
+            let relativeIndex = i - viewModel.visibleStartIndex
+            var x = viewModel.kLineChartRect.origin.x + CGFloat(relativeIndex) * viewModel.itemWidth
+            if (viewModel.offsetX + viewModel.totalWidth - viewModel.kLineChartRect.width) < 0  {
+                x = x - (viewModel.offsetX - viewModel.minOffsetX)
+            }
             
             let openY = priceToY(data.open)
             let closeY = priceToY(data.close)
@@ -263,19 +269,40 @@ extension KLineChartView {
             
         case .changed:
             let deltaX = translation.x - viewModel.panStartX
-            
-            viewModel.offsetX = viewModel.lastOffsetX - deltaX
-            
-            printLog(viewModel.offsetX)
-            
+            let offsetX = viewModel.lastOffsetX - deltaX
+            if offsetX > 0 {
+                viewModel.offsetX = offsetX / 2.0
+            } else if offsetX < viewModel.minOffsetX {
+                viewModel.offsetX = viewModel.minOffsetX - (viewModel.minOffsetX - offsetX) / 2.0
+            } else {
+                viewModel.offsetX = offsetX
+            }
+            printLog(offsetX)
             viewModel.calculateVisible()
             setNeedsDisplay()
             
         case .ended:
             viewModel.isDragging = false
+            if viewModel.offsetX > 0 {
+                viewModel.offsetX = 0
+            }
+            
+            if viewModel.offsetX < viewModel.minOffsetX {
+                viewModel.offsetX = viewModel.minOffsetX
+            }
+            viewModel.calculateVisible()
+            setNeedsDisplay()
             
         case .cancelled, .failed:
             viewModel.isDragging = false
+            if viewModel.offsetX > 0 {
+                viewModel.offsetX = 0
+            }
+            if viewModel.offsetX < viewModel.minOffsetX {
+                viewModel.offsetX = viewModel.minOffsetX
+            }
+            viewModel.calculateVisible()
+            setNeedsDisplay()
             
         default:
             break

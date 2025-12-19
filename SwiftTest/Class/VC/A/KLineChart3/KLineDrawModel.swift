@@ -81,6 +81,21 @@ class KLineDrawViewModel {
     //
     private var zoomCenterIndex: Int?
     
+    // 单条数据宽度
+    var itemWidth: CGFloat {
+        return config.kLineWidth * scale + config.kLineSpacing
+    }
+    
+    // 全部K线总宽度
+    var totalWidth: CGFloat {
+        return CGFloat(dataList.count) * itemWidth
+    }
+    
+    // 最小偏移量
+    var minOffsetX: CGFloat {
+        return -(totalWidth - kLineChartRect.width)
+    }
+    
     func calculateRect() {
         guard let chartView = chartView else {
             kLineChartRect = .zero
@@ -104,11 +119,6 @@ class KLineDrawViewModel {
             return String(format: "%.4f", price)
         }
     }
-    
-    func getXPosition(for index: Int) -> CGFloat {
-        let relativeIndex = index - visibleStartIndex
-        return kLineChartRect.origin.x + CGFloat(relativeIndex) * (config.kLineWidth + config.kLineSpacing)
-    }
 }
 
 // MARK: - 数据源
@@ -121,7 +131,9 @@ extension KLineDrawViewModel {
         { [weak self] dataList in
             guard let weakSelf = self else { return }
             
-            weakSelf.dataList.append(contentsOf: dataList)
+            let dataList_ = dataList.sorted { $0.timestamp < $1.timestamp }
+            weakSelf.dataList.insert(contentsOf: dataList_, at: 0)
+                        
             weakSelf.calculateVisible()
             weakSelf.chartView?.setNeedsDisplay()
         }
@@ -137,26 +149,24 @@ extension KLineDrawViewModel {
         // 计算可见K线数量
         visibleCount = min(Int(kLineChartRect.width / totalWidthPerKline), dataList.count)
         
+        // 回调K线图Rect
+        let width = totalWidthPerKline * CGFloat(visibleCount)
+        kLineChartRect = CGRectMake(kLineChartRect.minX - (width - kLineChartRect.width),
+                                    kLineChartRect.minY,
+                                    width,
+                                    kLineChartRect.height)
+        
         // 计算起始索引
         let totalKLinesWidth = CGFloat(dataList.count) * totalWidthPerKline
         if totalKLinesWidth <= kLineChartRect.width {
             visibleStartIndex = 0
         } else {
-            
-            let startIndexFloat = offsetX / totalWidthPerKline
-            visibleStartIndex = max(0, Int(floor(startIndexFloat)))
-            visibleStartIndex = min(visibleStartIndex, dataList.count - visibleCount)
-        }
-        
-        guard visibleCount > 0 else {
-            visiblePriceMax = 0
-            visiblePriceMin = 0
-            visibleVolumeMax = 0
-            return
+            let offsetCount = visibleCount - Int(floor(offsetX / totalWidthPerKline))
+            visibleStartIndex = max(0, dataList.count - offsetCount)
         }
         
         let endIndex = min(visibleStartIndex + visibleCount, dataList.count)
-        let visibleData = Array(dataList[visibleStartIndex..<endIndex])
+        let visibleData = Array(dataList[max(visibleStartIndex, 0)..<endIndex])
         
         guard let first = visibleData.first else {
             visiblePriceMax = 0
@@ -183,11 +193,11 @@ extension KLineDrawViewModel {
     func calculateVisibleXAxisTitles() {
         switch config.kLineType {
         case .realTtime:
-            xAxisTitles = [KLineXAxisTitleModel(point: CGPointMake(kLineChartRect.minX, 0), title: "09:30"),
-                           KLineXAxisTitleModel(point: CGPointMake(kLineChartRect.minX + kLineChartRect.width / 2.0, 0), title: "11:30/13:00") ,
-                           KLineXAxisTitleModel(point: CGPointMake(kLineChartRect.maxX, 0), title: "15:00")]
+            xAxisTitles = []
+            
         case .fiveDay:
             xAxisTitles = []
+            
         case .dayK:
             var list: [KLineXAxisTitleModel] = []
             let endIndex = min((visibleStartIndex + visibleCount), dataList.count-1)
@@ -198,7 +208,7 @@ extension KLineDrawViewModel {
                 if let next = next {
                     if next.date_yyyymm != data.date_yyyymm {
                         let x = CGFloat(index) * (config.kLineWidth + config.kLineSpacing)
-                        list.append(KLineXAxisTitleModel(point: CGPointMake(x, 0), title: next.date_yyyymm))
+                        list.append(KLineXAxisTitleModel(point: CGPointMake(x, 0), title: data.date_yyyymm))
                     }
                 }
                 
