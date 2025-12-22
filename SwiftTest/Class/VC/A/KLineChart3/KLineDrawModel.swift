@@ -133,8 +133,8 @@ extension KLineDrawViewModel {
     public func loadData() {
         guard let dataSource = dataSource else { return }
         dataSource.loadHistoricalData(lineType: config.kLineType,
-                                      before: dataList.last?.date ?? Date(),
-                                      count: dataList.count > 0 ? 100 : 1000)
+                                      before: dataList.first?.date ?? Date(),
+                                      count: dataList.count > 0 ? 200 : 1000)
         { [weak self] dataList in
             guard let weakSelf = self else { return }
             
@@ -157,7 +157,7 @@ extension KLineDrawViewModel {
         visibleCount = min(Int(kLineChartRect.width / totalWidthPerKline), dataList.count)
         
         // 回调K线图Rect
-        let width = totalWidthPerKline * CGFloat(visibleCount)
+        let width = max(totalWidthPerKline * CGFloat(visibleCount), kLineChartRect.width)
         kLineChartRect = CGRectMake(kLineChartRect.minX - (width - kLineChartRect.width),
                                     kLineChartRect.minY,
                                     width,

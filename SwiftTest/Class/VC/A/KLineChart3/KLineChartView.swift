@@ -18,6 +18,7 @@ class KLineChartView: BaseView {
         viewModel.loadData()
         
         setupPanGestures()
+        setupPinchGestures()
     }
     
     required public init?(coder: NSCoder) {
@@ -274,6 +275,7 @@ extension KLineChartView {
                 viewModel.offsetX = offsetX / 2.0
             } else if offsetX < viewModel.minOffsetX {
                 viewModel.offsetX = viewModel.minOffsetX - (viewModel.minOffsetX - offsetX) / 2.0
+                viewModel.loadData()
             } else {
                 viewModel.offsetX = offsetX
             }
@@ -343,6 +345,7 @@ extension KLineChartView {
         } else if newOffsetX < viewModel.minOffsetX {
             newOffsetX = viewModel.minOffsetX
             shouldStop = true
+            viewModel.loadData()
         } else {
             shouldStop = abs(viewModel.inertialVelocity) < 1
         }
@@ -370,146 +373,120 @@ extension KLineChartView {
         viewModel.calculateVisible()
         setNeedsDisplay()
     }
+}
+// MARK: 捏合手势
+extension KLineChartView {
+    private func setupPinchGestures() {
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
+        pinchGesture.delegate = self
+        addGestureRecognizer(pinchGesture)
+    }
     
-//    // MARK: - 无限滚动核心逻辑
-//    private func checkBoundaryAndLoadData(chartWidth: CGFloat, totalWidth: CGFloat) {
-//        let maxOffset = max(0, totalWidth - chartWidth)
-//        
-//        // 检查左边界
-//        if offsetX < -config.loadingThreshold && loadingState == .idle && hasMoreLeftData {
-//            loadMoreData(in: .loadingLeft)
-//        }
-//        
-//        // 检查右边界
-//        if offsetX > maxOffset + config.loadingThreshold && loadingState == .idle && hasMoreRightData {
-//            loadMoreData(in: .loadingRight)
-//        }
-//    }
+    @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            viewModel.isPinching = true
+            viewModel.lastPinchScale = gesture.scale
+            viewModel.zoomCenterIndex = nil
+            
+            // 停止惯性动画
+            stopInertialScroll()
+            
+            // 安全获取缩放中心
+            if gesture.numberOfTouches >= 2 {
+                if let centerPoint = getSafePinchCenter(for: gesture) {
+                    viewModel.zoomCenterIndex = getKlineIndex(at: centerPoint)
+                }
+            }
+            
+        case .changed:
+            // 安全检查触摸点数量
+            guard gesture.numberOfTouches >= 2 else {
+                return
+            }
+            
+            let scaleChange = gesture.scale / viewModel.lastPinchScale
+            viewModel.lastPinchScale = gesture.scale
+            
+            // 获取当前缩放中心
+            let currentCenterIndex: Int?
+            if let centerPoint = getSafePinchCenter(for: gesture) {
+                currentCenterIndex = getKlineIndex(at: centerPoint)
+            } else {
+                currentCenterIndex = nil
+            }
+            
+            // 使用当前中心点或缓存的上一个中心点
+            let centerIndex = currentCenterIndex ?? viewModel.zoomCenterIndex
+            
+            // 执行缩放
+            performZoom(scaleChange: scaleChange, centerIndex: centerIndex)
+            
+        case .ended, .cancelled, .failed:
+            viewModel.isPinching = false
+            viewModel.zoomCenterIndex = nil
+            viewModel.lastPinchScale = 1.0
+
+            viewModel.calculateVisible()
+            setNeedsDisplay()
+            
+        default:
+            break
+        }
+    }
     
-//    
-//    private func loadMoreData(in direction: KLineChartViewLoadingState) {
-//        guard let dataSource = dataSource, loadingState == .idle else { return }
-//        
-//        loadingState = direction
-//        
-//        // 获取最早或最晚的数据时间
-//        guard let targetDate = getTargetDate(for: direction) else {
-//            loadingState = .idle
-//            return
-//        }
-//        
-//        // 定义完成处理
-//        let handleCompletion = { [weak self] (newData: [KLineData]) in
-//            guard let self = self else { return }
-//            
-//            DispatchQueue.main.async {
-//                // 在这里根据返回的数据量判断是否还有更多数据
-//                if direction == .loadingLeft {
-//                    self.hasMoreLeftData = newData.count >= self.pageSize
-//                } else {
-//                    self.hasMoreRightData = newData.count >= self.pageSize
-//                }
-//                
-//                self.handleLoadedData(newData, direction: direction)
-//            }
-//        }
-//        
-//        if direction == .loadingLeft {
-//            dataSource.loadHistoricalData(before: targetDate,
-//                                          count: pageSize,
-//                                          completion: handleCompletion)
-//        } else {
-//            dataSource.loadRecentData(after: targetDate,
-//                                      count: pageSize,
-//                                      completion: handleCompletion)
-//        }
-//        
-//        setNeedsDisplay()
-//    }
-//    
-//    private func getTargetDate(for direction: KLineChartViewLoadingState) -> Date? {
-//        guard !klineDatas.isEmpty else { return nil }
-//        
-//        if direction == .loadingLeft {
-//            // 获取最早的数据日期
-//            let earliestData = klineDatas.first!
-//            return Date(timeIntervalSince1970: earliestData.timestamp - 1)
-//        } else {
-//            // 获取最新的数据日期
-//            let latestData = klineDatas.last!
-//            return Date(timeIntervalSince1970: latestData.timestamp + 1)
-//        }
-//    }
-//    
-//    private func handleLoadedData(_ newData: [KLineData], direction: KLineChartViewLoadingState) {
-//        guard !newData.isEmpty else {
-//            // 没有更多数据
-//            if direction == .loadingLeft {
-//                hasMoreLeftData = false
-//            } else {
-//                hasMoreRightData = false
-//            }
-//            loadingState = .idle
-//            checkAndSnapBack()
-//            return
-//        }
-//        
-//        // 根据方向合并数据
-//        let oldCount = klineDatas.count
-//        let oldOffsetX = offsetX
-//        let chartWidth = getChartRect().width
-//        
-//        if direction == .loadingLeft {
-//            // 在开头插入数据
-//            klineDatas = newData.reversed() + klineDatas
-//            
-//            // 调整offsetX以保持视觉位置
-//            let addedWidth = CGFloat(newData.count) * (klineWidth + config.klineSpacing)
-//            offsetX = oldOffsetX + addedWidth
-//            
-//        } else {
-//            // 在末尾追加数据
-//            klineDatas += newData
-//            
-//            // offsetX保持不变
-//        }
-//        
-//        // 计算技术指标
-//        calculateMA()
-//        
-//        // 加载完成，回弹到正常位置
-//        loadingState = .idle
-//        
-//        // 如果是从左边界加载的，需要平滑过渡
-//        if direction == .loadingLeft {
-//            animateLeftBoundaryTransition(oldOffsetX: oldOffsetX,
-//                                          oldCount: oldCount,
-//                                          newCount: klineDatas.count,
-//                                          chartWidth: chartWidth)
-//        } else {
-//            checkAndSnapBack()
-//        }
-//        
-//        updateVisibleRange()
-//        setNeedsDisplay()
-//    }
-//    
-//    private func animateLeftBoundaryTransition(oldOffsetX: CGFloat,
-//                                               oldCount: Int,
-//                                               newCount: Int,
-//                                               chartWidth: CGFloat) {
-//        let totalWidth = CGFloat(newCount) * (klineWidth + config.klineSpacing)
-//        
-//        // 计算目标位置（显示新加载的数据）
-//        let targetOffset: CGFloat = 0
-//        
-//        // 使用动画平滑过渡
-//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-//            self.offsetX = targetOffset
-//            self.updateVisibleRange()
-//            self.setNeedsDisplay()
-//        })
-//    }
+    private func getSafePinchCenter(for gesture: UIPinchGestureRecognizer) -> CGPoint? {
+        guard gesture.numberOfTouches >= 2 else { return nil }
+        
+        let touchPoint1 = gesture.location(ofTouch: 0, in: self)
+        let touchPoint2 = gesture.location(ofTouch: 1, in: self)
+        
+        return CGPoint(x: (touchPoint1.x + touchPoint2.x) / 2,
+                       y: (touchPoint1.y + touchPoint2.y) / 2)
+    }
+    
+    private func getKlineIndex(at point: CGPoint) -> Int? {
+        guard viewModel.kLineChartRect.contains(point) else { return nil }
+        
+        let xInChart = point.x - viewModel.kLineChartRect.origin.x
+        let relativeIndex = Int(xInChart / viewModel.itemWidth)
+        let index = viewModel.visibleStartIndex + relativeIndex
+        
+        return (index >= 0 && index < viewModel.dataList.count) ? index : nil
+    }
+    
+    private func performZoom(scaleChange: CGFloat, centerIndex: Int?) {
+        guard scaleChange != 1.0 else { return }
+        
+        let oldKlineWidth = viewModel.itemWidth
+        
+        // 更新缩放比例
+        var newScale = viewModel.scale * scaleChange
+        newScale = min(max(0.5, newScale), 3.0)
+        
+        if newScale != viewModel.scale {
+            viewModel.scale = newScale
+                        
+            // 保持中心点位置
+            if let centerIndex = centerIndex,
+               centerIndex >= 0 && centerIndex < viewModel.dataList.count {
+                                
+                // 计算中心点在新旧宽度下的位置
+                let oldCenterX = CGFloat(centerIndex) * oldKlineWidth
+                let newCenterX = CGFloat(centerIndex) * viewModel.itemWidth
+                
+                // 调整偏移量
+                viewModel.offsetX += (newCenterX - oldCenterX)
+                
+                // 边界检查
+                let maxOffset = max(0, viewModel.totalWidth - viewModel.kLineChartRect.width)
+                viewModel.offsetX = max(0, min(viewModel.offsetX, maxOffset))
+            }
+            
+            viewModel.calculateVisible()
+            setNeedsDisplay()
+        }
+    }
 }
 
 // MARK: - UIGestureRecognizerDelegate
