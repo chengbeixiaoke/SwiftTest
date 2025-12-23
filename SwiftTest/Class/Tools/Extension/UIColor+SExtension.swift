@@ -582,4 +582,45 @@ public extension UIColor {
     static let Text_0A37F2                 = ColorFromHex("0A37F2")
     
     static let Text_38B000                 = ColorFromHex("38B000")
+    
+    
+    // MARK: - 首页顶部渐变背景色
+    static let Level_0_Left_1             = ColorFromHex("05D29D")
+    static let Level_0_Left_0             = ColorFromHex("05D29D", 0.0)
+    static let Level_0_Center_1           = ColorFromHex("0EC517")
+    static let Level_0_Center_0           = ColorFromHex("0EC517", 0.0)
+    static let Level_0_Right_1            = ColorFromHex("80B917")
+    static let Level_0_Right_0            = ColorFromHex("80B917", 0.0)
+    
+    static let Level_1_Left_1             = ColorFromHex("DE4104")
+    static let Level_1_Left_0             = ColorFromHex("DE4104", 0.0)
+    static let Level_1_Center_1           = ColorFromHex("F46A07")
+    static let Level_1_Center_0           = ColorFromHex("F46A07", 0.0)
+    static let Level_1_Right_1            = ColorFromHex("F7971D")
+    static let Level_1_Right_0            = ColorFromHex("F7971D", 0.0)
+    
+    static let Level_2_Left_1             = ColorFromHex("006EFF")
+    static let Level_2_Left_0             = ColorFromHex("006EFF", 0.0)
+    static let Level_2_Center_1           = ColorFromHex("19B9EE")
+    static let Level_2_Center_0           = ColorFromHex("19B9EE", 0.0)
+    static let Level_2_Right_1            = ColorFromHex("30DFD3")
+    static let Level_2_Right_0            = ColorFromHex("30DFD3", 0.0)
+    
+    static let Level_3_Left_1             = ColorFromHex("6236FF")
+    static let Level_3_Left_0             = ColorFromHex("6236FF", 0.0)
+    static let Level_3_Center_1           = ColorFromHex("8E62FF")
+    static let Level_3_Center_0           = ColorFromHex("8E62FF", 0.0)
+    static let Level_3_Right_1            = ColorFromHex("B58DFF")
+    static let Level_3_Right_0            = ColorFromHex("B58DFF", 0.0)
+    
+    static let Level_4_Left_1             = ColorFromHex("EE1574")
+    static let Level_4_Left_0             = ColorFromHex("EE1574", 0.0)
+    static let Level_4_Center_1           = ColorFromHex("F60B3E")
+    static let Level_4_Center_0           = ColorFromHex("F60B3E", 0.0)
+    static let Level_4_Right_1            = ColorFromHex("FD0101")
+    static let Level_4_Right_0            = ColorFromHex("FD0101", 0.0)
+    
+    static let ColorBG_FFFFFF_0_000000_0    = ColorFromHex("FFFFFF", 0, darkHex: "000000", darkAlpha: 0)
+    static let ColorBG_FFFFFF_058_000000_058    = ColorFromHex("FFFFFF", 0.58, darkHex: "000000", darkAlpha: 0.58)
+
 }

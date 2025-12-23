@@ -50,6 +50,7 @@
 		433066562E8BC083002E2018 /* ACell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433066552E8BC083002E2018 /* ACell.swift */; };
 		433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433066572E8BC15A002E2018 /* BaseTableViewCell.swift */; };
 		4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4333CFA52E001CDB00ADDF38 /* String+Extension.swift */; };
+		43543E5E2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43543E5D2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift */; };
 		435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B76512D9E345700093B91 /* VideoPlayerViewController.swift */; };
 		435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B766D2D9E411500093B91 /* Object+Extension.swift */; };
 		435D785E2E03E52900688F0E /* MiniAppTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D785D2E03E52900688F0E /* MiniAppTestView.swift */; };
@@ -162,6 +163,7 @@
 		433066552E8BC083002E2018 /* ACell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACell.swift; sourceTree = "<group>"; };
 		433066572E8BC15A002E2018 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		4333CFA52E001CDB00ADDF38 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		43543E5D2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBackgroundViewController.swift; sourceTree = "<group>"; };
 		435B76512D9E345700093B91 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		435B766D2D9E411500093B91 /* Object+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Object+Extension.swift"; sourceTree = "<group>"; };
 		435D785D2E03E52900688F0E /* MiniAppTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppTestView.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 		432699F32D95438A0025EEAC /* A */ = {
 			isa = PBXGroup;
 			children = (
+				43B1894B2EF8E21E00AC8168 /* VCS */,
 				4361980A2EE948C4004932D6 /* KLineChart3 */,
 				436197FC2EE81B67004932D6 /* KLineChart */,
 				43AA20C52EC42584000D1EAC /* 3D */,
@@ -525,6 +528,14 @@
 			path = OBJ_3D;
 			sourceTree = "<group>";
 		};
+		43B1894B2EF8E21E00AC8168 /* VCS */ = {
+			isa = PBXGroup;
+			children = (
+				43543E5D2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift */,
+			);
+			path = VCS;
+			sourceTree = "<group>";
+		};
 		43BEABA22E02B26400092EB3 /* MiniApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -715,6 +726,7 @@
 				433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */,
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
 				43269A132D95438A0025EEAC /* AppDateFormatterManager.swift in Sources */,
+				43543E5E2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift in Sources */,
 				433065FC2E8A2444002E2018 /* UIWindow+Extension.swift in Sources */,
 				436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */,
 				433065F62E8A21E3002E2018 /* UIEdgeInsets+Extension.swift in Sources */,

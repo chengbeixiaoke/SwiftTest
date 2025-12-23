@@ -11,7 +11,7 @@ import YYKit
 open class BaseViewController: UIViewController {
     
     public var viewBackgroundColor: UIColor {
-        return .C_White
+        return .ColorWhite
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {

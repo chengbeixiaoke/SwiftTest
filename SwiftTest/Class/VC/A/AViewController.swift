@@ -50,7 +50,8 @@ class AViewController: BaseViewController {
                 Model(title: "饼状图", vcClass: SimplePieChartViewController.self),
                 Model(title: "饼状图", vcClass: SimplePieChartViewController2.self),
                 Model(title: "测试绘图", vcClass: ChatTestViewController.self),
-                Model(title: "3D模型", vcClass: Test3DViewController.self)]
+                Model(title: "3D模型", vcClass: Test3DViewController.self),
+                Model(title: "渐变视图2", vcClass: HomeTopBackgroundViewController.self)]
     }
     
     override func viewDidAppear(_ animated: Bool) {
