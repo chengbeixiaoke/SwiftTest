@@ -24,10 +24,10 @@ class Test3DViewController: BaseViewController {
         super.viewDidLoad()
         view.backgroundColor = .red
         
-        let objURL = Bundle.main.url(forResource: "wd_1", withExtension: "obj")
+        let modelURL = Bundle.main.url(forResource: "wd_1", withExtension: "usdz")
         let hdrURL = Bundle.main.url(forResource: "wd_1", withExtension: "hdr")
         let modelView = S3DModelView(frame: CGRectMake(0, 0, WidthScreen, WidthScreen),
-                                     objURL: objURL,
+                                     modelURL: modelURL,
                                      hdrURL: hdrURL)
         view.addSubview(modelView)
         modelView.backgroundColor = .C_White
@@ -39,3 +39,4 @@ class Test3DViewController: BaseViewController {
         self.modelView = modelView
     }
 }
+

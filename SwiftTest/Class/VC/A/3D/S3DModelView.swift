@@ -29,6 +29,7 @@ public class S3DModelView: BaseView {
         sceneView.allowsCameraControl = false
         sceneView.delegate = self
         sceneView.scene = scene
+        sceneView.autoenablesDefaultLighting = true
         return sceneView
     }()
     
@@ -66,11 +67,11 @@ public class S3DModelView: BaseView {
     public var onModelLoadComplete: ((Bool) -> Void)?
     
     // 模型
-    private let objURL: URL?
+    private let modelURL: URL?
     private let hdrURL: URL?
     
-    public init(frame: CGRect, objURL: URL?, hdrURL: URL?) {
-        self.objURL = objURL
+    public init(frame: CGRect, modelURL: URL?, hdrURL: URL?) {
+        self.modelURL = modelURL
         self.hdrURL = hdrURL
         super.init(frame: frame)
         
@@ -106,15 +107,15 @@ public class S3DModelView: BaseView {
     /// 加载模型
     public func loadOBJModel()
     {
-        guard let objURL = objURL else {
-            SLog("[3D] OBJ文件未找到，请确保 .obj 文件已添加到项目中")
+        guard let modelURL = modelURL else {
+            SLog("[3D] Model文件未找到，请确保模型文件已添加到项目中")
             onModelLoadComplete?(false)
             return
         }
         
-        loadModelInBackground(objURL: objURL) { [weak self] modelNode in
+        loadModelInBackground(modelURL: modelURL) { [weak self] modelNode in
             guard let self = self, let modelNode = modelNode else {
-                SLog("[3D] 模型加载失败: \(objURL.filePath)")
+                SLog("[3D] 模型加载失败: \(modelURL.filePath)")
                 
                 DispatchQueue.main.async {
                     self?.onModelLoadComplete?(false)
@@ -127,6 +128,7 @@ public class S3DModelView: BaseView {
                 self.setupPBRMaterials(for: modelNode)
                 self.containerNode.addChildNode(modelNode)
                 self.modelNode = modelNode
+                self.setupInitialAngle(angle: 30, duration: 0.2)
                 
                 // 标记模型已添加，等待渲染完成
                 self.isModelLoaded = true
@@ -139,21 +141,14 @@ public class S3DModelView: BaseView {
     /// - Parameters:
     ///   - objURL: 模型URL
     ///   - completion: 加载完成回调
-    private func loadModelInBackground(objURL: URL, completion: @escaping (SCNNode?) -> Void)
+    private func loadModelInBackground(modelURL: URL, completion: @escaping (SCNNode?) -> Void)
     {
         DispatchQueue.global(qos: .userInitiated).async {
-            let asset = MDLAsset(url: objURL)
-            guard let object = asset.object(at: 0) as? MDLMesh else {
-                SLog("[3D] 无法加载 OBJ 模型")
-                DispatchQueue.main.async {
-                    completion(nil)
-                }
-                return
-            }
-            
-            let modelNode = SCNNode(mdlObject: object)
+            let asset = MDLAsset(url: modelURL)
+            asset.loadTextures()
+            let node = SCNNode(mdlObject: asset.object(at: 0))
             DispatchQueue.main.async {
-                completion(modelNode)
+                completion(node)
             }
         }
     }
@@ -216,7 +211,7 @@ public class S3DModelView: BaseView {
         SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeOut)
         
         // 重置容器旋转
-        containerNode.eulerAngles = SCNVector3(0, 0, 0)
+        setupInitialAngle(angle: initialAngle, duration: 0.2)
         
         // 重置相机位置
         if let systemCameraNode = sceneView.pointOfView {
@@ -233,14 +228,14 @@ public class S3DModelView: BaseView {
     }
     
     private var initialAngle: CGFloat = 0
-    public func setupInitialAngle(angle: CGFloat) {
+    public func setupInitialAngle(angle: CGFloat, duration: CGFloat = 0.5) {
         initialAngle = angle
         
         let radians = angle * .pi / 180.0
         let rotateAction = SCNAction.rotateTo(x: CGFloat(radians),
                                               y: 0,
-                                              z: CGFloat(radians),
-                                              duration: 0.5)
+                                              z: 0,
+                                              duration: duration)
         containerNode.runAction(rotateAction)
     }
     
@@ -458,7 +453,7 @@ extension S3DModelView {
         isAutoRotating = true
         
         // 创建无限旋转动画
-        let rotateAction = SCNAction.rotateBy(x: CGFloat.pi, y: 0, z: 0, duration: autoRotationSpeed)
+        let rotateAction = SCNAction.rotateBy(x: 0, y: CGFloat.pi, z: 0, duration: autoRotationSpeed)
         rotateAction.timingMode = .linear
         
         // 无限重复
