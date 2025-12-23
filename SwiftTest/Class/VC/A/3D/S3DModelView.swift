@@ -10,10 +10,10 @@ import SnapKit
 import SceneKit
 import SceneKit.ModelIO
 
-class S3DModelView: BaseView {
+public class S3DModelView: BaseView {
     public override var backgroundColor: UIColor? {
         didSet {
-            scene.background.contents = UIColor.C_Clear
+            scene.background.contents = backgroundColor
         }
     }
     
@@ -92,7 +92,7 @@ class S3DModelView: BaseView {
     public func loadHDREnvironment()
     {
         guard let hdrURL = hdrURL else {
-            printLog("[3D] HDR文件未找到，请确保 .hdr 文件已添加到项目中")
+            SLog("[3D] HDR文件未找到，请确保 .hdr 文件已添加到项目中")
             return
         }
         
@@ -104,17 +104,17 @@ class S3DModelView: BaseView {
     }
     
     /// 加载模型
-    func loadOBJModel()
+    public func loadOBJModel()
     {
         guard let objURL = objURL else {
-            printLog("[3D] OBJ文件未找到，请确保 .obj 文件已添加到项目中")
+            SLog("[3D] OBJ文件未找到，请确保 .obj 文件已添加到项目中")
             onModelLoadComplete?(false)
             return
         }
         
         loadModelInBackground(objURL: objURL) { [weak self] modelNode in
             guard let self = self, let modelNode = modelNode else {
-                printLog("[3D] 模型加载失败: \(objURL.filePath)")
+                SLog("[3D] 模型加载失败: \(objURL.filePath)")
                 
                 DispatchQueue.main.async {
                     self?.onModelLoadComplete?(false)
@@ -130,7 +130,7 @@ class S3DModelView: BaseView {
                 
                 // 标记模型已添加，等待渲染完成
                 self.isModelLoaded = true
-                printLog("[3D] 模型节点已添加到场景，等待渲染完成...")
+                SLog("[3D] 模型节点已添加到场景，等待渲染完成...")
             }
         }
     }
@@ -144,7 +144,7 @@ class S3DModelView: BaseView {
         DispatchQueue.global(qos: .userInitiated).async {
             let asset = MDLAsset(url: objURL)
             guard let object = asset.object(at: 0) as? MDLMesh else {
-                printLog("[3D] 无法加载 OBJ 模型")
+                SLog("[3D] 无法加载 OBJ 模型")
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -230,6 +230,18 @@ class S3DModelView: BaseView {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.startAutoRotation()
         }
+    }
+    
+    private var initialAngle: CGFloat = 0
+    public func setupInitialAngle(angle: CGFloat) {
+        initialAngle = angle
+        
+        let radians = angle * .pi / 180.0
+        let rotateAction = SCNAction.rotateTo(x: CGFloat(radians),
+                                              y: 0,
+                                              z: CGFloat(radians),
+                                              duration: 0.5)
+        containerNode.runAction(rotateAction)
     }
     
     deinit
@@ -456,7 +468,7 @@ extension S3DModelView {
         containerNode.runAction(repeatAction, forKey: "autoRotation")
         autoRotationAction = repeatAction
         
-        printLog("[3D] 开始自动旋转")
+        SLog("[3D] 开始自动旋转")
     }
     
     /// 停止自动旋转
@@ -467,7 +479,7 @@ extension S3DModelView {
         autoRotationAction = nil
         isAutoRotating = false
         
-        printLog("[3D] 停止自动旋转")
+        SLog("[3D] 停止自动旋转")
     }
     
     /// 切换自动旋转状态
@@ -489,16 +501,6 @@ extension S3DModelView {
             startAutoRotation()
         }
     }
-    
-    /// 点击手势处理 - 控制自动旋转
-    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        guard gesture.state == .ended else { return }
-        
-        // 双击重置，单击切换自动旋转
-        if gesture.numberOfTapsRequired == 1 {
-            toggleAutoRotation()
-        }
-    }
 }
 
 // MARK: - SCNSceneRendererDelegate
@@ -514,25 +516,140 @@ extension S3DModelView: SCNSceneRendererDelegate {
             self.isModelLoaded = false // 重置状态
             
             // 延迟一帧确保完全渲染
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.notifyLoadCompletion(success: true)
             }
         }
     }
     
     private func notifyLoadCompletion(success: Bool, error: Error? = nil) {
-        printLog("[3D] 模型加载完成: \(success ? "成功" : "失败")")
+        SLog("[3D] 模型加载完成: \(success ? "成功" : "失败")")
         
         if success {
             if let cameraNode = sceneView.pointOfView {
                 cameraPosition = cameraNode.position
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let weakSelf = self else { return }
                 self?.startAutoRotation()
+                weakSelf.onModelLoadComplete?(success)
             }
         }
+    }
+}
+
+class S3DCameraSystem {
+    @discardableResult
+    static func setupOptimalCamera(modelNode: SCNNode,
+                                   sceneView: SCNView) -> SCNNode
+    {
+        // 获取模型几何信息
+        let (center, size) = getModelGeometry(modelNode)
         
-        onModelLoadComplete?(success)
+        // 计算相机参数
+        let cameraConfig = calculateCameraConfiguration(modelNode: modelNode, size: size, center: center)
+        SLog("[3D] cameraConfig: \(cameraConfig)")
+        
+        // 创建相机节点
+        let cameraNode = createCameraNode(config: cameraConfig)
+        
+        // 添加看向模型的约束
+        let lookConstraint = SCNLookAtConstraint(target: modelNode)
+        cameraNode.constraints = [lookConstraint]
+        
+        sceneView.scene?.rootNode.addChildNode(cameraNode)
+        sceneView.pointOfView = cameraNode
+        
+        return cameraNode
+    }
+    
+    private static func getModelGeometry(_ node: SCNNode) -> (center: SCNVector3, size: SCNVector3)
+    {
+        let min = node.boundingBox.min
+        let max = node.boundingBox.max
+        
+        let center = SCNVector3((min.x + max.x) / 2,
+                                (min.y + max.y) / 2,
+                                (min.z + max.z) / 2)
+        
+        let size = SCNVector3(max.x - min.x,
+                              max.y - min.y,
+                              max.z - min.z)
+        
+        return (center, size)
+    }
+    
+    private static func calculateCameraConfiguration(modelNode: SCNNode, size: SCNVector3, center: SCNVector3) -> CameraConfig
+    {
+        let distance = calculatePerspectiveDistance(size: size)
+        let position = SCNVector3(center.x, center.y + size.y * 0.2, center.z + distance)
+        let (zNear, zFar) = calculateProperClippingPlanes(cameraPosition: position,
+                                                          modelNode: modelNode)
+        return CameraConfig(position: position,
+                            fieldOfView: 45.0,
+                            orthographicScale: nil,
+                            zNear: zNear,
+                            zFar: zFar)
+    }
+    
+    private static func calculatePerspectiveDistance(size: SCNVector3) -> Float
+    {
+        let diagonal = sqrt(size.x * size.x + size.y * size.y + size.z * size.z)
+        return diagonal * 1.3
+    }
+    
+    private static func calculateProperClippingPlanes(cameraPosition: SCNVector3, modelNode: SCNNode) -> (zNear: Double, zFar: Double)
+    {
+        // 获取模型在世界坐标系中的位置
+        let modelWorldPosition = modelNode.worldPosition
+        
+        // 计算相机到模型中心的距离
+        let distanceToModel = sqrt(
+            pow(cameraPosition.x - modelWorldPosition.x, 2) +
+            pow(cameraPosition.y - modelWorldPosition.y, 2) +
+            pow(cameraPosition.z - modelWorldPosition.z, 2)
+        )
+        
+        // 获取模型尺寸
+        let boundingBox = modelNode.boundingBox
+        let modelSize = max(boundingBox.max.x - boundingBox.min.x,
+                            boundingBox.max.y - boundingBox.min.y,
+                            boundingBox.max.z - boundingBox.min.z)
+        
+        // 计算合理的裁剪平面
+        let zNear = Double(max(0.1, distanceToModel - modelSize * 2))  // 确保包含模型
+        let zFar = Double(distanceToModel + modelSize * 3)             // 确保包含远景
+        
+        return (zNear, zFar)
+    }
+    
+    private static func createCameraNode(config: CameraConfig) -> SCNNode
+    {
+        let camera = SCNCamera()
+        
+        if let orthographicScale = config.orthographicScale {
+            camera.usesOrthographicProjection = true
+            camera.orthographicScale = orthographicScale
+        } else {
+            camera.fieldOfView = CGFloat(config.fieldOfView)
+        }
+        
+        camera.zNear = config.zNear
+        camera.zFar = config.zFar
+        
+        let cameraNode = SCNNode()
+        cameraNode.camera = camera
+        cameraNode.position = config.position
+        
+        return cameraNode
+    }
+    
+    private struct CameraConfig {
+        let position: SCNVector3
+        let fieldOfView: Double
+        let orthographicScale: Double?
+        let zNear: Double
+        let zFar: Double
     }
 }

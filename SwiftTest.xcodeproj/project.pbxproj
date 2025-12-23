@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4300E9432EFA477E00FBB966 /* TestScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = 4300E9422EFA477E00FBB966 /* TestScene.scn */; };
 		430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430D94802EBB21C200D44522 /* AppRouterManager.swift */; };
 		4324E4EC2DA909F500C8971B /* AppThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */; };
 		43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699DE2D95438A0025EEAC /* EntityUserModelV1.swift */; };
@@ -76,13 +77,10 @@
 		4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */ = {isa = PBXBuildFile; fileRef = 437988452DBA061300A9BEE2 /* decryptFile.py */; };
 		4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 4381FB6A2D9D48EF00BF4B93 /* MyPackage */; };
 		4385243D2ED706AE00C8F8C3 /* S3DModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */; };
-		438524442ED7074000C8F8C3 /* wd_1.psd in Resources */ = {isa = PBXBuildFile; fileRef = 4385243F2ED7074000C8F8C3 /* wd_1.psd */; };
 		438524452ED7074000C8F8C3 /* wd_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4385243E2ED7074000C8F8C3 /* wd_1.jpg */; };
 		438524462ED7074000C8F8C3 /* 手环弯曲低模.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 438524402ED7074000C8F8C3 /* 手环弯曲低模.mtl */; };
 		438524472ED7074000C8F8C3 /* wd_1.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 438524422ED7074000C8F8C3 /* wd_1.hdr */; };
 		438524482ED7074000C8F8C3 /* wd_1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 438524412ED7074000C8F8C3 /* wd_1.obj */; };
-		4385244E2ED8588800C8F8C3 /* S3DModelView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385244D2ED8588800C8F8C3 /* S3DModelView2.swift */; };
-		438524502ED860CF00C8F8C3 /* S3DCameraSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385244F2ED860CF00C8F8C3 /* S3DCameraSystem.swift */; };
 		43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 43AA20CA2EC42E8D000D1EAC /* art.scnassets */; };
 		43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */; };
 		43B188B82EF298B900AC8168 /* AppPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B188B72EF298B900AC8168 /* AppPage.swift */; };
@@ -116,6 +114,7 @@
 
 /* Begin PBXFileReference section */
 		2E62492FBA8854686AFD4BA0 /* Pods-SwiftTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.debug.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.debug.xcconfig"; sourceTree = "<group>"; };
+		4300E9422EFA477E00FBB966 /* TestScene.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = TestScene.scn; sourceTree = "<group>"; };
 		430D94802EBB21C200D44522 /* AppRouterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterManager.swift; sourceTree = "<group>"; };
 		4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeViewController.swift; sourceTree = "<group>"; };
 		432699732D953FD70025EEAC /* SwiftTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,12 +187,9 @@
 		437988472DBA061300A9BEE2 /* public_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = public_key.pem; sourceTree = "<group>"; };
 		4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView.swift; sourceTree = "<group>"; };
 		4385243E2ED7074000C8F8C3 /* wd_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wd_1.jpg; sourceTree = "<group>"; };
-		4385243F2ED7074000C8F8C3 /* wd_1.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = wd_1.psd; sourceTree = "<group>"; };
 		438524402ED7074000C8F8C3 /* 手环弯曲低模.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = "手环弯曲低模.mtl"; sourceTree = "<group>"; };
 		438524412ED7074000C8F8C3 /* wd_1.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1.obj; sourceTree = "<group>"; };
 		438524422ED7074000C8F8C3 /* wd_1.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1.hdr; sourceTree = "<group>"; };
-		4385244D2ED8588800C8F8C3 /* S3DModelView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView2.swift; sourceTree = "<group>"; };
-		4385244F2ED860CF00C8F8C3 /* S3DCameraSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DCameraSystem.swift; sourceTree = "<group>"; };
 		43AA20CA2EC42E8D000D1EAC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3DViewController.swift; sourceTree = "<group>"; };
 		43B188B72EF298B900AC8168 /* AppPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPage.swift; sourceTree = "<group>"; };
@@ -501,10 +497,10 @@
 			isa = PBXGroup;
 			children = (
 				4385243E2ED7074000C8F8C3 /* wd_1.jpg */,
-				4385243F2ED7074000C8F8C3 /* wd_1.psd */,
 				438524402ED7074000C8F8C3 /* 手环弯曲低模.mtl */,
 				438524412ED7074000C8F8C3 /* wd_1.obj */,
 				438524422ED7074000C8F8C3 /* wd_1.hdr */,
+				4300E9422EFA477E00FBB966 /* TestScene.scn */,
 			);
 			path = WD_1;
 			sourceTree = "<group>";
@@ -514,8 +510,6 @@
 			children = (
 				4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */,
 				43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */,
-				4385244D2ED8588800C8F8C3 /* S3DModelView2.swift */,
-				4385244F2ED860CF00C8F8C3 /* S3DCameraSystem.swift */,
 			);
 			path = 3D;
 			sourceTree = "<group>";
@@ -624,13 +618,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4300E9432EFA477E00FBB966 /* TestScene.scn in Resources */,
 				4361980D2EE95376004932D6 /* Assets.xcassets in Resources */,
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
 				43AA20CB2EC42E8D000D1EAC /* art.scnassets in Resources */,
 				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
 				4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */,
 				4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */,
-				438524442ED7074000C8F8C3 /* wd_1.psd in Resources */,
 				438524452ED7074000C8F8C3 /* wd_1.jpg in Resources */,
 				438524462ED7074000C8F8C3 /* 手环弯曲低模.mtl in Resources */,
 				438524472ED7074000C8F8C3 /* wd_1.hdr in Resources */,
@@ -718,7 +712,6 @@
 				43269A0F2D95438A0025EEAC /* UserModelData.xcdatamodeld in Sources */,
 				43BEABB02E02C2A100092EB3 /* MiniAppH5ContainerSmallView.swift in Sources */,
 				4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */,
-				4385244E2ED8588800C8F8C3 /* S3DModelView2.swift in Sources */,
 				436197F42EE7C382004932D6 /* ChatTestViewController.swift in Sources */,
 				436198002EE81C1C004932D6 /* KLineConfiguration.swift in Sources */,
 				436198222EEB010D004932D6 /* KLineDataGenerator.swift in Sources */,
@@ -746,7 +739,6 @@
 				4385243D2ED706AE00C8F8C3 /* S3DModelView.swift in Sources */,
 				43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */,
 				43269A152D95438A0025EEAC /* CoreDataManager.swift in Sources */,
-				438524502ED860CF00C8F8C3 /* S3DCameraSystem.swift in Sources */,
 				43269A162D95438A0025EEAC /* C1TableView.swift in Sources */,
 				4324E4EC2DA909F500C8971B /* AppThemeViewController.swift in Sources */,
 				43269A182D95438A0025EEAC /* EntityUserModelV3.swift in Sources */,
