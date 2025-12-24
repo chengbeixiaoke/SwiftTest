@@ -14,6 +14,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions)
     {
+        clearLaunchScreenCache()
+        
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
 
@@ -55,6 +57,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene)
     {
         printLog("[App] - app已经进入后台")
+    }
+    
+    func clearLaunchScreenCache() {
+        let fileManager = FileManager.default
+        let libraryPath = NSHomeDirectory() + "/Library"
+        let splashBoardPath = libraryPath + "/SplashBoard"
+        
+        do {
+            // 检查缓存目录是否存在
+            if fileManager.fileExists(atPath: splashBoardPath) {
+                try fileManager.removeItem(atPath: splashBoardPath)
+                print("LaunchScreen 缓存清除成功。")
+            }
+        } catch {
+            print("清除缓存失败: \(error)")
+        }
     }
 }
 
