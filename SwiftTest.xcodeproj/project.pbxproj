@@ -77,7 +77,7 @@
 		4381FB6B2D9D48EF00BF4B93 /* MyPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 4381FB6A2D9D48EF00BF4B93 /* MyPackage */; };
 		4385243D2ED706AE00C8F8C3 /* S3DModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */; };
 		438524472ED7074000C8F8C3 /* wd_1.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 438524422ED7074000C8F8C3 /* wd_1.hdr */; };
-		43991FA82EFB8F7F00042990 /* wd_1.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 43991FA72EFB8F7F00042990 /* wd_1.usdz */; };
+		43A15A0B2EFBCEDD00936BB4 /* wd_1.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */; };
 		43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */; };
 		43B188B82EF298B900AC8168 /* AppPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B188B72EF298B900AC8168 /* AppPage.swift */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
@@ -184,7 +184,7 @@
 		437988472DBA061300A9BEE2 /* public_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = public_key.pem; sourceTree = "<group>"; };
 		4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView.swift; sourceTree = "<group>"; };
 		438524422ED7074000C8F8C3 /* wd_1.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1.hdr; sourceTree = "<group>"; };
-		43991FA72EFB8F7F00042990 /* wd_1.usdz */ = {isa = PBXFileReference; lastKnownFileType = file; path = wd_1.usdz; sourceTree = "<group>"; };
+		43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */ = {isa = PBXFileReference; lastKnownFileType = file; path = wd_1.usdz; sourceTree = "<group>"; };
 		43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3DViewController.swift; sourceTree = "<group>"; };
 		43B188B72EF298B900AC8168 /* AppPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPage.swift; sourceTree = "<group>"; };
 		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
@@ -489,7 +489,7 @@
 		438524432ED7074000C8F8C3 /* WD_1 */ = {
 			isa = PBXGroup;
 			children = (
-				43991FA72EFB8F7F00042990 /* wd_1.usdz */,
+				43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */,
 				438524422ED7074000C8F8C3 /* wd_1.hdr */,
 			);
 			path = WD_1;
@@ -610,12 +610,12 @@
 			files = (
 				4361980D2EE95376004932D6 /* Assets.xcassets in Resources */,
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
-				43991FA82EFB8F7F00042990 /* wd_1.usdz in Resources */,
 				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
 				4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */,
 				4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */,
 				438524472ED7074000C8F8C3 /* wd_1.hdr in Resources */,
 				43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */,
+				43A15A0B2EFBCEDD00936BB4 /* wd_1.usdz in Resources */,
 				43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */,
 				437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */,
 			);

@@ -56,6 +56,10 @@ class AViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        delay(seconds: 0.5) {
+            self.navigationController?.pushViewController(Test3DViewController(), animated: true)
+        }
     }
     
     override func viewDidLoad() {
