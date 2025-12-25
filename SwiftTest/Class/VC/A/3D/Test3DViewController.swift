@@ -6,8 +6,7 @@
 //
 
 import UIKit
-import SceneKit
-import SceneKit.ModelIO
+import GLTFSceneKit
 
 class Test3DViewController: BaseViewController {
     
@@ -24,7 +23,7 @@ class Test3DViewController: BaseViewController {
         super.viewDidLoad()
         view.backgroundColor = .red
         
-        let modelURL = Bundle.main.url(forResource: "wd_1", withExtension: "usdz")
+        let modelURL = Bundle.main.url(forResource: "g", withExtension: "glb")
         let hdrURL = Bundle.main.url(forResource: "wd_1", withExtension: "hdr")
         let modelView = S3DModelView(frame: CGRectMake(0, 0, WidthScreen, WidthScreen),
                                      modelURL: modelURL,

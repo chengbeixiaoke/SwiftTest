@@ -9,42 +9,22 @@ import UIKit
 import SnapKit
 import SceneKit
 import SceneKit.ModelIO
+import GLTFSceneKit
 
 public class S3DModelView: BaseView {
     public override var backgroundColor: UIColor? {
         didSet {
-            scene.background.contents = backgroundColor
+            rootScene.background.contents = backgroundColor
         }
     }
     
     // 主场景
-    private lazy var scene: SCNScene = {
-        return SCNScene()
-    }()
-    
-    // 主场景视图
-    private lazy var sceneView: SCNView = {
-        let sceneView = SCNView(frame: bounds)
-        sceneView.autoenablesDefaultLighting = false
-        sceneView.allowsCameraControl = false
-        sceneView.delegate = self
-        sceneView.scene = scene
-        sceneView.autoenablesDefaultLighting = true
-        return sceneView
-    }()
-    
+    private var rootScene: SCNScene!
     // 容器节点，模型和灯光都将添加到此节点
-    private lazy var containerNode: SCNNode = {
-        let containerNode = SCNNode()
-        // 固定在场景中心
-        containerNode.position = SCNVector3Zero
-        scene.rootNode.addChildNode(containerNode)
-        return containerNode
-    }()
-    
-    // 模型节点
-    private var modelNode: SCNNode?
-    
+    private var containerNode: SCNNode!
+    // 主场景视图
+    private var sceneView: SCNView!
+        
     // 记录相机初始位置
     private var cameraPosition: SCNVector3 = SCNVector3Zero
     
@@ -86,6 +66,19 @@ public class S3DModelView: BaseView {
     /// 设置场景
     private func setupScene()
     {
+        rootScene = SCNScene()
+        
+        containerNode = SCNNode()
+        containerNode.position = SCNVector3Zero
+        rootScene.rootNode.addChildNode(containerNode)
+        
+        sceneView = SCNView(frame: bounds)
+        sceneView.autoenablesDefaultLighting = false
+        sceneView.allowsCameraControl = false
+        sceneView.delegate = self
+        sceneView.scene = rootScene
+        sceneView.autoenablesDefaultLighting = true
+        
         addSubview(sceneView)
     }
     
@@ -97,11 +90,11 @@ public class S3DModelView: BaseView {
             return
         }
         
-        // scene.background.contents = hdrURL
+        // rootScene.background.contents = hdrURL
         
         // 设置 HDR 环境贴图
-        scene.lightingEnvironment.contents = hdrURL
-        scene.lightingEnvironment.intensity = 1.0 // 调整强度
+        rootScene.lightingEnvironment.contents = hdrURL
+        rootScene.lightingEnvironment.intensity = 1.1 // 调整强度
     }
     
     /// 加载模型
@@ -109,31 +102,28 @@ public class S3DModelView: BaseView {
     {
         guard let modelURL = modelURL else {
             SLog("[3D] Model文件未找到，请确保模型文件已添加到项目中")
-            onModelLoadComplete?(false)
             return
         }
         
-        loadModelInBackground(modelURL: modelURL) { [weak self] modelNode in
-            guard let self = self, let modelNode = modelNode else {
-                SLog("[3D] 模型加载失败: \(modelURL.filePath)")
-                
-                DispatchQueue.main.async {
-                    self?.onModelLoadComplete?(false)
-                }
-                return
-            }
+        do {
+            let sceneSource = GLTFSceneSource(url: modelURL, options: [:])
+            let scene = try sceneSource.scene()
             
-            DispatchQueue.main.async {
-                self.setupSceneWithModel(modelNode)
-                self.setupPBRMaterials(for: modelNode)
-                self.containerNode.addChildNode(modelNode)
-                self.modelNode = modelNode
-                self.setupInitialAngle(angle: 30, duration: 0.2)
-                
-                // 标记模型已添加，等待渲染完成
-                self.isModelLoaded = true
-                SLog("[3D] 模型节点已添加到场景，等待渲染完成...")
-            }
+            containerNode.addChildNode(scene.rootNode)
+            
+            // 设置相机
+            S3DCameraSystem.setupOptimalCamera(modelNode: scene.rootNode, sceneView: sceneView)
+            // 给一个初始旋转角度
+            self.setupInitialAngle(angle: 30, duration: 0.2)
+            
+            // 标记模型已添加，等待渲染完成
+            self.isModelLoaded = true
+            
+            // 加载HDR
+            loadHDREnvironment()
+        } catch {
+            SLog("[3D] Model文件加载失败: \(error.localizedDescription)")
+            return
         }
     }
     
@@ -149,42 +139,6 @@ public class S3DModelView: BaseView {
             let node = SCNNode(mdlObject: asset.object(at: 0))
             DispatchQueue.main.async {
                 completion(node)
-            }
-        }
-    }
-    
-    /// 设置模型
-    /// - Parameter modelNode: 3D模型
-    func setupSceneWithModel(_ modelNode: SCNNode)
-    {
-        // 1. 首先将模型添加到场景
-        scene.rootNode.addChildNode(modelNode)
-        
-        // 设置相机
-        S3DCameraSystem.setupOptimalCamera(modelNode: modelNode,
-                                           sceneView: sceneView)
-    }
-    
-    /// 为3D模型的所有子节点统一配置基于物理的渲染材质，确保模型在SceneKit中具有真实的光照和材质表现。
-    /// - Parameter modelNode: 模型节点
-    private func setupPBRMaterials(for modelNode: SCNNode)
-    {
-        // 遍历所有子节点并设置 PBR 材质
-        modelNode.enumerateChildNodes { node, _ in
-            if let geometry = node.geometry {
-                for material in geometry.materials {
-                    // 启用基于物理的渲染
-                    material.lightingModel = .physicallyBased
-                    
-                    // 设置默认材质属性
-                    if material.diffuse.contents == nil {
-                        material.diffuse.contents = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
-                    }
-                    
-                    // 设置金属度和粗糙度
-                    material.metalness.contents = 0.3
-                    material.roughness.contents = 0.7
-                }
             }
         }
     }
@@ -216,7 +170,7 @@ public class S3DModelView: BaseView {
         // 重置相机位置
         if let systemCameraNode = sceneView.pointOfView {
             systemCameraNode.position = cameraPosition
-            scene.rootNode.addChildNode(systemCameraNode)
+            sceneView.scene?.rootNode.addChildNode(systemCameraNode)
         }
         
         SCNTransaction.commit()
@@ -404,7 +358,7 @@ extension S3DModelView {
             let clampedZ = max(minDistance, min(maxDistance, newZ))
             
             systemCameraNode.position.z = clampedZ
-            scene.rootNode.addChildNode(systemCameraNode)
+            rootScene.rootNode.addChildNode(systemCameraNode)
             
             lastPinchScale = currentScale
             
@@ -591,7 +545,7 @@ class S3DCameraSystem {
     private static func calculatePerspectiveDistance(size: SCNVector3) -> Float
     {
         let diagonal = sqrt(size.x * size.x + size.y * size.y + size.z * size.z)
-        return diagonal * 1.3
+        return diagonal * 1.0
     }
     
     private static func calculateProperClippingPlanes(cameraPosition: SCNVector3, modelNode: SCNNode) -> (zNear: Double, zFar: Double)

@@ -92,6 +92,7 @@
 		43C2E2432E28FBB900F04297 /* SceneDelegate+Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */; };
 		43C2E2452E290D6700F04297 /* YYLabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
+		43EA0F972EFCE63300424D04 /* g.glb in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0F962EFCE63300424D04 /* g.glb */; };
 		70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -199,6 +200,7 @@
 		43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SceneDelegate+Other.swift"; sourceTree = "<group>"; };
 		43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YYLabel+Extension.swift"; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
+		43EA0F962EFCE63300424D04 /* g.glb */ = {isa = PBXFileReference; lastKnownFileType = file; path = g.glb; sourceTree = "<group>"; };
 		7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
 		B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -489,6 +491,7 @@
 		438524432ED7074000C8F8C3 /* WD_1 */ = {
 			isa = PBXGroup;
 			children = (
+				43EA0F962EFCE63300424D04 /* g.glb */,
 				43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */,
 				438524422ED7074000C8F8C3 /* wd_1.hdr */,
 			);
@@ -608,6 +611,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43EA0F972EFCE63300424D04 /* g.glb in Resources */,
 				4361980D2EE95376004932D6 /* Assets.xcassets in Resources */,
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
 				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
