@@ -20,6 +20,7 @@ def base_pod
   pod 'WebRTC-SDK', '=125.6422.07'
   
   pod 'GLTFSceneKit'
+  pod 'GCDWebServer'
   
   pod 'SavoBaseModule', :git => 'https://codeup.aliyun.com/5ffe89797c4a6a0f9774e738/SavoBaseModule.git'
   

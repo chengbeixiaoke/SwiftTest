@@ -36,6 +36,10 @@ class Test3DViewController: BaseViewController {
             weakSelf.view.backgroundColor = .C_White
         }
         self.modelView = modelView
+        
+//        let webview = WebView3D(frame: CGRectMake(0, 0, WidthScreen, WidthScreen))
+//        view.addSubview(webview)
+//        webview.center = view.center
     }
 }
 

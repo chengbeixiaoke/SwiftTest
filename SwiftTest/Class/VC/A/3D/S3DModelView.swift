@@ -532,7 +532,7 @@ class S3DCameraSystem {
     private static func calculateCameraConfiguration(modelNode: SCNNode, size: SCNVector3, center: SCNVector3) -> CameraConfig
     {
         let distance = calculatePerspectiveDistance(size: size)
-        let position = SCNVector3(center.x, center.y + size.y * 0.2, center.z + distance)
+        let position = SCNVector3(center.x, center.y, center.z + distance)
         let (zNear, zFar) = calculateProperClippingPlanes(cameraPosition: position,
                                                           modelNode: modelNode)
         return CameraConfig(position: position,

@@ -93,6 +93,12 @@
 		43C2E2452E290D6700F04297 /* YYLabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
 		43EA0F972EFCE63300424D04 /* g.glb in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0F962EFCE63300424D04 /* g.glb */; };
+		43EA0FC62EFD399F00424D04 /* WebView3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EA0FC52EFD399F00424D04 /* WebView3D.swift */; };
+		43EA0FC92EFD3FDA00424D04 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FC72EFD3FDA00424D04 /* index.html */; };
+		43EA0FCA2EFD3FDA00424D04 /* model-viewer.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FC82EFD3FDA00424D04 /* model-viewer.min.js */; };
+		43EA0FCE2EFD4FCE00424D04 /* gg.glb in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FCB2EFD4FCE00424D04 /* gg.glb */; };
+		43EA0FD02EFD4FCE00424D04 /* wd_1g.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FCD2EFD4FCE00424D04 /* wd_1g.hdr */; };
+		43EA0FDC2EFD581800424D04 /* model.html in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FDB2EFD581700424D04 /* model.html */; };
 		70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -201,6 +207,12 @@
 		43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YYLabel+Extension.swift"; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
 		43EA0F962EFCE63300424D04 /* g.glb */ = {isa = PBXFileReference; lastKnownFileType = file; path = g.glb; sourceTree = "<group>"; };
+		43EA0FC52EFD399F00424D04 /* WebView3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView3D.swift; sourceTree = "<group>"; };
+		43EA0FC72EFD3FDA00424D04 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		43EA0FC82EFD3FDA00424D04 /* model-viewer.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "model-viewer.min.js"; sourceTree = "<group>"; };
+		43EA0FCB2EFD4FCE00424D04 /* gg.glb */ = {isa = PBXFileReference; lastKnownFileType = file; path = gg.glb; sourceTree = "<group>"; };
+		43EA0FCD2EFD4FCE00424D04 /* wd_1g.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1g.hdr; sourceTree = "<group>"; };
+		43EA0FDB2EFD581700424D04 /* model.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = model.html; sourceTree = "<group>"; };
 		7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
 		B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -501,6 +513,7 @@
 		43AA20C52EC42584000D1EAC /* 3D */ = {
 			isa = PBXGroup;
 			children = (
+				43EA0FC02EFD381D00424D04 /* 3DWebView */,
 				4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */,
 				43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */,
 			);
@@ -535,6 +548,19 @@
 				435D785D2E03E52900688F0E /* MiniAppTestView.swift */,
 			);
 			path = MiniApp;
+			sourceTree = "<group>";
+		};
+		43EA0FC02EFD381D00424D04 /* 3DWebView */ = {
+			isa = PBXGroup;
+			children = (
+				43EA0FDB2EFD581700424D04 /* model.html */,
+				43EA0FCB2EFD4FCE00424D04 /* gg.glb */,
+				43EA0FCD2EFD4FCE00424D04 /* wd_1g.hdr */,
+				43EA0FC72EFD3FDA00424D04 /* index.html */,
+				43EA0FC82EFD3FDA00424D04 /* model-viewer.min.js */,
+				43EA0FC52EFD399F00424D04 /* WebView3D.swift */,
+			);
+			path = 3DWebView;
 			sourceTree = "<group>";
 		};
 		4D93665770E4F5D2D0790FAB /* Pods */ = {
@@ -594,7 +620,7 @@
 			mainGroup = 4326996A2D953FD70025EEAC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "../MyPackage" */,
+				4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "MyPackage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 432699742D953FD70025EEAC /* Products */;
@@ -613,9 +639,14 @@
 			files = (
 				43EA0F972EFCE63300424D04 /* g.glb in Resources */,
 				4361980D2EE95376004932D6 /* Assets.xcassets in Resources */,
+				43EA0FCE2EFD4FCE00424D04 /* gg.glb in Resources */,
+				43EA0FD02EFD4FCE00424D04 /* wd_1g.hdr in Resources */,
+				43EA0FC92EFD3FDA00424D04 /* index.html in Resources */,
+				43EA0FCA2EFD3FDA00424D04 /* model-viewer.min.js in Resources */,
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
 				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
 				4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */,
+				43EA0FDC2EFD581800424D04 /* model.html in Resources */,
 				4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */,
 				438524472ED7074000C8F8C3 /* wd_1.hdr in Resources */,
 				43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */,
@@ -658,13 +689,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -697,6 +724,7 @@
 				433065F92E8A23DB002E2018 /* PublicFunction.swift in Sources */,
 				433065FA2E8A23DB002E2018 /* PublicMacro.swift in Sources */,
 				433066002E8A2FE0002E2018 /* CALayer+Extension.swift in Sources */,
+				43EA0FC62EFD399F00424D04 /* WebView3D.swift in Sources */,
 				433066562E8BC083002E2018 /* ACell.swift in Sources */,
 				43269A0E2D95438A0025EEAC /* C1ViewController.swift in Sources */,
 				43269A0F2D95438A0025EEAC /* UserModelData.xcdatamodeld in Sources */,
@@ -1019,7 +1047,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "../MyPackage" */ = {
+		4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "MyPackage" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../MyPackage;
 		};
