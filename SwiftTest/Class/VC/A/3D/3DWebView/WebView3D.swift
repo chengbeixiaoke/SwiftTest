@@ -1,16 +1,12 @@
 import UIKit
 import WebKit
-import GCDWebServer
 
-class WebView3D: UIView {
+class WebView3D: UIView, WKURLSchemeHandler {
     private var webView: WKWebView!
-    private var webServer: GCDWebServer!
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupWebView()
-        setupWebServer()
     }
     
     required init?(coder: NSCoder) {
@@ -19,56 +15,11 @@ class WebView3D: UIView {
     
     private func setupWebView() {
         let config = WKWebViewConfiguration()
-        config.allowsInlineMediaPlayback = true
-        
-        // 允许本地文件访问
-        config.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-        
+        config.setURLSchemeHandler(self, forURLScheme: "custom")
         webView = WKWebView(frame: bounds, configuration: config)
         webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(webView)
         loadLocalHTML()
-    }
-    
-    private func setupWebServer() {
-        webServer = GCDWebServer()
-        
-        // 1. 启用日志
-        GCDWebServer.setLogLevel(3)
-        GCDWebServer.setBuiltInLogger { level, message in
-            printLog("[3D] \(message)")
-        }
-        
-        // 2. 获取资源目录路径
-        guard let resourcePath = Bundle.main.resourcePath else {
-            print("❌ 无法获取资源路径")
-            return
-        }
-        
-        print("📁 资源目录: \(resourcePath)")
-        
-        // 3. 列出所有文件（调试用）
-        do {
-            let files = try FileManager.default.contentsOfDirectory(atPath: resourcePath)
-            print("📄 包内文件: \(files)")
-        } catch {
-            print("⚠️ 无法列出文件: \(error)")
-        }
-        
-        // 4. 添加静态文件处理器
-        webServer.addGETHandler(forBasePath: "/", directoryPath: resourcePath, indexFilename: nil, cacheAge: 0, allowRangeRequests: true)
-        
-        // 5. 启动服务器
-        do {
-            try webServer.start(options: [
-                GCDWebServerOption_Port: 8080,
-                GCDWebServerOption_BindToLocalhost: true,
-                GCDWebServerOption_AutomaticallySuspendInBackground: false
-            ])
-            print("✅ 本地服务器启动: http://localhost:8080/")
-        } catch {
-            print("❌ 服务器启动失败: \(error)")
-        }
     }
     
     private func loadLocalHTML() {
@@ -79,7 +30,7 @@ class WebView3D: UIView {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>3D Model</title>
-            <script type="module" src="http://localhost:8080/model-viewer.min.js"></script>
+            <script type="module" src="custom://local/model-viewer.min.js"></script>
             <style>
                 body { margin: 0; padding: 0; overflow: hidden; background-color: transparent; }
                 model-viewer { width: 100vw; height: 100vh; }
@@ -91,9 +42,9 @@ class WebView3D: UIView {
         <body>
             <model-viewer
                 id="robot-model"
-                src="http://localhost:8080/gg.glb"
+                src="custom://local/gg.glb"
                 alt="A 3D model"
-                environment-image="http://localhost:8080/wd_1g.hdr"
+                environment-image="custom://local/wd_1g.hdr"
                 auto-rotate
                 camera-controls
                 disable-tap
@@ -103,41 +54,75 @@ class WebView3D: UIView {
                 max-camera-orbit="auto auto 300%"
             >
             </model-viewer>
-        </body>
-
-        <script>
-            const modelViewer = document.querySelector('#robot-model');
-            function initFromUrlParams() {
-                const params = new URLSearchParams(window.location.search);
-                const orbit = params.get('orbit');
-
-                if (orbit) {
-                    // 暂时关闭自动旋转，否则会覆盖初始角度
-                    modelViewer.setAttribute('camera-orbit', orbit)
+            <script>
+                const modelViewer = document.querySelector('#robot-model');
+                function initFromUrlParams() {
+                    const params = new URLSearchParams(window.location.search);
+                    const orbit = params.get('orbit');
+                    if (orbit) {
+                        // 暂时关闭自动旋转，否则会覆盖初始角度
+                        modelViewer.setAttribute('camera-orbit', orbit)
+                    }
                 }
-            }
-            initFromUrlParams()
-        </script>
+        
+                initFromUrlParams()
+            </script>
+        </body>
         </html>
         """
         
-        // 2. 加载HTML
-        webView.loadHTMLString(htmlString, baseURL: URL(string: "http://localhost:8080/"))
-        
-        // 3. 添加JavaScript控制台日志
-        webView.configuration.userContentController.add(self, name: "logger")
+        webView.loadHTMLString(htmlString, baseURL: nil)
     }
     
-    deinit {
-        webServer?.stop()
-        print("🛑 服务器已停止")
-    }
-}
-
-extension WebView3D: WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "logger" {
-            printLog("[3D] JavaScript日志: \(message.body)")
+    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
+        guard let url = urlSchemeTask.request.url else { return }
+        let fileName = url.lastPathComponent
+        
+        let origin = urlSchemeTask.request.value(forHTTPHeaderField: "Origin") ?? "*"
+        if fileName.contains("model-viewer.min.js"),
+           let filePath = Bundle.main.path(forResource: "model-viewer.min", ofType: "js"),
+           let data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
+        {
+            let headers = ["Content-Type": "application/javascript", "Access-Control-Allow-Origin": origin]
+            let response = HTTPURLResponse(url: url,
+                                           statusCode: 200,
+                                           httpVersion: "HTTP/1.1",
+                                           headerFields: headers)!
+            urlSchemeTask.didReceive(response)
+            urlSchemeTask.didReceive(data)
+            urlSchemeTask.didFinish()
         }
+        
+        if fileName.contains("gg.glb"),
+           let filePath = Bundle.main.path(forResource: "gg", ofType: "glb"),
+           let data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
+        {
+            let headers = ["Content-Type": "model/gltf-binary", "Access-Control-Allow-Origin": origin]
+            let response = HTTPURLResponse(url: url,
+                                           statusCode: 200,
+                                           httpVersion: "HTTP/1.1",
+                                           headerFields: headers)!
+            urlSchemeTask.didReceive(response)
+            urlSchemeTask.didReceive(data)
+            urlSchemeTask.didFinish()
+        }
+        
+        if fileName.contains("wd_1g.hdr"),
+           let filePath = Bundle.main.path(forResource: "wd_1g", ofType: "hdr"),
+           let data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
+        {
+            let headers = ["Content-Type": "image/hdr", "Access-Control-Allow-Origin": origin]
+            let response = HTTPURLResponse(url: url,
+                                           statusCode: 200,
+                                           httpVersion: "HTTP/1.1",
+                                           headerFields: headers)!
+            urlSchemeTask.didReceive(response)
+            urlSchemeTask.didReceive(data)
+            urlSchemeTask.didFinish()
+        }
+    }
+    
+    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
+        printLog("[3D] 请求停止: \(urlSchemeTask.request.url?.absoluteString ?? "")")
     }
 }

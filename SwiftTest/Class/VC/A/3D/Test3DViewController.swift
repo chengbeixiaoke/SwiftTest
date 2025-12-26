@@ -23,23 +23,23 @@ class Test3DViewController: BaseViewController {
         super.viewDidLoad()
         view.backgroundColor = .red
         
-        let modelURL = Bundle.main.url(forResource: "g", withExtension: "glb")
-        let hdrURL = Bundle.main.url(forResource: "wd_1", withExtension: "hdr")
-        let modelView = S3DModelView(frame: CGRectMake(0, 0, WidthScreen, WidthScreen),
-                                     modelURL: modelURL,
-                                     hdrURL: hdrURL)
-        view.addSubview(modelView)
-        modelView.backgroundColor = .C_White
-        modelView.center = CGPoint(x: WidthScreen / 2.0, y: HeightScreen / 2.0)
-        modelView.onModelLoadComplete = { [weak self] _ in
-            guard let weakSelf = self else { return }
-            weakSelf.view.backgroundColor = .C_White
-        }
-        self.modelView = modelView
-        
-//        let webview = WebView3D(frame: CGRectMake(0, 0, WidthScreen, WidthScreen))
-//        view.addSubview(webview)
-//        webview.center = view.center
+//        let modelURL = Bundle.main.url(forResource: "g", withExtension: "glb")
+//        let hdrURL = Bundle.main.url(forResource: "wd_1", withExtension: "hdr")
+//        let modelView = S3DModelView(frame: CGRectMake(0, 0, WidthScreen, WidthScreen),
+//                                     modelURL: modelURL,
+//                                     hdrURL: hdrURL)
+//        view.addSubview(modelView)
+//        modelView.backgroundColor = .C_White
+//        modelView.center = CGPoint(x: WidthScreen / 2.0, y: HeightScreen / 2.0)
+//        modelView.onModelLoadComplete = { [weak self] _ in
+//            guard let weakSelf = self else { return }
+//            weakSelf.view.backgroundColor = .C_White
+//        }
+//        self.modelView = modelView
+//        
+        let webview = WebView3D(frame: CGRectMake(0, 0, WidthScreen, WidthScreen))
+        view.addSubview(webview)
+        webview.center = view.center
     }
 }
 
