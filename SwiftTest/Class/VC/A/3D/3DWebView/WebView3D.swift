@@ -17,61 +17,16 @@ class WebView3D: UIView, WKURLSchemeHandler {
         let config = WKWebViewConfiguration()
         config.setURLSchemeHandler(self, forURLScheme: "custom")
         webView = WKWebView(frame: bounds, configuration: config)
-        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(webView)
         loadLocalHTML()
     }
     
     private func loadLocalHTML() {
-        let htmlString = """
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>3D Model</title>
-            <script type="module" src="custom://local/model-viewer.min.js"></script>
-            <style>
-                body { margin: 0; padding: 0; overflow: hidden; background-color: transparent; }
-                model-viewer { width: 100vw; height: 100vh; }
-                model-viewer::part(default-progress-bar) {
-                    display: none;
-                }
-            </style>
-        </head>
-        <body>
-            <model-viewer
-                id="robot-model"
-                src="custom://local/gg.glb"
-                alt="A 3D model"
-                environment-image="custom://local/wd_1g.hdr"
-                auto-rotate
-                camera-controls
-                disable-tap
-                disable-pan
-                disable-zoom
-                interaction-prompt="none"
-                max-camera-orbit="auto auto 300%"
-            >
-            </model-viewer>
-            <script>
-                const modelViewer = document.querySelector('#robot-model');
-                function initFromUrlParams() {
-                    const params = new URLSearchParams(window.location.search);
-                    const orbit = params.get('orbit');
-                    if (orbit) {
-                        // 暂时关闭自动旋转，否则会覆盖初始角度
-                        modelViewer.setAttribute('camera-orbit', orbit)
-                    }
-                }
+        guard let filePath = Bundle.main.path(forResource: "index", ofType: "html") else { return }
         
-                initFromUrlParams()
-            </script>
-        </body>
-        </html>
-        """
-        
-        webView.loadHTMLString(htmlString, baseURL: nil)
+        let url = URL(fileURLWithPath: filePath)
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
     
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
@@ -93,8 +48,8 @@ class WebView3D: UIView, WKURLSchemeHandler {
             urlSchemeTask.didFinish()
         }
         
-        if fileName.contains("gg.glb"),
-           let filePath = Bundle.main.path(forResource: "gg", ofType: "glb"),
+        if fileName.contains("modelGLB.glb"),
+           let filePath = Bundle.main.path(forResource: "modelGLB", ofType: "glb"),
            let data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
         {
             let headers = ["Content-Type": "model/gltf-binary", "Access-Control-Allow-Origin": origin]
@@ -107,8 +62,8 @@ class WebView3D: UIView, WKURLSchemeHandler {
             urlSchemeTask.didFinish()
         }
         
-        if fileName.contains("wd_1g.hdr"),
-           let filePath = Bundle.main.path(forResource: "wd_1g", ofType: "hdr"),
+        if fileName.contains("modelHDR.hdr"),
+           let filePath = Bundle.main.path(forResource: "modelHDR", ofType: "hdr"),
            let data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
         {
             let headers = ["Content-Type": "image/hdr", "Access-Control-Allow-Origin": origin]

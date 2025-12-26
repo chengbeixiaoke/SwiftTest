@@ -80,6 +80,7 @@
 		43A15A0B2EFBCEDD00936BB4 /* wd_1.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */; };
 		43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */; };
 		43B188B82EF298B900AC8168 /* AppPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B188B72EF298B900AC8168 /* AppPage.swift */; };
+		43B2AD6E2EFE5BA000311207 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 43B2AD6D2EFE5BA000311207 /* index.html */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
 		43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */; };
 		43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */; };
@@ -95,8 +96,8 @@
 		43EA0F972EFCE63300424D04 /* g.glb in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0F962EFCE63300424D04 /* g.glb */; };
 		43EA0FC62EFD399F00424D04 /* WebView3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EA0FC52EFD399F00424D04 /* WebView3D.swift */; };
 		43EA0FCA2EFD3FDA00424D04 /* model-viewer.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FC82EFD3FDA00424D04 /* model-viewer.min.js */; };
-		43EA0FCE2EFD4FCE00424D04 /* gg.glb in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FCB2EFD4FCE00424D04 /* gg.glb */; };
-		43EA0FD02EFD4FCE00424D04 /* wd_1g.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FCD2EFD4FCE00424D04 /* wd_1g.hdr */; };
+		43EA0FCE2EFD4FCE00424D04 /* modelGLB.glb in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FCB2EFD4FCE00424D04 /* modelGLB.glb */; };
+		43EA0FD02EFD4FCE00424D04 /* modelHDR.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FCD2EFD4FCE00424D04 /* modelHDR.hdr */; };
 		70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -192,6 +193,7 @@
 		43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */ = {isa = PBXFileReference; lastKnownFileType = file; path = wd_1.usdz; sourceTree = "<group>"; };
 		43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3DViewController.swift; sourceTree = "<group>"; };
 		43B188B72EF298B900AC8168 /* AppPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPage.swift; sourceTree = "<group>"; };
+		43B2AD6D2EFE5BA000311207 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
 		43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerViewController.swift; sourceTree = "<group>"; };
 		43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavoPresentSwipeInteractionController.swift; sourceTree = "<group>"; };
@@ -207,8 +209,8 @@
 		43EA0F962EFCE63300424D04 /* g.glb */ = {isa = PBXFileReference; lastKnownFileType = file; path = g.glb; sourceTree = "<group>"; };
 		43EA0FC52EFD399F00424D04 /* WebView3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView3D.swift; sourceTree = "<group>"; };
 		43EA0FC82EFD3FDA00424D04 /* model-viewer.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "model-viewer.min.js"; sourceTree = "<group>"; };
-		43EA0FCB2EFD4FCE00424D04 /* gg.glb */ = {isa = PBXFileReference; lastKnownFileType = file; path = gg.glb; sourceTree = "<group>"; };
-		43EA0FCD2EFD4FCE00424D04 /* wd_1g.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1g.hdr; sourceTree = "<group>"; };
+		43EA0FCB2EFD4FCE00424D04 /* modelGLB.glb */ = {isa = PBXFileReference; lastKnownFileType = file; path = modelGLB.glb; sourceTree = "<group>"; };
+		43EA0FCD2EFD4FCE00424D04 /* modelHDR.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = modelHDR.hdr; sourceTree = "<group>"; };
 		7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
 		B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -549,8 +551,9 @@
 		43EA0FC02EFD381D00424D04 /* 3DWebView */ = {
 			isa = PBXGroup;
 			children = (
-				43EA0FCB2EFD4FCE00424D04 /* gg.glb */,
-				43EA0FCD2EFD4FCE00424D04 /* wd_1g.hdr */,
+				43B2AD6D2EFE5BA000311207 /* index.html */,
+				43EA0FCB2EFD4FCE00424D04 /* modelGLB.glb */,
+				43EA0FCD2EFD4FCE00424D04 /* modelHDR.hdr */,
 				43EA0FC82EFD3FDA00424D04 /* model-viewer.min.js */,
 				43EA0FC52EFD399F00424D04 /* WebView3D.swift */,
 			);
@@ -633,8 +636,8 @@
 			files = (
 				43EA0F972EFCE63300424D04 /* g.glb in Resources */,
 				4361980D2EE95376004932D6 /* Assets.xcassets in Resources */,
-				43EA0FCE2EFD4FCE00424D04 /* gg.glb in Resources */,
-				43EA0FD02EFD4FCE00424D04 /* wd_1g.hdr in Resources */,
+				43EA0FCE2EFD4FCE00424D04 /* modelGLB.glb in Resources */,
+				43EA0FD02EFD4FCE00424D04 /* modelHDR.hdr in Resources */,
 				43EA0FCA2EFD3FDA00424D04 /* model-viewer.min.js in Resources */,
 				43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */,
 				4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */,
@@ -644,6 +647,7 @@
 				43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */,
 				43A15A0B2EFBCEDD00936BB4 /* wd_1.usdz in Resources */,
 				43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */,
+				43B2AD6E2EFE5BA000311207 /* index.html in Resources */,
 				437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
