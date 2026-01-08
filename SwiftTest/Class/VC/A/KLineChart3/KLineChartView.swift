@@ -161,7 +161,7 @@ extension KLineChartView {
     func drawKlines(in context: CGContext) {
         guard viewModel.visibleCount > 0 else { return }
         context.setLineDash(phase: 0, lengths: [])
-
+        
         let chartRect = viewModel.kLineChartRect
         let priceRange = viewModel.visiblePriceMax - viewModel.visiblePriceMin
         
@@ -173,8 +173,6 @@ extension KLineChartView {
             let clampedNormalizedPrice = min(max(normalizedPrice, 0), 1)
             return chartRect.maxY - clampedNormalizedPrice * chartRect.height
         }
-        
-//        printLog(viewModel.visibleStartIndex)
         
         for i in viewModel.visibleStartIndex..<endIndex {
             let data = viewModel.dataList[i]
@@ -222,9 +220,9 @@ extension KLineChartView {
             let bodyHeight = abs(clampedCloseY - clampedOpenY)
             if bodyHeight > 0 {
                 let bodyRect = CGRect(x: x,
-                                    y: min(clampedOpenY, clampedCloseY),
-                                    width: config.kLineWidth,
-                                    height: bodyHeight)
+                                      y: min(clampedOpenY, clampedCloseY),
+                                      width: config.kLineWidth,
+                                      height: bodyHeight)
                 
                 context.setFillColor(color.cgColor)
                 context.fill(bodyRect)
@@ -275,17 +273,14 @@ extension KLineChartView {
                 viewModel.offsetX = offsetX / 2.0
             } else if offsetX < viewModel.minOffsetX {
                 viewModel.offsetX = viewModel.minOffsetX - (viewModel.minOffsetX - offsetX) / 2.0
-                viewModel.loadData()
             } else {
                 viewModel.offsetX = offsetX
             }
-//            printLog(offsetX)
             viewModel.calculateVisible()
             setNeedsDisplay()
             
         case .ended:
             viewModel.isDragging = false
-            checkAndSnapBack()
             // 计算惯性速度
             let velocity = gesture.velocity(in: self).x
             if abs(velocity) > 50 {
@@ -330,22 +325,17 @@ extension KLineChartView {
         // 应用减速
         viewModel.inertialVelocity *= viewModel.inertialDeceleration
         printLog(viewModel.inertialVelocity)
-
         
         // 计算新位置
         let deltaX = viewModel.inertialVelocity * 0.016
-        var newOffsetX = viewModel.offsetX - deltaX
+        let newOffsetX = viewModel.offsetX - deltaX
         
         // 检查边界和加载
         var shouldStop = false
-        
         if newOffsetX > 0 {
-            newOffsetX = 0
             shouldStop = true
         } else if newOffsetX < viewModel.minOffsetX {
-            newOffsetX = viewModel.minOffsetX
             shouldStop = true
-            viewModel.loadData()
         } else {
             shouldStop = abs(viewModel.inertialVelocity) < 1
         }
@@ -367,11 +357,16 @@ extension KLineChartView {
             viewModel.offsetX = 0
         }
         
+        let needLoadData = viewModel.offsetX < viewModel.minOffsetX - 100
         if viewModel.offsetX < viewModel.minOffsetX {
             viewModel.offsetX = viewModel.minOffsetX
         }
         viewModel.calculateVisible()
         setNeedsDisplay()
+        
+        if needLoadData {
+            viewModel.loadData()
+        }
     }
 }
 // MARK: 捏合手势
@@ -383,6 +378,16 @@ extension KLineChartView {
     }
     
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        // 拖拽时，不进行缩放
+        if viewModel.isDragging {
+            return
+        }
+        
+        // 安全检查触摸点数量
+        guard gesture.numberOfTouches >= 2 else {
+            return
+        }
+        
         switch gesture.state {
         case .began:
             viewModel.isPinching = true
@@ -393,18 +398,11 @@ extension KLineChartView {
             stopInertialScroll()
             
             // 安全获取缩放中心
-            if gesture.numberOfTouches >= 2 {
-                if let centerPoint = getSafePinchCenter(for: gesture) {
-                    viewModel.zoomCenterIndex = getKlineIndex(at: centerPoint)
-                }
+            if let centerPoint = getSafePinchCenter(for: gesture) {
+                viewModel.zoomCenterIndex = getKlineIndex(at: centerPoint)
             }
             
         case .changed:
-            // 安全检查触摸点数量
-            guard gesture.numberOfTouches >= 2 else {
-                return
-            }
-            
             let scaleChange = gesture.scale / viewModel.lastPinchScale
             viewModel.lastPinchScale = gesture.scale
             
@@ -426,7 +424,7 @@ extension KLineChartView {
             viewModel.isPinching = false
             viewModel.zoomCenterIndex = nil
             viewModel.lastPinchScale = 1.0
-
+            
             viewModel.calculateVisible()
             setNeedsDisplay()
             
@@ -466,11 +464,11 @@ extension KLineChartView {
         
         if newScale != viewModel.scale {
             viewModel.scale = newScale
-                        
+            
             // 保持中心点位置
             if let centerIndex = centerIndex,
                centerIndex >= 0 && centerIndex < viewModel.dataList.count {
-                                
+                
                 // 计算中心点在新旧宽度下的位置
                 let oldCenterX = CGFloat(centerIndex) * oldKlineWidth
                 let newCenterX = CGFloat(centerIndex) * viewModel.itemWidth

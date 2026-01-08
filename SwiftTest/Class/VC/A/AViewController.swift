@@ -58,7 +58,7 @@ class AViewController: BaseViewController {
         super.viewDidAppear(animated)
         
         delay(seconds: 0.5) {
-            self.navigationController?.pushViewController(Test3DViewController(), animated: true)
+            self.navigationController?.pushViewController(CandleStickDemoViewController3(), animated: true)
         }
     }
     

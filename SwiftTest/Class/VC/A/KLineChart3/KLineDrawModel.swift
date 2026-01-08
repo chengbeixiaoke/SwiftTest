@@ -66,7 +66,11 @@ class KLineDrawViewModel {
     // 缩放倍数
     var scale: CGFloat = 1.0
     // 偏移量
-    var offsetX: CGFloat = 0
+    var offsetX: CGFloat = 0 {
+        didSet {
+            printLog("")
+        }
+    }
     // 最后一次偏移量
     var lastOffsetX: CGFloat = 0
     
@@ -88,9 +92,14 @@ class KLineDrawViewModel {
     // 惯性减速系数
     let inertialDeceleration: CGFloat = 0.95
     
+    // 单条K线宽度
+    var kLineWidth: CGFloat {
+        return floor(config.kLineWidth * scale)
+    }
+    
     // 单条数据宽度
     var itemWidth: CGFloat {
-        return config.kLineWidth * scale + config.kLineSpacing
+        return kLineWidth + config.kLineSpacing
     }
     
     // 全部K线总宽度
@@ -134,7 +143,7 @@ extension KLineDrawViewModel {
         guard let dataSource = dataSource else { return }
         dataSource.loadHistoricalData(lineType: config.kLineType,
                                       before: dataList.first?.date ?? Date(),
-                                      count: dataList.count > 0 ? 200 : 1000)
+                                      count: dataList.count > 0 ? 100 : 200)
         { [weak self] dataList in
             guard let weakSelf = self else { return }
             
@@ -151,28 +160,26 @@ extension KLineDrawViewModel {
     // 数据处理
     func calculateVisible()
     {
-        let totalWidthPerKline = config.kLineWidth * scale + config.kLineSpacing
-        
         // 计算可见K线数量
-        visibleCount = min(Int(kLineChartRect.width / totalWidthPerKline), dataList.count)
+        visibleCount = min(Int(kLineChartRect.width / itemWidth), dataList.count)
         
         // 回调K线图Rect
-        let width = max(totalWidthPerKline * CGFloat(visibleCount), kLineChartRect.width)
+        let width = max(itemWidth * CGFloat(visibleCount), kLineChartRect.width)
         kLineChartRect = CGRectMake(kLineChartRect.minX - (width - kLineChartRect.width),
                                     kLineChartRect.minY,
                                     width,
                                     kLineChartRect.height)
         
         // 计算起始索引
-        let totalKLinesWidth = CGFloat(dataList.count) * totalWidthPerKline
+        let totalKLinesWidth = CGFloat(dataList.count) * itemWidth
         if totalKLinesWidth <= kLineChartRect.width {
             visibleStartIndex = 0
         } else {
-            let offsetCount = visibleCount - Int(floor(offsetX / totalWidthPerKline))
+            let offsetCount = max(visibleCount - Int(floor(offsetX * scale / itemWidth)), 0)
             visibleStartIndex = max(0, dataList.count - offsetCount)
         }
         
-        let endIndex = min(visibleStartIndex + visibleCount, dataList.count-1)
+        let endIndex = min(visibleStartIndex + visibleCount, dataList.count)
         let visibleData = Array(dataList[max(visibleStartIndex, 0)..<endIndex])
         
         guard let first = visibleData.first else {
