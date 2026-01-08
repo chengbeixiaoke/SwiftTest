@@ -447,7 +447,7 @@ extension KLineChartView {
 
             let visibleCount = min(Int(floor(viewModel.kLineChartRect.width / viewModel.itemWidth)), viewModel.dataList.count)
             let visibleStartIndex = max(zoomCenterIndex - Int(floor(zoomCenterX / viewModel.itemWidth)), 0)
-            viewModel.offsetX = -CGFloat((viewModel.dataList.count - visibleCount) - visibleStartIndex) * viewModel.itemWidth
+            viewModel.offsetX = min(-CGFloat((viewModel.dataList.count - visibleCount) - visibleStartIndex) * viewModel.itemWidth, 0)
             viewModel.calculateVisible()
         }
     }
