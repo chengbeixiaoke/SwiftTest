@@ -159,14 +159,12 @@ extension KLineChartView {
 // MARK: - 画K线
 extension KLineChartView {
     func drawKlines(in context: CGContext) {
-        guard viewModel.visibleCount > 0 else { return }
+        guard !viewModel.visibleData.isEmpty else { return }
         context.setLineDash(phase: 0, lengths: [])
         
         let chartRect = viewModel.kLineChartRect
         let priceRange = viewModel.visiblePriceMax - viewModel.visiblePriceMin
-        
-        let endIndex = min(viewModel.visibleStartIndex + viewModel.visibleCount, viewModel.dataList.count)
-        
+                
         func priceToY(_ price: CGFloat) -> CGFloat {
             if priceRange <= 0 { return chartRect.midY }
             let normalizedPrice = (price - viewModel.visiblePriceMin) / priceRange
@@ -174,10 +172,8 @@ extension KLineChartView {
             return chartRect.maxY - clampedNormalizedPrice * chartRect.height
         }
         
-        for i in viewModel.visibleStartIndex..<endIndex {
-            let data = viewModel.dataList[i]
-            let relativeIndex = i - viewModel.visibleStartIndex
-            var x = viewModel.kLineChartRect.origin.x + CGFloat(relativeIndex) * viewModel.itemWidth
+        for (i, data) in viewModel.visibleData.enumerated() {
+            var x = viewModel.kLineChartRect.origin.x + CGFloat(i) * viewModel.itemWidth
             if (viewModel.offsetX + viewModel.totalWidth - viewModel.kLineChartRect.width) < 0  {
                 x = x - (viewModel.offsetX - viewModel.minOffsetX)
             }
@@ -204,14 +200,14 @@ extension KLineChartView {
             
             // 上影线
             if clampedHighY < bodyTop {
-                context.move(to: CGPoint(x: x + config.kLineWidth/2, y: clampedHighY))
-                context.addLine(to: CGPoint(x: x + config.kLineWidth/2, y: bodyTop))
+                context.move(to: CGPoint(x: x + viewModel.kLineWidth/2, y: clampedHighY))
+                context.addLine(to: CGPoint(x: x + viewModel.kLineWidth/2, y: bodyTop))
             }
             
             // 下影线
             if clampedLowY > bodyBottom {
-                context.move(to: CGPoint(x: x + config.kLineWidth/2, y: bodyBottom))
-                context.addLine(to: CGPoint(x: x + config.kLineWidth/2, y: clampedLowY))
+                context.move(to: CGPoint(x: x + viewModel.kLineWidth/2, y: bodyBottom))
+                context.addLine(to: CGPoint(x: x + viewModel.kLineWidth/2, y: clampedLowY))
             }
             
             context.strokePath()
@@ -221,7 +217,7 @@ extension KLineChartView {
             if bodyHeight > 0 {
                 let bodyRect = CGRect(x: x,
                                       y: min(clampedOpenY, clampedCloseY),
-                                      width: config.kLineWidth,
+                                      width: viewModel.kLineWidth,
                                       height: bodyHeight)
                 
                 context.setFillColor(color.cgColor)
@@ -229,10 +225,10 @@ extension KLineChartView {
             } else {
                 // 十字线
                 context.setStrokeColor(color.cgColor)
-                context.setLineWidth(config.kLineWidth)
+                context.setLineWidth(viewModel.kLineWidth)
                 let centerY = clampedOpenY
-                context.move(to: CGPoint(x: x + config.kLineWidth/2, y: centerY - 0.5))
-                context.addLine(to: CGPoint(x: x + config.kLineWidth/2, y: centerY + 0.5))
+                context.move(to: CGPoint(x: x + viewModel.kLineWidth/2, y: centerY - 0.5))
+                context.addLine(to: CGPoint(x: x + viewModel.kLineWidth/2, y: centerY + 0.5))
                 context.strokePath()
             }
         }
@@ -277,7 +273,6 @@ extension KLineChartView {
                 viewModel.offsetX = offsetX
             }
             viewModel.calculateVisible()
-            setNeedsDisplay()
             
         case .ended:
             viewModel.isDragging = false
@@ -299,7 +294,7 @@ extension KLineChartView {
         }
     }
     
-    // MARK: - 惯性滚动
+    // 惯性滚动
     func startInertialScroll(velocity: CGFloat) {
         viewModel.inertialVelocity = velocity * 0.3
         
@@ -349,7 +344,6 @@ extension KLineChartView {
         }
         
         viewModel.calculateVisible()
-        setNeedsDisplay()
     }
     
     func checkAndSnapBack() {
@@ -367,7 +361,6 @@ extension KLineChartView {
         
         if needSnapBack {
             viewModel.calculateVisible()
-            setNeedsDisplay()
         }
         
         if needLoadData {
@@ -386,11 +379,13 @@ extension KLineChartView {
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
         // 拖拽时，不进行缩放
         if viewModel.isDragging {
+            viewModel.isPinching = false
             return
         }
         
         // 安全检查触摸点数量
         guard gesture.numberOfTouches >= 2 else {
+            viewModel.isPinching = false
             return
         }
         
@@ -399,97 +394,95 @@ extension KLineChartView {
             viewModel.isPinching = true
             viewModel.lastPinchScale = gesture.scale
             viewModel.zoomCenterIndex = nil
-            
+            viewModel.zoomCenterX = nil
+
             // 停止惯性动画
             stopInertialScroll()
             
             // 安全获取缩放中心
-            if let centerPoint = getSafePinchCenter(for: gesture) {
-                viewModel.zoomCenterIndex = getKlineIndex(at: centerPoint)
-            }
+            findZoomCenter(at: gesture)
             
         case .changed:
             let scaleChange = gesture.scale / viewModel.lastPinchScale
             viewModel.lastPinchScale = gesture.scale
             
-            // 获取当前缩放中心
-            let currentCenterIndex: Int?
-            if let centerPoint = getSafePinchCenter(for: gesture) {
-                currentCenterIndex = getKlineIndex(at: centerPoint)
-            } else {
-                currentCenterIndex = nil
-            }
-            
-            // 使用当前中心点或缓存的上一个中心点
-            let centerIndex = currentCenterIndex ?? viewModel.zoomCenterIndex
             
             // 执行缩放
-            performZoom(scaleChange: scaleChange, centerIndex: centerIndex)
+            performZoom(scaleChange: scaleChange)
             
         case .ended, .cancelled, .failed:
             viewModel.isPinching = false
             viewModel.zoomCenterIndex = nil
+            viewModel.zoomCenterX = nil
             viewModel.lastPinchScale = 1.0
-            
             viewModel.calculateVisible()
-            setNeedsDisplay()
-            
         default:
             break
         }
     }
     
-    private func getSafePinchCenter(for gesture: UIPinchGestureRecognizer) -> CGPoint? {
-        guard gesture.numberOfTouches >= 2 else { return nil }
+    private func findZoomCenter(at gesture: UIPinchGestureRecognizer) {
+        guard gesture.numberOfTouches >= 2 else { return }
         
         let touchPoint1 = gesture.location(ofTouch: 0, in: self)
         let touchPoint2 = gesture.location(ofTouch: 1, in: self)
         
-        return CGPoint(x: (touchPoint1.x + touchPoint2.x) / 2,
+        let point = CGPoint(x: (touchPoint1.x + touchPoint2.x) / 2,
                        y: (touchPoint1.y + touchPoint2.y) / 2)
+        
+        guard viewModel.kLineChartRect.contains(point) else { return }
+        let relativeIndex = Int(floor(point.x / viewModel.itemWidth))
+        viewModel.zoomCenterIndex = viewModel.visibleStartIndex + relativeIndex
+        viewModel.zoomCenterX = point.x
     }
     
-    private func getKlineIndex(at point: CGPoint) -> Int? {
-        guard viewModel.kLineChartRect.contains(point) else { return nil }
-        
-        let xInChart = point.x - viewModel.kLineChartRect.origin.x
-        let relativeIndex = Int(xInChart / viewModel.itemWidth)
-        let index = viewModel.visibleStartIndex + relativeIndex
-        
-        return (index >= 0 && index < viewModel.dataList.count) ? index : nil
-    }
-    
-    private func performZoom(scaleChange: CGFloat, centerIndex: Int?) {
+    private func performZoom(scaleChange: CGFloat) {
         guard scaleChange != 1.0 else { return }
         
-        let oldKlineWidth = viewModel.itemWidth
-        
-        // 更新缩放比例
         var newScale = viewModel.scale * scaleChange
         newScale = min(max(0.5, newScale), 3.0)
         
+        let originVisibleCount = min(Int(floor(viewModel.kLineChartRect.width / viewModel.itemWidth)), viewModel.dataList.count)
+        
         if newScale != viewModel.scale {
             viewModel.scale = newScale
+            printLog("[XXX]: \(viewModel.scale)")
             
-            // 保持中心点位置
-            if let centerIndex = centerIndex,
-               centerIndex >= 0 && centerIndex < viewModel.dataList.count {
-                
-                // 计算中心点在新旧宽度下的位置
-                let oldCenterX = CGFloat(centerIndex) * oldKlineWidth
-                let newCenterX = CGFloat(centerIndex) * viewModel.itemWidth
-                
-                // 调整偏移量
-                viewModel.offsetX += (newCenterX - oldCenterX)
-                
-                // 边界检查
-                let maxOffset = max(0, viewModel.totalWidth - viewModel.kLineChartRect.width)
-                viewModel.offsetX = max(0, min(viewModel.offsetX, maxOffset))
-            }
-            
+            let visibleCount = min(Int(floor(viewModel.kLineChartRect.width / viewModel.itemWidth)), viewModel.dataList.count)
+            viewModel.offsetX = viewModel.offsetX * scaleChange - CGFloat(originVisibleCount - visibleCount) * viewModel.itemWidth / 2.0
             viewModel.calculateVisible()
-            setNeedsDisplay()
         }
+        
+        
+//        
+//        let oldKlineWidth = viewModel.itemWidth
+//        
+//        // 更新缩放比例
+//        var newScale = viewModel.scale * scaleChange
+//        newScale = min(max(0.5, newScale), 3.0)
+//        
+//        if newScale != viewModel.scale {
+//            viewModel.scale = newScale
+//            
+//            // 保持中心点位置
+//            if let centerIndex = centerIndex,
+//               centerIndex >= 0 && centerIndex < viewModel.dataList.count {
+//                
+//                // 计算中心点在新旧宽度下的位置
+//                let oldCenterX = CGFloat(centerIndex) * oldKlineWidth
+//                let newCenterX = CGFloat(centerIndex) * viewModel.itemWidth
+//                
+//                // 调整偏移量
+//                viewModel.offsetX += (newCenterX - oldCenterX)
+//                
+//                // 边界检查
+//                let maxOffset = max(0, viewModel.totalWidth - viewModel.kLineChartRect.width)
+//                viewModel.offsetX = max(0, min(viewModel.offsetX, maxOffset))
+//            }
+//            
+//            viewModel.calculateVisible()
+//            setNeedsDisplay()
+//        }
     }
 }
 

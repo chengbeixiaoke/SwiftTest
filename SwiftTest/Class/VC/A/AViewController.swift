@@ -57,9 +57,9 @@ class AViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        delay(seconds: 0.5) {
-            self.navigationController?.pushViewController(CandleStickDemoViewController3(), animated: true)
-        }
+//        delay(seconds: 0.5) {
+//            self.navigationController?.pushViewController(CandleStickDemoViewController3(), animated: true)
+//        }
     }
     
     override func viewDidLoad() {
