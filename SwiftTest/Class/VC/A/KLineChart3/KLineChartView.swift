@@ -353,16 +353,22 @@ extension KLineChartView {
     }
     
     func checkAndSnapBack() {
+        var needSnapBack = false
         if viewModel.offsetX > 0 {
+            needSnapBack = true
             viewModel.offsetX = 0
         }
         
         let needLoadData = viewModel.offsetX < viewModel.minOffsetX - 100
         if viewModel.offsetX < viewModel.minOffsetX {
+            needSnapBack = true
             viewModel.offsetX = viewModel.minOffsetX
         }
-        viewModel.calculateVisible()
-        setNeedsDisplay()
+        
+        if needSnapBack {
+            viewModel.calculateVisible()
+            setNeedsDisplay()
+        }
         
         if needLoadData {
             viewModel.loadData()
