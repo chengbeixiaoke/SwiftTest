@@ -121,6 +121,11 @@ class KLineConfig {
     // 显示成交量
     var showVolume: Bool = true
     
+    // 缩放最小倍数
+    var scaleMin: CGFloat = 0.5
+    // 缩放最大倍数
+    var scaleMax: CGFloat = 4.0
+    
     // 边距
     var margin: UIEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     // 成交量视图高度

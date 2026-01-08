@@ -35,7 +35,7 @@ class KLineDrawViewModel {
     init(config: KLineConfig) {
         self.config = config
     }
-
+    
     // 画图View
     weak var chartView: KLineChartView? {
         didSet {
@@ -52,6 +52,8 @@ class KLineDrawViewModel {
     // K线图Rect
     var kLineChartRect: CGRect = .zero
     
+    // 可见K线数量
+    var visibleCount: Int = 0
     // 可见K线
     var visibleData: [CandleStickData] = []
     // 可见最高价
@@ -89,9 +91,7 @@ class KLineDrawViewModel {
     let inertialDeceleration: CGFloat = 0.95
     
     // 单条K线宽度
-    var kLineWidth: CGFloat {
-        return floor(config.kLineWidth * scale)
-    }
+    var kLineWidth: CGFloat = 0
     
     // 单条数据宽度
     var itemWidth: CGFloat {
@@ -108,26 +108,26 @@ class KLineDrawViewModel {
         return -(totalWidth - kLineChartRect.width)
     }
     
-    var visibleStartIndex: Int {
+    var visibleStartIndex: Int
+    {
         guard let data = visibleData.first else { return 0 }
         return dataList.firstIndex(where: { $0.id == data.id }) ?? 0
     }
     
-    func calculateRect() {
-        guard let chartView = chartView else {
-            kLineChartRect = .zero
-            return
-        }
+    func calculateRect()
+    {
+        guard let chartView = chartView else { kLineChartRect = .zero; return }
         
         let height = (chartView.bounds.height - config.margin.horizontal) - (config.showVolume ? (config.volumeHeight + config.volumeTopMargin) : 0)
         let width = chartView.bounds.width - config.margin.vertical
         kLineChartRect = CGRect(x: config.margin.left,
-                                y: config.margin.right,
+                                y: config.margin.top,
                                 width: width,
                                 height: height)
     }
     
-    func formatPrice(_ price: CGFloat) -> String {
+    func formatPrice(_ price: CGFloat) -> String
+    {
         if price >= 100 {
             return String(format: "%.2f", price)
         } else if price >= 10 {
@@ -136,11 +136,41 @@ class KLineDrawViewModel {
             return String(format: "%.4f", price)
         }
     }
+    
+    func calculateKLineWidth(totalWidth: CGFloat,
+                             itemWidth: CGFloat,
+                             spacing: CGFloat) -> (Int, CGFloat)
+    {
+        let roughCount = totalWidth / (itemWidth + spacing)
+        
+        let lowerCount = max(1, Int(floor(roughCount)))
+        let upperCount = Int(ceil(roughCount))
+        
+        func calculateWidth(for count: Int) -> CGFloat {
+            return (totalWidth - CGFloat(count - 1) * spacing) / CGFloat(count)
+        }
+        
+        let lowerWidth = calculateWidth(for: lowerCount)
+        let upperWidth = calculateWidth(for: upperCount)
+        
+        if lowerWidth >= itemWidth * 0.8 && upperWidth >= itemWidth * 0.8 {
+            let lowerDiff = abs(lowerWidth - itemWidth)
+            let upperDiff = abs(upperWidth - itemWidth)
+            return lowerDiff <= upperDiff ? (lowerCount, lowerWidth) : (upperCount, upperWidth)
+        } else if lowerWidth >= itemWidth * 0.8 {
+            return (lowerCount, lowerWidth)
+        } else if upperWidth >= itemWidth * 0.8 {
+            return (upperCount, upperWidth)
+        } else {
+            return lowerWidth >= upperWidth ? (lowerCount, lowerWidth) : (upperCount, upperWidth)
+        }
+    }
 }
 
 // MARK: - 数据源
 extension KLineDrawViewModel {
-    public func loadData() {
+    public func loadData()
+    {
         guard let dataSource = dataSource else { return }
         dataSource.loadHistoricalData(lineType: config.kLineType,
                                       before: dataList.first?.date ?? Date(),
@@ -150,7 +180,7 @@ extension KLineDrawViewModel {
             
             let dataList_ = dataList.sorted { $0.timestamp < $1.timestamp }
             weakSelf.dataList.insert(contentsOf: dataList_, at: 0)
-                        
+            
             weakSelf.calculateVisible()
         }
     }
@@ -161,17 +191,13 @@ extension KLineDrawViewModel {
     func calculateVisible()
     {
         // 计算可见K线数量
-        let visibleCount = min(Int(floor(kLineChartRect.width / itemWidth)), dataList.count)
-        
-        // 回调K线图Rect
-        let width = max(itemWidth * CGFloat(visibleCount), kLineChartRect.width)
-        kLineChartRect = CGRectMake(kLineChartRect.minX - (width - kLineChartRect.width),
-                                    kLineChartRect.minY,
-                                    width,
-                                    kLineChartRect.height)
-        
+        let (visibleCount_, oneKLineWidth) = calculateKLineWidth(totalWidth: kLineChartRect.width,
+                                                                 itemWidth: config.kLineWidth * scale,
+                                                                 spacing: config.kLineSpacing)
+        visibleCount = visibleCount_
+        kLineWidth = oneKLineWidth
         // 计算起始索引
-        let totalKLinesWidth = CGFloat(dataList.count) * itemWidth
+        let totalKLinesWidth = CGFloat(dataList.count) * itemWidth - config.kLineSpacing
         if totalKLinesWidth <= kLineChartRect.width {
             visibleData = dataList.suffix(visibleCount)
         } else {

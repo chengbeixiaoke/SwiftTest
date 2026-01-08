@@ -440,14 +440,18 @@ extension KLineChartView {
         guard scaleChange != 1.0, let zoomCenterIndex = viewModel.zoomCenterIndex, let zoomCenterX = viewModel.zoomCenterX else { return }
         
         var newScale = viewModel.scale * scaleChange
-        newScale = min(max(0.5, newScale), 3.0)
-                
+        newScale = min(max(config.scaleMin, newScale), config.scaleMax)
+
         if newScale != viewModel.scale {
             viewModel.scale = newScale
 
-            let visibleCount = min(Int(floor(viewModel.kLineChartRect.width / viewModel.itemWidth)), viewModel.dataList.count)
-            let visibleStartIndex = max(zoomCenterIndex - Int(floor(zoomCenterX / viewModel.itemWidth)), 0)
-            viewModel.offsetX = min(-CGFloat((viewModel.dataList.count - visibleCount) - visibleStartIndex) * viewModel.itemWidth, 0)
+            let (count, _) = viewModel.calculateKLineWidth(totalWidth: viewModel.kLineChartRect.width,
+                                                               itemWidth: config.kLineWidth * viewModel.scale,
+                                                               spacing: config.kLineSpacing)
+            if count != viewModel.visibleCount {
+                let visibleStartIndex = max(zoomCenterIndex - Int(floor(zoomCenterX / viewModel.itemWidth)), 0)
+                viewModel.offsetX = min(-CGFloat((viewModel.dataList.count - count) - visibleStartIndex) * viewModel.itemWidth, 0)
+            }
             viewModel.calculateVisible()
         }
     }
