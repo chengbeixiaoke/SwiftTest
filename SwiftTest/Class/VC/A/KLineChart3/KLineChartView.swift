@@ -433,56 +433,23 @@ extension KLineChartView {
         guard viewModel.kLineChartRect.contains(point) else { return }
         let relativeIndex = Int(floor(point.x / viewModel.itemWidth))
         viewModel.zoomCenterIndex = viewModel.visibleStartIndex + relativeIndex
-        viewModel.zoomCenterX = point.x
+        viewModel.zoomCenterX = CGFloat(relativeIndex) * viewModel.itemWidth
     }
     
     private func performZoom(scaleChange: CGFloat) {
-        guard scaleChange != 1.0 else { return }
+        guard scaleChange != 1.0, let zoomCenterIndex = viewModel.zoomCenterIndex, let zoomCenterX = viewModel.zoomCenterX else { return }
         
         var newScale = viewModel.scale * scaleChange
         newScale = min(max(0.5, newScale), 3.0)
-        
-        let originVisibleCount = min(Int(floor(viewModel.kLineChartRect.width / viewModel.itemWidth)), viewModel.dataList.count)
-        
+                
         if newScale != viewModel.scale {
             viewModel.scale = newScale
-            printLog("[XXX]: \(viewModel.scale)")
-            
+
             let visibleCount = min(Int(floor(viewModel.kLineChartRect.width / viewModel.itemWidth)), viewModel.dataList.count)
-            viewModel.offsetX = viewModel.offsetX * scaleChange - CGFloat(originVisibleCount - visibleCount) * viewModel.itemWidth / 2.0
+            let visibleStartIndex = max(zoomCenterIndex - Int(floor(zoomCenterX / viewModel.itemWidth)), 0)
+            viewModel.offsetX = -CGFloat((viewModel.dataList.count - visibleCount) - visibleStartIndex) * viewModel.itemWidth
             viewModel.calculateVisible()
         }
-        
-        
-//        
-//        let oldKlineWidth = viewModel.itemWidth
-//        
-//        // 更新缩放比例
-//        var newScale = viewModel.scale * scaleChange
-//        newScale = min(max(0.5, newScale), 3.0)
-//        
-//        if newScale != viewModel.scale {
-//            viewModel.scale = newScale
-//            
-//            // 保持中心点位置
-//            if let centerIndex = centerIndex,
-//               centerIndex >= 0 && centerIndex < viewModel.dataList.count {
-//                
-//                // 计算中心点在新旧宽度下的位置
-//                let oldCenterX = CGFloat(centerIndex) * oldKlineWidth
-//                let newCenterX = CGFloat(centerIndex) * viewModel.itemWidth
-//                
-//                // 调整偏移量
-//                viewModel.offsetX += (newCenterX - oldCenterX)
-//                
-//                // 边界检查
-//                let maxOffset = max(0, viewModel.totalWidth - viewModel.kLineChartRect.width)
-//                viewModel.offsetX = max(0, min(viewModel.offsetX, maxOffset))
-//            }
-//            
-//            viewModel.calculateVisible()
-//            setNeedsDisplay()
-//        }
     }
 }
 
