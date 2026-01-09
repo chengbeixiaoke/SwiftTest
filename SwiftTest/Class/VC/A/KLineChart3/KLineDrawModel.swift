@@ -181,7 +181,7 @@ extension KLineDrawViewModel {
         guard let dataSource = dataSource else { return }
         dataSource.loadHistoricalData(lineType: config.kLineType,
                                       before: dataList.first?.date ?? Date(),
-                                      count: dataList.count > 0 ? 100 : 200)
+                                      count: dataList.count > 0 ? 100 : 50)
         { [weak self] dataList in
             guard let weakSelf = self else { return }
             

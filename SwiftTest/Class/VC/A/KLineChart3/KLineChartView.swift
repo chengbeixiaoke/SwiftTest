@@ -8,7 +8,7 @@
 import UIKit
 
 class KLineChartView: BaseView {
-    let viewModel: KLineDrawViewModel
+    private let viewModel: KLineDrawViewModel
     init(frame: CGRect, viewModel: KLineDrawViewModel) {
         self.viewModel = viewModel
         super.init(frame: frame)
@@ -17,21 +17,22 @@ class KLineChartView: BaseView {
         viewModel.chartView = self
         viewModel.loadData()
         
-        setupPanGestures()
-        setupPinchGestures()
+        setupGestures()
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var config: KLineConfig {
+    public var config: KLineConfig
+    {
         get {
             return viewModel.config
         }
     }
     
-    open override func draw(_ rect: CGRect) {
+    open override func draw(_ rect: CGRect)
+    {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
         // 清空背景
@@ -46,11 +47,10 @@ class KLineChartView: BaseView {
         // 画K线
         drawKlines(in: context)
     }
-}
-
-// MARK: 画网格
-extension KLineChartView {
-    func drawGrid(in context: CGContext) {
+    
+    // MARK: 画网格
+    private func drawGrid(in context: CGContext)
+    {
         // 水平轴
         if config.showXAxis {
             context.setStrokeColor(config.xAxisColor.cgColor)
@@ -154,17 +154,16 @@ extension KLineChartView {
                              withAttributes: attributes)
         }
     }
-}
-
-// MARK: - 画K线
-extension KLineChartView {
-    func drawKlines(in context: CGContext) {
+    
+    // MARK: - 画K线
+    private func drawKlines(in context: CGContext)
+    {
         guard !viewModel.visibleData.isEmpty else { return }
         context.setLineDash(phase: 0, lengths: [])
         
         let chartRect = viewModel.kLineChartRect
         let priceRange = viewModel.visiblePriceMax - viewModel.visiblePriceMin
-                
+        
         func priceToY(_ price: CGFloat) -> CGFloat {
             if priceRange <= 0 { return chartRect.midY }
             let normalizedPrice = (price - viewModel.visiblePriceMin) / priceRange
@@ -238,19 +237,77 @@ extension KLineChartView {
     }
 }
 
-// MARK: 滑动/拖动手势
-extension KLineChartView {
-    func setupPanGestures() {
+// MARK: - 手势
+extension KLineChartView: UIGestureRecognizerDelegate {
+    // 添加手势
+    private func setupGestures()
+    {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panGesture.minimumNumberOfTouches = 1
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
         addGestureRecognizer(panGesture)
+        
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
+        pinchGesture.delegate = self
+        addGestureRecognizer(pinchGesture)
     }
     
-    @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
-        // 如果正在捏合，则不处理拖拽
+    // 计算偏移量
+    private func calculatePanGesture(offsetX: CGFloat)
+    {
+        if offsetX >= 0 {
+            if (offsetX/2.0 - viewModel.offsetX) >= viewModel.itemWidth {
+                viewModel.visibleStartIndex = min(viewModel.visibleStartIndex + 1, viewModel.dataList.count)
+                viewModel.calculateVisible()
+                viewModel.offsetX = CGFloat((viewModel.visibleStartIndex + viewModel.visibleCount) - viewModel.dataList.count) * viewModel.itemWidth
+            }
+        } else if offsetX >= viewModel.minOffsetX {
+            if (viewModel.offsetX - offsetX) >= viewModel.itemWidth {
+                viewModel.visibleStartIndex = max(viewModel.visibleStartIndex - 1, 0)
+                viewModel.calculateVisible()
+                viewModel.offsetX = CGFloat((viewModel.visibleStartIndex + viewModel.visibleCount) - viewModel.dataList.count) * viewModel.itemWidth
+            }
+            if (offsetX - viewModel.offsetX) >= viewModel.itemWidth {
+                viewModel.visibleStartIndex = min(viewModel.visibleStartIndex + 1, viewModel.dataList.count)
+                viewModel.calculateVisible()
+                viewModel.offsetX = CGFloat((viewModel.visibleStartIndex + viewModel.visibleCount) - viewModel.dataList.count) * viewModel.itemWidth
+            }
+        } else {
+            viewModel.visibleStartIndex = 0
+            viewModel.offsetX = offsetX
+            viewModel.calculateVisible()
+        }
+    }
+    
+    // 边界检查
+    func checkAndSnapBack()
+    {
+        viewModel.inertialStartOffsetX = 0
+        
+        if (viewModel.visibleStartIndex + viewModel.visibleCount) > viewModel.dataList.count {
+            viewModel.visibleStartIndex = viewModel.dataList.count - viewModel.visibleCount
+            viewModel.offsetX = 0
+            viewModel.calculateVisible()
+        }
+        
+        if viewModel.offsetX < viewModel.minOffsetX {
+            let needLoad = viewModel.offsetX < viewModel.minOffsetX - viewModel.kLineChartRect.width/3.0
+            viewModel.visibleStartIndex = 0
+            viewModel.offsetX = viewModel.minOffsetX
+            viewModel.calculateVisible()
+            
+            if needLoad {
+                viewModel.loadData()
+            }
+        }
+    }
+    
+    // 拖动手势
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer)
+    {
         if viewModel.isPinching {
+            viewModel.isDragging = false
             return
         }
         stopInertialScroll()
@@ -288,32 +345,9 @@ extension KLineChartView {
         }
     }
     
-    func calculatePanGesture(offsetX: CGFloat)  {
-        if offsetX >= 0 {
-            if (offsetX/2.0 - viewModel.offsetX) >= viewModel.itemWidth {
-                viewModel.visibleStartIndex = min(viewModel.visibleStartIndex + 1, viewModel.dataList.count)
-                viewModel.calculateVisible()
-                viewModel.offsetX = CGFloat((viewModel.visibleStartIndex + viewModel.visibleCount) - viewModel.dataList.count) * viewModel.itemWidth
-            }
-        } else if offsetX >= viewModel.minOffsetX {
-            if (viewModel.offsetX - offsetX) >= viewModel.itemWidth {
-                viewModel.visibleStartIndex = max(viewModel.visibleStartIndex - 1, 0)
-                viewModel.calculateVisible()
-                viewModel.offsetX = CGFloat((viewModel.visibleStartIndex + viewModel.visibleCount) - viewModel.dataList.count) * viewModel.itemWidth
-            }
-            if (offsetX - viewModel.offsetX) >= viewModel.itemWidth {
-                viewModel.visibleStartIndex = min(viewModel.visibleStartIndex + 1, viewModel.dataList.count)
-                viewModel.calculateVisible()
-                viewModel.offsetX = CGFloat((viewModel.visibleStartIndex + viewModel.visibleCount) - viewModel.dataList.count) * viewModel.itemWidth
-            }
-        } else {
-            viewModel.visibleStartIndex = 0
-            viewModel.offsetX = offsetX
-            viewModel.calculateVisible()
-        }
-    }
-    
-    func startInertialScroll(velocity: CGFloat) {
+    // 开始惯性滚动
+    func startInertialScroll(velocity: CGFloat)
+    {
         viewModel.inertialVelocity = velocity * 0.3
         
         if viewModel.displayLink == nil {
@@ -322,13 +356,17 @@ extension KLineChartView {
         }
     }
     
-    func stopInertialScroll() {
+    // 停止惯性滚动
+    func stopInertialScroll()
+    {
         viewModel.displayLink?.invalidate()
         viewModel.displayLink = nil
         viewModel.inertialVelocity = 0
     }
     
-    @objc private func updateInertialScroll() {
+    // 惯性滚动
+    @objc private func updateInertialScroll()
+    {
         guard abs(viewModel.inertialVelocity) > 0.1 else {
             stopInertialScroll()
             checkAndSnapBack()
@@ -336,13 +374,10 @@ extension KLineChartView {
         }
         
         viewModel.inertialVelocity *= viewModel.inertialDeceleration
-        
-        // 计算新位置
         let deltaX = viewModel.inertialVelocity * viewModel.inertialDecelerationRatio
         viewModel.inertialStartOffsetX = viewModel.inertialStartOffsetX - deltaX
         calculatePanGesture(offsetX: viewModel.inertialStartOffsetX)
-
-        // 检查边界和加载
+        
         var shouldStop = false
         if viewModel.offsetX > 0 {
             shouldStop = true
@@ -358,45 +393,11 @@ extension KLineChartView {
         }
     }
     
-    func checkAndSnapBack() {
-        viewModel.inertialStartOffsetX = 0
-
-        if (viewModel.visibleStartIndex + viewModel.visibleCount) > viewModel.dataList.count {
-            viewModel.visibleStartIndex = viewModel.dataList.count - viewModel.visibleCount
-            viewModel.offsetX = 0
-            viewModel.calculateVisible()
-        }
-        
-        if viewModel.offsetX < viewModel.minOffsetX {
-            let needLoad = viewModel.offsetX < viewModel.minOffsetX - viewModel.kLineChartRect.width/3.0
-            viewModel.visibleStartIndex = 0
-            viewModel.offsetX = viewModel.minOffsetX
-            viewModel.calculateVisible()
-            
-            if needLoad {
-                viewModel.loadData()
-            }
-        }
-    }
-}
-// MARK: 捏合手势
-extension KLineChartView {
-    private func setupPinchGestures() {
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
-        pinchGesture.delegate = self
-        addGestureRecognizer(pinchGesture)
-    }
-    
+    // 捏合手势
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
-        // 拖拽时，不进行缩放
-        if viewModel.isDragging {
-            viewModel.isPinching = false
-            return
-        }
-        
-        // 安全检查触摸点数量
-        guard gesture.numberOfTouches >= 2 else {
-            viewModel.isPinching = false
+        // 安全检查
+        guard !viewModel.isDragging, gesture.numberOfTouches >= 2 else {
+            resetPinchGesture()
             return
         }
         
@@ -406,86 +407,81 @@ extension KLineChartView {
             viewModel.lastPinchScale = gesture.scale
             viewModel.zoomCenterIndex = nil
             viewModel.zoomCenterX = nil
-
-            // 停止惯性动画
             stopInertialScroll()
-            
-            // 安全获取缩放中心
             findZoomCenter(at: gesture)
             
         case .changed:
             let scaleChange = gesture.scale / viewModel.lastPinchScale
             viewModel.lastPinchScale = gesture.scale
-            
-            
-            // 执行缩放
             performZoom(scaleChange: scaleChange)
             
         case .ended, .cancelled, .failed:
-            viewModel.isPinching = false
-            viewModel.zoomCenterIndex = nil
-            viewModel.zoomCenterX = nil
-            viewModel.lastPinchScale = 1.0
+            resetPinchGesture()
             viewModel.calculateVisible()
         default:
             break
         }
     }
     
-    private func findZoomCenter(at gesture: UIPinchGestureRecognizer) {
+    // 重置捏合手势
+    private func resetPinchGesture()
+    {
+        viewModel.isPinching = false
+        viewModel.isPinching = false
+        viewModel.zoomCenterIndex = nil
+        viewModel.zoomCenterX = nil
+        viewModel.lastPinchScale = 1.0
+    }
+    
+    // 计算捏合中心
+    private func findZoomCenter(at gesture: UIPinchGestureRecognizer)
+    {
         guard gesture.numberOfTouches >= 2 else { return }
         
         let touchPoint1 = gesture.location(ofTouch: 0, in: self)
         let touchPoint2 = gesture.location(ofTouch: 1, in: self)
         
         let point = CGPoint(x: (touchPoint1.x + touchPoint2.x) / 2,
-                       y: (touchPoint1.y + touchPoint2.y) / 2)
+                            y: (touchPoint1.y + touchPoint2.y) / 2)
         
         guard viewModel.kLineChartRect.contains(point) else { return }
         let relativeIndex = Int(floor(point.x / viewModel.itemWidth))
         viewModel.zoomCenterIndex = viewModel.visibleStartIndex + relativeIndex
-        viewModel.zoomCenterX = CGFloat(relativeIndex) * viewModel.itemWidth
+        viewModel.zoomCenterX = point.x
     }
     
-    private func performZoom(scaleChange: CGFloat) {
-        guard scaleChange != 1.0, let zoomCenterIndex = viewModel.zoomCenterIndex, let zoomCenterX = viewModel.zoomCenterX else { return }
+    // 执行捏合缩放计算
+    private func performZoom(scaleChange: CGFloat)
+    {
+        guard scaleChange != 1.0, let zoomCenterX = viewModel.zoomCenterX else { return }
         
         var newScale = viewModel.scale * scaleChange
         newScale = min(max(config.scaleMin, newScale), config.scaleMax)
-
+        
         if newScale != viewModel.scale {
             viewModel.scale = newScale
-
+            
             let (count, kLineWidth) = viewModel.calculateKLineWidth(totalWidth: viewModel.kLineChartRect.width,
-                                                               itemWidth: config.kLineWidth * viewModel.scale,
-                                                               spacing: config.kLineSpacing)
-            let itemWidth = kLineWidth + config.kLineSpacing
+                                                                    itemWidth: config.kLineWidth * viewModel.scale,
+                                                                    spacing: config.kLineSpacing)
             if count != viewModel.visibleCount {
-                if scaleChange < 1.0 {
-                    if CGFloat((viewModel.visibleStartIndex - zoomCenterIndex)) * itemWidth < zoomCenterX {
-                        viewModel.offsetX = -CGFloat(max(viewModel.visibleStartIndex - 1 - count, 0)) * itemWidth
-                        printLog("[XXXXX]: 缩小 前边插入\(viewModel.offsetX)")
-                    } else {
-                        viewModel.offsetX = -CGFloat(max(viewModel.visibleStartIndex - count, 0)) * itemWidth
-                        printLog("[XXXXX]: 缩小 后边插入\(viewModel.offsetX)")
+                if scaleChange >= 1.0 {
+                    if zoomCenterX.remainder(dividingBy: kLineWidth) > (viewModel.kLineChartRect.width - zoomCenterX).remainder(dividingBy: kLineWidth) {
+                        viewModel.visibleStartIndex = viewModel.visibleStartIndex + (viewModel.visibleCount - count)
                     }
                 } else {
-                    if CGFloat((viewModel.visibleStartIndex - zoomCenterIndex)) * (kLineWidth + config.kLineSpacing) > zoomCenterX {
-                        viewModel.offsetX = -CGFloat(max(viewModel.visibleStartIndex + 1 - count, 0)) * itemWidth
-                        printLog("[XXXXX]: 放大 前边缩进\(viewModel.offsetX)")
-                    } else {
-                        viewModel.offsetX = -CGFloat(max(viewModel.visibleStartIndex - count, 0)) * itemWidth
-                        printLog("[XXXXX]: 放大 后边缩进\(viewModel.offsetX)")
+                    if zoomCenterX.remainder(dividingBy: kLineWidth) > (viewModel.kLineChartRect.width - zoomCenterX).remainder(dividingBy: kLineWidth) {
+                        viewModel.visibleStartIndex = viewModel.visibleStartIndex - (count - viewModel.visibleCount)
                     }
                 }
             }
+            
             viewModel.calculateVisible()
+            viewModel.offsetX = CGFloat((viewModel.visibleStartIndex + viewModel.visibleCount) - viewModel.dataList.count) * viewModel.itemWidth
+            checkAndSnapBack()
         }
     }
-}
-
-// MARK: - UIGestureRecognizerDelegate
-extension KLineChartView: UIGestureRecognizerDelegate {
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
     {
         // 允许拖拽和捏合同时识别
