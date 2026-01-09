@@ -62,6 +62,8 @@ class KLineDrawViewModel {
     var xAxisTitles: [KLineXAxisTitleModel] = []
     // K线图Rect
     var kLineChartRect: CGRect = .zero
+    // 成交量Rect
+    var volumeChartRect: CGRect = .zero
     
     // 缩放倍数
     var scale: CGFloat = 1.0
@@ -131,6 +133,11 @@ class KLineDrawViewModel {
                                 y: config.margin.top,
                                 width: width,
                                 height: height)
+        
+        volumeChartRect = CGRect(x: config.margin.left,
+                                 y: kLineChartRect.maxY + config.volumeTopMargin,
+                                 width:width,
+                                 height: config.volumeHeight)
     }
     
     func formatPrice(_ price: CGFloat) -> String
@@ -229,18 +236,22 @@ extension KLineDrawViewModel {
             return
         }
         
-        visiblePriceMax = first.high
-        visiblePriceMin = first.low
-        visibleVolumeMax = first.volume
-        
-        for data in visibleData {
-            visiblePriceMax = max(visiblePriceMax, data.high)
-            visiblePriceMin = min(visiblePriceMin, data.low)
-            visibleVolumeMax = max(visibleVolumeMax, data.volume)
+        let extremes = visibleData.reduce((priceMax: first.high,
+                                           priceMin: first.low,
+                                           volumeMax: first.volume)) { result, data in
+            return (max(result.priceMax, data.high),
+                    min(result.priceMin, data.low),
+                    max(result.volumeMax, data.volume))
         }
         
-        // 计算X轴坐标点
-        calculateVisibleXAxisTitles()
+        visiblePriceMax = extremes.priceMax
+        visiblePriceMin = extremes.priceMin
+        visibleVolumeMax = extremes.volumeMax
+        
+        visibleData.forEach { data in
+            data.volumeHeight = volumeChartRect.height * data.volume / visibleVolumeMax
+        }
+        
         // 重绘
         chartView?.setNeedsDisplay()
     }
@@ -250,25 +261,10 @@ extension KLineDrawViewModel {
         switch config.kLineType {
         case .realTtime:
             xAxisTitles = []
-            
         case .fiveDay:
             xAxisTitles = []
-            
         case .dayK:
-            var list: [KLineXAxisTitleModel] = []
-            var next: CandleStickData? = nil
-            for (index, data) in visibleData.enumerated() {
-                if let next = next {
-                    if next.date_yyyymm != data.date_yyyymm {
-                        let x = CGFloat(index) * (config.kLineWidth + config.kLineSpacing)
-                        list.append(KLineXAxisTitleModel(point: CGPointMake(x, 0), title: data.date_yyyymm))
-                    }
-                }
-                
-                next = data
-            }
-            xAxisTitles = list
-            
+            xAxisTitles = []
         case .weekK:
             xAxisTitles = []
         case .monthK:

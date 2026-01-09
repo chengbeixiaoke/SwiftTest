@@ -24,29 +24,12 @@ class CandleStickDemoViewController3: BaseViewController {
         
         dataList = KLineDataGenerator.generateKLineData(type: .dayK, periods: 10000)
         dataList = dataList.sorted {$0.timestamp > $1.timestamp}
-//        test()
         setupUI()
     }
     
     func setupUI() {
         navigationItem.title = "K线图"
         view.addSubview(kLineView)
-    }
-    
-    func test() {
-        let count: Int = 61
-        loadHistoricalData(lineType: .dayK,
-                           before: subDataList.last?.date ?? Date(),
-                           count: count)
-        { [weak self] list in
-            guard let weakSelf = self else { return }
-            list.forEach { data in
-                printLog(data.date)
-            }
-            printLog("######################################################")
-            weakSelf.subDataList.append(contentsOf: list)
-            list.count < count ? nil : weakSelf.test()
-        }
     }
 }
 

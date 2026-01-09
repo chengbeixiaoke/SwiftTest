@@ -19,6 +19,9 @@ class CandleStickData: Identifiable {
     public let volume: Double
     public let amount: Double? // 成交额（可选）
     
+    // 成交量柱状图高度
+    public var volumeHeight: CGFloat = 0
+    
     public init(date: Date, open: Double, high: Double, low: Double, close: Double, volume: Double, amount: Double?) {
         self.date = date
         self.open = open

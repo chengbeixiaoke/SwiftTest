@@ -26,9 +26,12 @@ class KLineChartView: BaseView {
     
     public var config: KLineConfig
     {
-        get {
-            return viewModel.config
-        }
+        return viewModel.config
+    }
+    
+    public var kChartRect: CGRect
+    {
+        return viewModel.kLineChartRect
     }
     
     open override func draw(_ rect: CGRect)
@@ -63,8 +66,8 @@ class KLineChartView: BaseView {
                 context.setLineDash(phase: 0, lengths: [])
             }
             
-            context.move(to: CGPoint(x: viewModel.kLineChartRect.minX, y: viewModel.kLineChartRect.maxY))
-            context.addLine(to: CGPoint(x: viewModel.kLineChartRect.maxX, y: viewModel.kLineChartRect.maxY))
+            context.move(to: CGPoint(x: kChartRect.minX, y: kChartRect.maxY))
+            context.addLine(to: CGPoint(x: kChartRect.maxX, y: kChartRect.maxY))
             context.strokePath()
         }
         
@@ -79,19 +82,19 @@ class KLineChartView: BaseView {
             context.setLineDash(phase: 0, lengths: [])
         }
         
-        let horizontalHeight = viewModel.kLineChartRect.height / CGFloat(config.gridXLines)
+        let horizontalHeight = kChartRect.height / CGFloat(config.gridXLines)
         for i in 0...config.gridXLines {
-            let y = viewModel.kLineChartRect.minY + CGFloat(i) * horizontalHeight
+            let y = kChartRect.minY + CGFloat(i) * horizontalHeight
             if i < config.gridXLines {
-                context.move(to: CGPoint(x: viewModel.kLineChartRect.minX, y: y))
-                context.addLine(to: CGPoint(x: viewModel.kLineChartRect.maxX, y: y))
+                context.move(to: CGPoint(x: kChartRect.minX, y: y))
+                context.addLine(to: CGPoint(x: kChartRect.maxX, y: y))
                 context.strokePath()
             }
         }
         
         // Y轴Title
         for i in 0...config.gridXLines {
-            let y = viewModel.kLineChartRect.minY + CGFloat(i) * horizontalHeight
+            let y = kChartRect.minY + CGFloat(i) * horizontalHeight
             let price = viewModel.visiblePriceMax - CGFloat(i) * (viewModel.visiblePriceMax - viewModel.visiblePriceMin) / CGFloat(config.gridXLines)
             let priceText = viewModel.formatPrice(price)
             
@@ -99,7 +102,7 @@ class KLineChartView: BaseView {
                                                              .foregroundColor: config.yAxisTextColor]
             
             let textSize = priceText.size(withAttributes: attributes)
-            priceText.draw(at: CGPoint(x: viewModel.kLineChartRect.minX + 5, y: y - textSize.height / 2.0),
+            priceText.draw(at: CGPoint(x: kChartRect.minX + 5, y: y - textSize.height / 2.0),
                            withAttributes: attributes)
         }
         
@@ -115,8 +118,8 @@ class KLineChartView: BaseView {
                 context.setLineDash(phase: 0, lengths: [])
             }
             
-            context.move(to: CGPoint(x: viewModel.kLineChartRect.minX, y: viewModel.kLineChartRect.maxY))
-            context.addLine(to: CGPoint(x: viewModel.kLineChartRect.minX, y: viewModel.kLineChartRect.minY))
+            context.move(to: CGPoint(x: kChartRect.minX, y: kChartRect.maxY))
+            context.addLine(to: CGPoint(x: kChartRect.minX, y: kChartRect.minY))
             context.strokePath()
         }
         
@@ -132,8 +135,8 @@ class KLineChartView: BaseView {
         }
         
         for title in viewModel.xAxisTitles {
-            context.move(to: CGPoint(x: title.point.x, y: viewModel.kLineChartRect.minY))
-            context.addLine(to: CGPoint(x: title.point.x, y: viewModel.kLineChartRect.maxY))
+            context.move(to: CGPoint(x: title.point.x, y: kChartRect.minY))
+            context.addLine(to: CGPoint(x: title.point.x, y: kChartRect.maxY))
             context.strokePath()
         }
         
@@ -144,13 +147,13 @@ class KLineChartView: BaseView {
             
             let textSize = title.title.size(withAttributes: attributes)
             var x = title.point.x - textSize.width / 2.0
-            if x < viewModel.kLineChartRect.minX {
-                x = viewModel.kLineChartRect.minX
+            if x < kChartRect.minX {
+                x = kChartRect.minX
             }
-            if x + textSize.width > viewModel.kLineChartRect.maxX {
-                x = viewModel.kLineChartRect.maxX - textSize.width
+            if x + textSize.width > kChartRect.maxX {
+                x = kChartRect.maxX - textSize.width
             }
-            title.title.draw(at: CGPoint(x: x, y: viewModel.kLineChartRect.maxY + 5),
+            title.title.draw(at: CGPoint(x: x, y: kChartRect.maxY + 5),
                              withAttributes: attributes)
         }
     }
@@ -161,7 +164,7 @@ class KLineChartView: BaseView {
         guard !viewModel.visibleData.isEmpty else { return }
         context.setLineDash(phase: 0, lengths: [])
         
-        let chartRect = viewModel.kLineChartRect
+        let chartRect = kChartRect
         let priceRange = viewModel.visiblePriceMax - viewModel.visiblePriceMin
         
         func priceToY(_ price: CGFloat) -> CGFloat {
@@ -172,9 +175,35 @@ class KLineChartView: BaseView {
         }
         
         for (i, data) in viewModel.visibleData.enumerated() {
-            var x = viewModel.kLineChartRect.origin.x + CGFloat(i) * viewModel.itemWidth
+            var x = kChartRect.origin.x + CGFloat(i) * viewModel.itemWidth
             if viewModel.offsetX < viewModel.minOffsetX {
                 x = x - (viewModel.offsetX - viewModel.minOffsetX)/2.0
+            }
+            
+            // 绘制坐标时间线
+            if i > 0, data.date_yyyymm != viewModel.visibleData[i-1].date_yyyymm {
+                context.setStrokeColor(config.gridYColor.cgColor)
+                context.setLineWidth(config.gridYLineWidth)
+                
+                if config.gridYSisplayDottedLines {
+                    let dashPattern: [CGFloat] = [config.gridYLineWidth * 2, config.gridYLineWidth * 2]
+                    context.setLineDash(phase: 0, lengths: dashPattern)
+                } else {
+                    context.setLineDash(phase: 0, lengths: [])
+                }
+                
+                context.move(to: CGPoint(x: x, y: kChartRect.minY))
+                context.addLine(to: CGPoint(x: x, y: kChartRect.maxY))
+                context.strokePath()
+                
+                let timeText = data.date_yyyymm
+                let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 10),
+                                                                 .foregroundColor: config.yAxisTextColor]
+                
+                let textSize = timeText.size(withAttributes: attributes)
+                let pointX = min(max(x - textSize.width/2.0, 0), kChartRect.maxX - textSize.width)
+                let point = CGPoint(x: pointX, y: kChartRect.maxY + 2.0)
+                timeText.draw(at: point, withAttributes: attributes)
             }
             
             let openY = priceToY(data.open)
@@ -193,6 +222,7 @@ class KLineChartView: BaseView {
             // 绘制上下影线
             context.setStrokeColor(color.cgColor)
             context.setLineWidth(config.kLineShadowWidth)
+            context.setLineDash(phase: 0, lengths: [])
             
             let bodyTop = min(clampedOpenY, clampedCloseY)
             let bodyBottom = max(clampedOpenY, clampedCloseY)
@@ -214,25 +244,19 @@ class KLineChartView: BaseView {
             // 绘制实体
             let bodyHeight = abs(clampedCloseY - clampedOpenY)
             if bodyHeight > 0 {
-                let bodyRect = CGRect(x: x,
-                                      y: min(clampedOpenY, clampedCloseY),
-                                      width: viewModel.kLineWidth,
-                                      height: bodyHeight)
-                
+                let bodyRect = CGRect(x: x, y: min(clampedOpenY, clampedCloseY), width: viewModel.kLineWidth, height: bodyHeight)
                 context.setFillColor(color.cgColor)
                 context.fill(bodyRect)
-                
-                
-                if let index = viewModel.dataList.firstIndex(where: {data.id == $0.id}), index == viewModel.zoomCenterIndex {
-                    let priceText = data.date_ddmm
-                    let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 10),
-                                                                     .foregroundColor: config.yAxisTextColor]
-                    
-                    let textSize = priceText.size(withAttributes: attributes)
-                    priceText.draw(at: CGPoint(x: bodyRect.minX, y: bodyRect.minY + bodyRect.height / 2.0 - textSize.height/2.0),
-                                   withAttributes: attributes)
-                }
             }
+            
+            // 绘制成交量
+            let volumeY = viewModel.volumeChartRect.maxY - data.volumeHeight
+            context.setFillColor(color.cgColor)
+            context.fill(CGRect(x: x,
+                                y: volumeY,
+                                width: viewModel.kLineWidth,
+                                height: data.volumeHeight))
+            
         }
     }
 }
@@ -292,7 +316,7 @@ extension KLineChartView: UIGestureRecognizerDelegate {
         }
         
         if viewModel.offsetX < viewModel.minOffsetX {
-            let needLoad = viewModel.offsetX < viewModel.minOffsetX - viewModel.kLineChartRect.width/3.0
+            let needLoad = viewModel.offsetX < viewModel.minOffsetX - kChartRect.width/3.0
             viewModel.visibleStartIndex = 0
             viewModel.offsetX = viewModel.minOffsetX
             viewModel.calculateVisible()
@@ -444,7 +468,7 @@ extension KLineChartView: UIGestureRecognizerDelegate {
         let point = CGPoint(x: (touchPoint1.x + touchPoint2.x) / 2,
                             y: (touchPoint1.y + touchPoint2.y) / 2)
         
-        guard viewModel.kLineChartRect.contains(point) else { return }
+        guard kChartRect.contains(point) else { return }
         let relativeIndex = Int(floor(point.x / viewModel.itemWidth))
         viewModel.zoomCenterIndex = viewModel.visibleStartIndex + relativeIndex
         viewModel.zoomCenterX = point.x
@@ -461,16 +485,16 @@ extension KLineChartView: UIGestureRecognizerDelegate {
         if newScale != viewModel.scale {
             viewModel.scale = newScale
             
-            let (count, kLineWidth) = viewModel.calculateKLineWidth(totalWidth: viewModel.kLineChartRect.width,
+            let (count, kLineWidth) = viewModel.calculateKLineWidth(totalWidth: kChartRect.width,
                                                                     itemWidth: config.kLineWidth * viewModel.scale,
                                                                     spacing: config.kLineSpacing)
             if count != viewModel.visibleCount {
                 if scaleChange >= 1.0 {
-                    if zoomCenterX.remainder(dividingBy: kLineWidth) > (viewModel.kLineChartRect.width - zoomCenterX).remainder(dividingBy: kLineWidth) {
+                    if zoomCenterX.remainder(dividingBy: kLineWidth) > (kChartRect.width - zoomCenterX).remainder(dividingBy: kLineWidth) {
                         viewModel.visibleStartIndex = viewModel.visibleStartIndex + (viewModel.visibleCount - count)
                     }
                 } else {
-                    if zoomCenterX.remainder(dividingBy: kLineWidth) > (viewModel.kLineChartRect.width - zoomCenterX).remainder(dividingBy: kLineWidth) {
+                    if zoomCenterX.remainder(dividingBy: kLineWidth) > (kChartRect.width - zoomCenterX).remainder(dividingBy: kLineWidth) {
                         viewModel.visibleStartIndex = viewModel.visibleStartIndex - (count - viewModel.visibleCount)
                     }
                 }

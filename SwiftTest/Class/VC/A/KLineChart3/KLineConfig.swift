@@ -131,5 +131,5 @@ class KLineConfig {
     // 成交量视图高度
     var volumeHeight: CGFloat = 60
     // 成交量视图上边距
-    var volumeTopMargin: CGFloat = 10
+    var volumeTopMargin: CGFloat = 15
 }
