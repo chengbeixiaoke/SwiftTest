@@ -36,6 +36,7 @@
 		43269A242D95438A0025EEAC /* 飞书20250120-095209.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 432699F12D95438A0025EEAC /* 飞书20250120-095209.mp4 */; };
 		43269A2B2D9544FB0025EEAC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A292D9544FB0025EEAC /* Main.storyboard */; };
 		43269A2C2D9544FB0025EEAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43269A272D9544FB0025EEAC /* LaunchScreen.storyboard */; };
+		432F786C2F10CE6F00F11B26 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432F786B2F10CE6F00F11B26 /* Array+Extension.swift */; };
 		433065E92E8A1E46002E2018 /* GradientLineChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065E82E8A1E46002E2018 /* GradientLineChartViewController.swift */; };
 		433065EB2E8A1EBC002E2018 /* BarChartDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065EA2E8A1EBC002E2018 /* BarChartDemoViewController.swift */; };
 		433065ED2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433065EC2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift */; };
@@ -151,6 +152,7 @@
 		43269A072D95438A0025EEAC /* UserModelDataV2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserModelDataV2.xcdatamodel; sourceTree = "<group>"; };
 		43269A262D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43269A282D9544FB0025EEAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
+		432F786B2F10CE6F00F11B26 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		433065E82E8A1E46002E2018 /* GradientLineChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientLineChartViewController.swift; sourceTree = "<group>"; };
 		433065EA2E8A1EBC002E2018 /* BarChartDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartDemoViewController.swift; sourceTree = "<group>"; };
 		433065EC2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedChartDemoViewController.swift; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 				4333CFA52E001CDB00ADDF38 /* String+Extension.swift */,
 				43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */,
 				433065F52E8A21E3002E2018 /* UIEdgeInsets+Extension.swift */,
+				432F786B2F10CE6F00F11B26 /* Array+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -738,6 +741,7 @@
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
 				43269A132D95438A0025EEAC /* AppDateFormatterManager.swift in Sources */,
 				43543E5E2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift in Sources */,
+				432F786C2F10CE6F00F11B26 /* Array+Extension.swift in Sources */,
 				433065FC2E8A2444002E2018 /* UIWindow+Extension.swift in Sources */,
 				436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */,
 				433065F62E8A21E3002E2018 /* UIEdgeInsets+Extension.swift in Sources */,

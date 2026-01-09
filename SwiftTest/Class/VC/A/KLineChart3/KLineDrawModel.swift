@@ -47,15 +47,10 @@ class KLineDrawViewModel {
     
     // 数据
     var dataList: [CandleStickData] = []
-    // X轴坐标点
-    var xAxisTitles: [KLineXAxisTitleModel] = []
-    // K线图Rect
-    var kLineChartRect: CGRect = .zero
-    
+    // 可见K线起始位置
+    var visibleStartIndex: Int = 0
     // 可见K线数量
     var visibleCount: Int = 0
-    // 可见K线
-    var visibleData: [CandleStickData] = []
     // 可见最高价
     var visiblePriceMax: CGFloat = 0
     // 可见最低价
@@ -63,10 +58,19 @@ class KLineDrawViewModel {
     // 可见数据容量
     var visibleVolumeMax: CGFloat = 0
     
+    // X轴坐标点
+    var xAxisTitles: [KLineXAxisTitleModel] = []
+    // K线图Rect
+    var kLineChartRect: CGRect = .zero
+    
     // 缩放倍数
     var scale: CGFloat = 1.0
     // 偏移量
-    var offsetX: CGFloat = 0
+    var offsetX: CGFloat = 0 {
+        didSet {
+            printLog("offsetX: \(offsetX)")
+        }
+    }
     // 最后一次偏移量
     var lastOffsetX: CGFloat = 0
     
@@ -89,6 +93,10 @@ class KLineDrawViewModel {
     var inertialVelocity: CGFloat = 0
     // 惯性减速系数
     let inertialDeceleration: CGFloat = 0.95
+    // 惯性减速比例
+    let inertialDecelerationRatio: CGFloat = 0.016
+    // 惯性起始偏移量
+    var inertialStartOffsetX: CGFloat = 0
     
     // 单条K线宽度
     var kLineWidth: CGFloat = 0
@@ -108,10 +116,9 @@ class KLineDrawViewModel {
         return -(totalWidth - kLineChartRect.width)
     }
     
-    var visibleStartIndex: Int
-    {
-        guard let data = visibleData.first else { return 0 }
-        return dataList.firstIndex(where: { $0.id == data.id }) ?? 0
+    // 可见K线数组
+    var visibleData: [CandleStickData] {
+        return dataList.subArray(from: visibleStartIndex, count: visibleCount)
     }
     
     func calculateRect()
@@ -178,11 +185,29 @@ extension KLineDrawViewModel {
         { [weak self] dataList in
             guard let weakSelf = self else { return }
             
+            let firstLoad: Bool = weakSelf.dataList.isEmpty
             let dataList_ = dataList.sorted { $0.timestamp < $1.timestamp }
             weakSelf.dataList.insert(contentsOf: dataList_, at: 0)
             
+            if firstLoad {
+                weakSelf.firstLoadDataReloadUI()
+            } else {
+                weakSelf.visibleStartIndex = weakSelf.visibleStartIndex + dataList_.count
+            }
             weakSelf.calculateVisible()
         }
+    }
+    
+    private func firstLoadDataReloadUI() {
+        // 计算可见K线数量
+        let (visibleCount_, oneKLineWidth) = calculateKLineWidth(totalWidth: kLineChartRect.width,
+                                                                 itemWidth: config.kLineWidth * scale,
+                                                                 spacing: config.kLineSpacing)
+        visibleCount = visibleCount_
+        kLineWidth = oneKLineWidth
+        
+        visibleStartIndex = dataList.count - visibleCount
+        calculateVisible()
     }
 }
 
@@ -196,16 +221,6 @@ extension KLineDrawViewModel {
                                                                  spacing: config.kLineSpacing)
         visibleCount = visibleCount_
         kLineWidth = oneKLineWidth
-        // 计算起始索引
-        let totalKLinesWidth = CGFloat(dataList.count) * itemWidth - config.kLineSpacing
-        if totalKLinesWidth <= kLineChartRect.width {
-            visibleData = dataList.suffix(visibleCount)
-        } else {
-            let offsetCount = max(visibleCount - Int(floor(offsetX / itemWidth)), 0)
-            let visibleStartIndex = max(0, dataList.count - offsetCount)
-            let endIndex = min(visibleStartIndex + visibleCount, dataList.count)
-            visibleData = Array(dataList[max(visibleStartIndex, 0)..<endIndex])
-        }
         
         guard let first = visibleData.first else {
             visiblePriceMax = 0

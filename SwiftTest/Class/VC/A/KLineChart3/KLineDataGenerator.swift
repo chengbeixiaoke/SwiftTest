@@ -54,6 +54,10 @@ class CandleStickData: Identifiable {
     public var date_yyyymm: String {
         return AppDateFormatterManager.shared.dateString(date, formatter: .yyyyMM)
     }
+    
+    public var date_ddmm: String {
+        return AppDateFormatterManager.shared.dateString(date, formatter: .ddMMyy)
+    }
 }
 
 // MARK: - A股交易时间管理
