@@ -368,11 +368,12 @@ extension KLineChartView {
         }
         
         if viewModel.offsetX < viewModel.minOffsetX {
+            let needLoad = viewModel.offsetX < viewModel.minOffsetX - viewModel.kLineChartRect.width/3.0
             viewModel.visibleStartIndex = 0
             viewModel.offsetX = viewModel.minOffsetX
             viewModel.calculateVisible()
             
-            if viewModel.offsetX < viewModel.minOffsetX - viewModel.kLineChartRect.width/3.0 {
+            if needLoad {
                 viewModel.loadData()
             }
         }
