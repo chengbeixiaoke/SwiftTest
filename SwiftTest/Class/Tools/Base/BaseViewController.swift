@@ -56,7 +56,7 @@ open class BaseViewController: UIViewController {
         
         navigationItem.hidesBackButton = true
         if navigationController?.children.count ?? 0 <= 1 {
-            navigationItem.leftBarButtonItem = UIBarButtonItem()
+            navigationItem.leftBarButtonItem = nil
         } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "normal_back"),
                                                                style: .plain,

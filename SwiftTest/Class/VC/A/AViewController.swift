@@ -56,10 +56,6 @@ class AViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-//        delay(seconds: 0.5) {
-//            self.navigationController?.pushViewController(CandleStickDemoViewController3(), animated: true)
-//        }
     }
     
     override func viewDidLoad() {
@@ -100,6 +96,7 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ACell", for: indexPath) as! ACell
         cell.nameLabel.text = dataList[indexPath.row].title
         cell.messageLabel.text = dataList[indexPath.row].vcClass.className()
+        cell.contentView.backgroundColor = (indexPath.row % 2 == 0) ? .BG_727386 : .white
         return cell
     }
     
@@ -122,6 +119,7 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = dataList[indexPath.row].vcClass.init()
+//        navigationController?.present(vc, animated: true)
         navigationController?.pushViewController(vc, animated: true)
     }
 }
