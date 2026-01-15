@@ -43,11 +43,17 @@ open class TranslucentBlurView: UIView {
         let blurView = UIVisualEffectView()
         blurView.frame = bounds
         addSubview(blurView)
+                
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = bounds
+        gradientLayer.colors = [UIColor.white.cgColor, UIColor.white.cgColor, UIColor.clear.cgColor]
+        gradientLayer.locations = [0.0, 0.8, 1.0]
+        blurView.layer.mask = gradientLayer
         
-        let view = UIView(frame: bounds)
+        let view = UIView(frame: blurView.bounds)
         view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         blurView.contentView.addSubview(view)
-        
+
         let animator = UIViewPropertyAnimator(duration: 0, curve: .linear) { [weak self] in
             guard let weakSelf = self else { return }
             blurView.effect = UIBlurEffect(style: weakSelf.style)
