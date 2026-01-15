@@ -51,6 +51,7 @@
 		433066562E8BC083002E2018 /* ACell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433066552E8BC083002E2018 /* ACell.swift */; };
 		433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433066572E8BC15A002E2018 /* BaseTableViewCell.swift */; };
 		4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4333CFA52E001CDB00ADDF38 /* String+Extension.swift */; };
+		433DD99F2F176757009FE5DE /* GradientBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433DD99E2F176757009FE5DE /* GradientBlurView.swift */; };
 		43543E5E2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43543E5D2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift */; };
 		435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B76512D9E345700093B91 /* VideoPlayerViewController.swift */; };
 		435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B766D2D9E411500093B91 /* Object+Extension.swift */; };
@@ -167,6 +168,7 @@
 		433066552E8BC083002E2018 /* ACell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACell.swift; sourceTree = "<group>"; };
 		433066572E8BC15A002E2018 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		4333CFA52E001CDB00ADDF38 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		433DD99E2F176757009FE5DE /* GradientBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBlurView.swift; sourceTree = "<group>"; };
 		43543E5D2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBackgroundViewController.swift; sourceTree = "<group>"; };
 		435B76512D9E345700093B91 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		435B766D2D9E411500093B91 /* Object+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Object+Extension.swift"; sourceTree = "<group>"; };
@@ -387,6 +389,7 @@
 		43269A052D95438A0025EEAC /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				433DD99D2F176734009FE5DE /* Views */,
 				430D947F2EBB219300D44522 /* Main */,
 				43BEABA22E02B26400092EB3 /* MiniApp */,
 				432699E62D95438A0025EEAC /* CoreData */,
@@ -459,6 +462,14 @@
 				433066572E8BC15A002E2018 /* BaseTableViewCell.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		433DD99D2F176734009FE5DE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				433DD99E2F176757009FE5DE /* GradientBlurView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		435B76532D9E345B00093B91 /* Player */ = {
@@ -714,6 +725,7 @@
 				43269A092D95438A0025EEAC /* EViewController.swift in Sources */,
 				43269A0A2D95438A0025EEAC /* UserModel.swift in Sources */,
 				433065EB2E8A1EBC002E2018 /* BarChartDemoViewController.swift in Sources */,
+				433DD99F2F176757009FE5DE /* GradientBlurView.swift in Sources */,
 				43BEABAC2E02B45C00092EB3 /* MiniAppContainerNavigationView.swift in Sources */,
 				43BEABAE2E02B45C00092EB3 /* MiniAppContainerButtonView.swift in Sources */,
 				43269A0B2D95438A0025EEAC /* BaseTableView.swift in Sources */,

@@ -51,11 +51,30 @@ class AViewController: BaseViewController {
                 Model(title: "饼状图", vcClass: SimplePieChartViewController2.self),
                 Model(title: "测试绘图", vcClass: ChatTestViewController.self),
                 Model(title: "3D模型", vcClass: Test3DViewController.self),
+                Model(title: "渐变视图2", vcClass: HomeTopBackgroundViewController.self),
+                Model(title: "主题色", vcClass: AppThemeViewController.self),
+                Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
+                Model(title: "K线图2", vcClass: CandleStickDemoViewController2.self),
+                Model(title: "K线图3", vcClass: CandleStickDemoViewController3.self),
+                Model(title: "折线图", vcClass: GradientLineChartViewController.self),
+                Model(title: "柱状图", vcClass: BarChartDemoViewController.self),
+                Model(title: "组合图", vcClass: CombinedChartDemoViewController.self),
+                Model(title: "饼状图", vcClass: SimplePieChartViewController.self),
+                Model(title: "饼状图", vcClass: SimplePieChartViewController2.self),
+                Model(title: "测试绘图", vcClass: ChatTestViewController.self),
+                Model(title: "3D模型", vcClass: Test3DViewController.self),
                 Model(title: "渐变视图2", vcClass: HomeTopBackgroundViewController.self)]
     }
     
+    var blurView2: TranslucentBlurView!
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        blurView2.fractionComplete = 0.08
     }
     
     override func viewDidLoad() {
@@ -66,6 +85,27 @@ class AViewController: BaseViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        if #available(iOS 26.0, *) {
+            tableView.topEdgeEffect.isHidden = true
+        }
+        
+        blurView2 = TranslucentBlurView(frame: CGRectMake(0, 0, WidthScreen, 200), style: .systemUltraThinMaterial)
+        blurView2.isUserInteractionEnabled = false
+        view.addSubview(blurView2)
+                
+        // 使用示例
+        let blurView = GradientBlurView(effect: UIBlurEffect(style: .systemChromeMaterial))
+        blurView.startColor = UIColor.white
+        blurView.endColor = UIColor.clear
+        blurView.direction = .topToBottom
+        view.addSubview(blurView)
+        blurView.snp.makeConstraints { make in
+            make.top.equalTo(blurView2.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(100)
+        }
+        blurView.isUserInteractionEnabled = false
     }
 }
 
@@ -89,14 +129,14 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return HeightScreen
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ACell", for: indexPath) as! ACell
         cell.nameLabel.text = dataList[indexPath.row].title
         cell.messageLabel.text = dataList[indexPath.row].vcClass.className()
-        cell.contentView.backgroundColor = (indexPath.row % 2 == 0) ? .BG_727386 : .white
+        cell.contentView.backgroundColor = .BG_727386
         return cell
     }
     
@@ -119,7 +159,6 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = dataList[indexPath.row].vcClass.init()
-//        navigationController?.present(vc, animated: true)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

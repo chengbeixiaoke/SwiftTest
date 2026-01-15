@@ -39,5 +39,9 @@ class ACell: BaseTableViewCell {
             make.left.equalToSuperview().inset(15)
             make.right.equalToSuperview().inset(15)
         }
+        
+        let imageView = UIImageView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen))
+        imageView.image = UIImage(named: "app_store")
+        contentView.addSubview(imageView)
     }
 }

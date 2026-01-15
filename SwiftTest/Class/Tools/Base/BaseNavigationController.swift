@@ -15,10 +15,10 @@ open class BaseNavigationController: UINavigationController {
         let appearance = UINavigationBarAppearance()
         
         // 设置为不透明背景（可选）
-        appearance.configureWithOpaqueBackground()
+//        appearance.configureWithOpaqueBackground()
 
         // 2. 设置背景颜色
-        appearance.backgroundColor = .white
+//        appearance.backgroundColor = .white
 
         // 3. 设置标题颜色
         appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
@@ -29,16 +29,16 @@ open class BaseNavigationController: UINavigationController {
         // appearance.shadowColor = .lightGray
 
         // 选择2：自定义分割线颜色
-        appearance.shadowColor = .lightGray.withAlphaComponent(0.6)
+//        appearance.shadowColor = .lightGray.withAlphaComponent(0.6)
 
         // 选择3：完全隐藏分割线
-        // appearance.shadowColor = .clear
+         appearance.shadowColor = .clear
 
         // 5. 应用 appearance 到不同状态
         // 标准状态
         navigationBar.standardAppearance = appearance
         // 大标题滚动时
-        navigationBar.scrollEdgeAppearance = appearance
+        navigationBar.scrollEdgeAppearance = nil
         // 紧凑状态（横屏等）
         navigationBar.compactAppearance = appearance
 
