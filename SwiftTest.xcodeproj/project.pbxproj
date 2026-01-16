@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430D94802EBB21C200D44522 /* AppRouterManager.swift */; };
+		431F2E6A2F1A7C9D00207C6E /* GlassEffectContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431F2E692F1A7C9D00207C6E /* GlassEffectContainerView.swift */; };
+		431F2E6C2F1A85D700207C6E /* HomeTopBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431F2E6B2F1A85D700207C6E /* HomeTopBackgroundView.swift */; };
 		4324E4EC2DA909F500C8971B /* AppThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */; };
 		43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432699DE2D95438A0025EEAC /* EntityUserModelV1.swift */; };
 		43269A092D95438A0025EEAC /* EViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43269A002D95438A0025EEAC /* EViewController.swift */; };
@@ -52,7 +54,6 @@
 		433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433066572E8BC15A002E2018 /* BaseTableViewCell.swift */; };
 		4333CFA62E001CDB00ADDF38 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4333CFA52E001CDB00ADDF38 /* String+Extension.swift */; };
 		433DD99F2F176757009FE5DE /* GradientBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433DD99E2F176757009FE5DE /* GradientBlurView.swift */; };
-		43543E5E2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43543E5D2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift */; };
 		435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B76512D9E345700093B91 /* VideoPlayerViewController.swift */; };
 		435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B766D2D9E411500093B91 /* Object+Extension.swift */; };
 		435D785E2E03E52900688F0E /* MiniAppTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D785D2E03E52900688F0E /* MiniAppTestView.swift */; };
@@ -121,6 +122,8 @@
 		4300E9642EFA948000FBB966 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = ../mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
 		4300E9652EFA948000FBB966 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = ../mul.lproj/LaunchScreen.xcstrings; sourceTree = "<group>"; };
 		430D94802EBB21C200D44522 /* AppRouterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterManager.swift; sourceTree = "<group>"; };
+		431F2E692F1A7C9D00207C6E /* GlassEffectContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassEffectContainerView.swift; sourceTree = "<group>"; };
+		431F2E6B2F1A85D700207C6E /* HomeTopBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBackgroundView.swift; sourceTree = "<group>"; };
 		4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeViewController.swift; sourceTree = "<group>"; };
 		432699732D953FD70025EEAC /* SwiftTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432699CD2D9540390025EEAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -169,7 +172,6 @@
 		433066572E8BC15A002E2018 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		4333CFA52E001CDB00ADDF38 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		433DD99E2F176757009FE5DE /* GradientBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBlurView.swift; sourceTree = "<group>"; };
-		43543E5D2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBackgroundViewController.swift; sourceTree = "<group>"; };
 		435B76512D9E345700093B91 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		435B766D2D9E411500093B91 /* Object+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Object+Extension.swift"; sourceTree = "<group>"; };
 		435D785D2E03E52900688F0E /* MiniAppTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppTestView.swift; sourceTree = "<group>"; };
@@ -467,6 +469,8 @@
 		433DD99D2F176734009FE5DE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				431F2E6B2F1A85D700207C6E /* HomeTopBackgroundView.swift */,
+				431F2E692F1A7C9D00207C6E /* GlassEffectContainerView.swift */,
 				433DD99E2F176757009FE5DE /* GradientBlurView.swift */,
 			);
 			path = Views;
@@ -543,7 +547,6 @@
 		43B1894B2EF8E21E00AC8168 /* VCS */ = {
 			isa = PBXGroup;
 			children = (
-				43543E5D2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift */,
 			);
 			path = VCS;
 			sourceTree = "<group>";
@@ -730,6 +733,7 @@
 				43BEABAE2E02B45C00092EB3 /* MiniAppContainerButtonView.swift in Sources */,
 				43269A0B2D95438A0025EEAC /* BaseTableView.swift in Sources */,
 				4330661C2E8B89DE002E2018 /* AppTabBarController.swift in Sources */,
+				431F2E6C2F1A85D700207C6E /* HomeTopBackgroundView.swift in Sources */,
 				43C2E23F2E28F5F000F04297 /* BaseView.swift in Sources */,
 				436197F02EE7C265004932D6 /* AnimatedLineGraphChartView.swift in Sources */,
 				436197F22EE7C2AC004932D6 /* UIColor+SExtension.swift in Sources */,
@@ -752,7 +756,6 @@
 				433066582E8BC15A002E2018 /* BaseTableViewCell.swift in Sources */,
 				43269A112D95438A0025EEAC /* UIImage+Extension.swift in Sources */,
 				43269A132D95438A0025EEAC /* AppDateFormatterManager.swift in Sources */,
-				43543E5E2EF91DA7005B8B9D /* HomeTopBackgroundViewController.swift in Sources */,
 				432F786C2F10CE6F00F11B26 /* Array+Extension.swift in Sources */,
 				433065FC2E8A2444002E2018 /* UIWindow+Extension.swift in Sources */,
 				436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */,
@@ -763,6 +766,7 @@
 				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
 				436197D52EE6CEA3004932D6 /* SimplePieChartViewController.swift in Sources */,
 				436198022EE81D3F004932D6 /* KLineChartViewXX.swift in Sources */,
+				431F2E6A2F1A7C9D00207C6E /* GlassEffectContainerView.swift in Sources */,
 				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
 				43269A142D95438A0025EEAC /* CViewController.swift in Sources */,
 				43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */,

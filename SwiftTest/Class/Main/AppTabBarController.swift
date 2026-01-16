@@ -38,6 +38,19 @@ class AppTabBarController26: UITabBarController {
                               imageName: "tabbar_setting",
                               identifier: "me"))
         selectedTab = tabs.first
+        
+        let appearance = tabBar.standardAppearance
+        // 调整堆叠布局（stacked）的间距
+        appearance.stackedLayoutAppearance.normal.titlePositionAdjustment = UIOffset(
+            horizontal: 6,  // 水平偏移
+            vertical: -6    // 垂直偏移：负值减少间距，正值增加间距
+        )
+        
+        appearance.stackedLayoutAppearance.selected.titlePositionAdjustment = UIOffset(
+            horizontal: 6,
+            vertical: 16
+        )
+        tabBar.standardAppearance = appearance
     }
     
     // MARK: 设置UITab

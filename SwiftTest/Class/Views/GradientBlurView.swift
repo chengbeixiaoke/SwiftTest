@@ -10,7 +10,7 @@ import UIKit
 open class TranslucentBlurView: UIView {
     private var animator: UIViewPropertyAnimator?
     
-    public var fractionComplete: CGFloat = 0.2
+    public var fractionComplete: CGFloat = 0.08
     {
         didSet { update() }
     }

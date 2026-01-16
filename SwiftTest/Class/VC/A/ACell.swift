@@ -41,7 +41,20 @@ class ACell: BaseTableViewCell {
         }
         
         let imageView = UIImageView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen))
-        imageView.image = UIImage(named: "app_store")
+        imageView.image = UIImage(named: "test001")
         contentView.addSubview(imageView)
+    }
+}
+
+class A2Cell: BaseTableViewCell {
+    private lazy var levelBackgroundView = {
+        return HomeTopBackgroundView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen))
+    }()
+
+    override func setupUI() {
+        super.setupUI()
+        contentView.addSubview(levelBackgroundView)
+        levelBackgroundView.updateLevel(level: 5)
+        levelBackgroundView.clipsToBounds = true
     }
 }

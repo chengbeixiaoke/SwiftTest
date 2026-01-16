@@ -583,6 +583,9 @@ public extension UIColor {
     
     static let Text_38B000                 = ColorFromHex("38B000")
     
+    static let ColorBG_FFFFFF_0_000000_0    = ColorFromHex("FFFFFF", 0, darkHex: "000000", darkAlpha: 0)
+    static let ColorBG_FFFFFF_058_000000_058    = ColorFromHex("FFFFFF", 0.58, darkHex: "000000", darkAlpha: 0.58)
+
     
     // MARK: - 首页顶部渐变背景色
     static let Level_0_Left_1             = ColorFromHex("05D29D")
@@ -620,7 +623,11 @@ public extension UIColor {
     static let Level_4_Right_1            = ColorFromHex("FD0101")
     static let Level_4_Right_0            = ColorFromHex("FD0101", 0.0)
     
-    static let ColorBG_FFFFFF_0_000000_0    = ColorFromHex("FFFFFF", 0, darkHex: "000000", darkAlpha: 0)
-    static let ColorBG_FFFFFF_058_000000_058    = ColorFromHex("FFFFFF", 0.58, darkHex: "000000", darkAlpha: 0.58)
-
+    static let Level_5_Left_1             = ColorFromHex("DBDE17")
+    static let Level_5_Left_0             = ColorFromHex("DBDE17", 0.0)
+    static let Level_5_Center_1           = ColorFromHex("9CE112")
+    static let Level_5_Center_0           = ColorFromHex("9CE112", 0.0)
+    static let Level_5_Right_1            = ColorFromHex("57E40D")
+    static let Level_5_Right_0            = ColorFromHex("57E40D", 0.0)
 }
+
