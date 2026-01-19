@@ -25,7 +25,8 @@ import YYKit
 
 class AViewController: BaseViewController {
     private var cancellables = Set<AnyCancellable>()
-    
+    let customMenuView2 = UIView(frame: CGRectMake(50, 250, 200, 200))
+
     lazy var tableView =  {
         let tableView = BaseTableView(frame: .zero, style: .grouped)
         tableView.backgroundColor = viewBackgroundColor
@@ -101,6 +102,7 @@ class AViewController: BaseViewController {
             setupMenuButton()
             setupMenuButton2()
             setupCustomMenu()
+            setupCustomMenu2()
         }
     }
 }
@@ -339,5 +341,42 @@ extension AViewController {
         customVC.modalPresentationStyle = .popover
         customVC.popoverPresentationController?.sourceView = sender
         present(customVC, animated: true)
+    }
+}
+
+@available(iOS 26.0, *)
+extension AViewController {
+    func setupCustomMenu2() {
+        // 创建按钮
+        let menuButton = UIButton()
+        menuButton.configuration = UIButton.Configuration.prominentClearGlass()
+        menuButton.setTitle("选择操作2", for: .normal)
+        menuButton.frame = CGRect(x: 50, y: 200, width: 120, height: 44)
+        menuButton.addTarget(self, action: #selector(showCustomMenu2), for: .touchUpInside)
+        // 添加按钮到视图
+        view.addSubview(menuButton)
+    }
+    
+    @objc func showCustomMenu2() {
+        view.addSubview(customMenuView2)
+        // 1. 准备菜单，初始状态缩小并透明
+        customMenuView2.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        customMenuView2.alpha = 0
+        customMenuView2.backgroundColor = .red
+        customMenuView2.cornerConfiguration = .capsule()
+
+        // 2. 使用弹簧动画显示
+        UIView.animate(
+            withDuration: 5,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.5,
+            options: [],
+            animations: {
+                self.customMenuView2.transform = .identity
+                self.customMenuView2.alpha = 1
+            },
+            completion: nil
+        )
     }
 }
