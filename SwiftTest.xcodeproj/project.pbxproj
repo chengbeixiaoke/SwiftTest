@@ -71,6 +71,7 @@
 		4361980F2EE95753004932D6 /* KLineConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4361980E2EE95753004932D6 /* KLineConfig.swift */; };
 		436198222EEB010D004932D6 /* KLineDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198212EEB010D004932D6 /* KLineDataGenerator.swift */; };
 		436198242EEBEFB4004932D6 /* KLineDrawModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198232EEBEFB4004932D6 /* KLineDrawModel.swift */; };
+		4364EBB22F1DC36E000985BA /* GlassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4364EBB12F1DC36E000985BA /* GlassViewController.swift */; };
 		43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
 		437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */; };
@@ -188,6 +189,7 @@
 		4361980E2EE95753004932D6 /* KLineConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineConfig.swift; sourceTree = "<group>"; };
 		436198212EEB010D004932D6 /* KLineDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDataGenerator.swift; sourceTree = "<group>"; };
 		436198232EEBEFB4004932D6 /* KLineDrawModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDrawModel.swift; sourceTree = "<group>"; };
+		4364EBB12F1DC36E000985BA /* GlassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassViewController.swift; sourceTree = "<group>"; };
 		43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController.swift; sourceTree = "<group>"; };
 		43740CBF2DB7840E005119F4 /* TestRSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRSA.swift; sourceTree = "<group>"; };
 		437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2025-04-23_4029257634_Logs.log"; sourceTree = "<group>"; };
@@ -547,6 +549,7 @@
 		43B1894B2EF8E21E00AC8168 /* VCS */ = {
 			isa = PBXGroup;
 			children = (
+				4364EBB12F1DC36E000985BA /* GlassViewController.swift */,
 			);
 			path = VCS;
 			sourceTree = "<group>";
@@ -725,6 +728,7 @@
 				433065ED2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift in Sources */,
 				43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */,
 				436197FB2EE81221004932D6 /* CandleStickDemoViewController2.swift in Sources */,
+				4364EBB22F1DC36E000985BA /* GlassViewController.swift in Sources */,
 				43269A092D95438A0025EEAC /* EViewController.swift in Sources */,
 				43269A0A2D95438A0025EEAC /* UserModel.swift in Sources */,
 				433065EB2E8A1EBC002E2018 /* BarChartDemoViewController.swift in Sources */,

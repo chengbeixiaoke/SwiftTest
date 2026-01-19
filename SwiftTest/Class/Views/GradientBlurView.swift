@@ -12,8 +12,15 @@ open class TranslucentBlurView: UIView {
     
     public var fractionComplete: CGFloat = 0.08
     {
-        didSet { update() }
+        didSet { resetDraw() }
     }
+    
+    public var needMaskView: Bool = false
+    public var maskAlpha: CGFloat = 0.5
+    public var gradientLayerAlpha: CGFloat = 1.0
+    
+    // locations要么分两段，要么分3段，其他没适配
+    public var locations: [NSNumber] = [0.0, 1.0]
     
     private var blurView: UIVisualEffectView?
     private var style: UIBlurEffect.Style = .systemMaterial
@@ -22,17 +29,23 @@ open class TranslucentBlurView: UIView {
         super.init(frame: frame)
         self.style = style
         
-        update()
+        resetDraw()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(appWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(appWillEnterForeground),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
     }
     
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func update()
+    public func resetDraw()
     {
         blurView?.removeFromSuperview()
         blurView = nil
@@ -44,22 +57,33 @@ open class TranslucentBlurView: UIView {
         blurView.frame = bounds
         addSubview(blurView)
                 
+        
+        var colors: [UIColor] = [UIColor.white, UIColor.clear]
+        if locations.count == 3 {
+            colors = [UIColor.white.withAlphaComponent(gradientLayerAlpha),
+                      UIColor.white.withAlphaComponent(gradientLayerAlpha),
+                      UIColor.clear]
+        }
+        
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = bounds
-        gradientLayer.colors = [UIColor.white.cgColor, UIColor.white.cgColor, UIColor.clear.cgColor]
-        gradientLayer.locations = [0.0, 0.8, 1.0]
+        gradientLayer.colors = colors.map({$0.cgColor})
+        gradientLayer.locations = locations
         blurView.layer.mask = gradientLayer
         
-        let view = UIView(frame: blurView.bounds)
-        view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        blurView.contentView.addSubview(view)
-
+        if needMaskView {
+            let view = UIView(frame: blurView.bounds)
+            view.backgroundColor = UIColor.ColorWhite.withAlphaComponent(maskAlpha)
+            blurView.contentView.addSubview(view)
+        }
+        
         let animator = UIViewPropertyAnimator(duration: 0, curve: .linear) { [weak self] in
             guard let weakSelf = self else { return }
             blurView.effect = UIBlurEffect(style: weakSelf.style)
         }
-        animator.fractionComplete = fractionComplete
+        animator.startAnimation()
         animator.pauseAnimation()
+        animator.fractionComplete = fractionComplete
         
         self.blurView = blurView
         self.animator = animator
@@ -70,7 +94,85 @@ open class TranslucentBlurView: UIView {
     }
 
     @objc private func appWillEnterForeground() {
-        update()
+        resetDraw()
+    }
+    
+    deinit {
+        animator?.stopAnimation(false)
+        animator?.finishAnimation(at: .current)
+        animator = nil
+    }
+}
+
+@available(iOS 26.0, *)
+open class TranslucentGlassBlurView: UIView {
+    private var animator: UIViewPropertyAnimator?
+    
+    public var fractionComplete: CGFloat = 1.1
+    {
+        didSet { resetDraw() }
+    }
+
+    private var blurView: UIVisualEffectView?
+    private var style: UIGlassEffect.Style = .clear
+    public init(frame: CGRect, style: UIGlassEffect.Style)
+    {
+        super.init(frame: frame)
+        self.style = style
+        
+        resetDraw()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(appWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(appWillEnterForeground),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
+    }
+    
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func resetDraw()
+    {
+        blurView?.removeFromSuperview()
+        blurView = nil
+        animator?.stopAnimation(false)
+        animator?.finishAnimation(at: .current)
+        animator = nil
+        
+        let blurView = UIVisualEffectView()
+        blurView.frame = bounds
+        blurView.effect = UIGlassEffect(style: style)
+        addSubview(blurView)
+        
+        let animator = UIViewPropertyAnimator(duration: 0, curve: .linear) { [weak self] in
+            guard let weakSelf = self else { return }
+            blurView.effect = UIGlassEffect(style: weakSelf.style)
+        }
+        animator.startAnimation()
+        animator.pauseAnimation()
+        animator.fractionComplete = fractionComplete
+        
+        self.blurView = blurView
+        self.animator = animator
+    }
+    
+    @objc private func appWillResignActive() {
+        animator?.pauseAnimation()
+    }
+
+    @objc private func appWillEnterForeground() {
+        resetDraw()
+    }
+    
+    deinit {
+        animator?.stopAnimation(false)
+        animator?.finishAnimation(at: .current)
+        animator = nil
     }
 }
 
@@ -149,5 +251,33 @@ open class GradientBlurView: UIVisualEffectView {
     open override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer.frame = bounds
+    }
+}
+
+@available(iOS 26.0, *)
+open class RegularGlassBlurView: UIVisualEffectView {
+    
+    init()
+    {
+        let xx = UIGlassEffect(style: .regular)
+        xx.isInteractive = true
+        xx.tintColor = UIColor.white.withAlphaComponent(0.2)
+        super.init(effect: xx)
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+            self.wyy_traitCollectionDidChange(previousTraitCollection)
+        }
+    }
+    
+    public required init?(coder: NSCoder)
+    {
+        super.init(coder: coder)
+    }
+    
+    open func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            printLog("[RegularGlassBlurView]: \(previousTraitCollection?.userInterfaceStyle)")
+        }
     }
 }
