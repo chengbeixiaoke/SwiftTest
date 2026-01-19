@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class GlassViewController: BaseViewController {
     let customMenuView2 = UIView(frame: CGRectMake(50, 250, 200, 200))
@@ -41,16 +42,18 @@ class GlassViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "首页"
+//        navigationController?.navigationBar.isHidden = true
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        tableView.contentInset = UIEdgeInsets(top: 110, left: 0, bottom: 0, right: 0)
         
         if #available(iOS 26.0, *) {
 //            tableView.topEdgeEffect.isHidden = true
         }
-        
+                
 //        blurView2 = TranslucentBlurView(frame: CGRectMake(0, 0, WidthScreen, 83), style: .systemUltraThinMaterial)
 //        blurView2.isUserInteractionEnabled = false
 //        blurView2.locations = [0.0, 0.8, 1.0]
@@ -62,29 +65,9 @@ class GlassViewController: BaseViewController {
             setupMenuButton2()
             setupCustomMenu()
             
-            
-//            do {
-//                let glassEffect = UIGlassEffect(style: .regular)
-//                glassEffect.isInteractive = true
-//                glassEffect.tintColor = UIColor.blue.withAlphaComponent(0.01)
-//                
-//                let glassView = UIVisualEffectView(effect: glassEffect)
-//                glassView.frame = CGRect(x: 50, y: 500, width: 80, height: 44)
-//                glassView.setCornerRadius(22)
-//                view.addSubview(glassView)
-//                
-//                let label = UILabel()
-//                label.text = "自适应"
-//                label.textColor = UIColor(named: "text0000001FFFFFF1")
-//                glassView.contentView.addSubview(label)
-//                label.snp.makeConstraints { make in
-//                    make.centerX.centerY.equalToSuperview()
-//                }
-//            }
-            
             do {
                 let glassView = RegularGlassBlurView()
-                glassView.frame = CGRect(x: 50, y: 500, width: 80, height: 44)
+                glassView.frame = CGRectMake(50, 500, 80, 44)
                 glassView.setCornerRadius(22)
                 view.addSubview(glassView)
                 
@@ -102,17 +85,55 @@ class GlassViewController: BaseViewController {
                 glassEffect.isInteractive = true
                 
                 let glassView = UIVisualEffectView(effect: glassEffect)
-                glassView.frame = CGRect(x: 140, y: 500, width: 80, height: 44)
+                glassView.frame = CGRectMake(140, 500, 80, 44)
                 glassView.setCornerRadius(22)
                 view.addSubview(glassView)
+                
+//                let label = UILabel()
+//                label.text = "全透明"
+//                label.textColor = UIColor.white
+//                glassView.contentView.addSubview(label)
+//                label.snp.makeConstraints { make in
+//                    make.centerX.centerY.equalToSuperview()
+//                }
+            }
+            
+            do {
+                let toolBar = UIToolbar()
+                toolBar.frame = CGRectMake(50, 550, WidthScreen - 100, 44)
+                view.addSubview(toolBar)
+                toolBar.tintColor = UIColor.white
+                toolBar.backgroundColor = UIColor.clear
+                toolBar.barTintColor = UIColor.clear
+                
+                let barButton1 = UIBarButtonItem(title: "菜单")
+                barButton1.style = .plain
+                barButton1.tintColor = UIColor.clear
+                barButton1.actionBlock = { _ in
+                    printLog("菜单")
+                }
+                
+                let barButton2 = UIBarButtonItem(title: "菜单")
+                barButton2.style = .plain
                 
                 let label = UILabel()
                 label.text = "全透明"
                 label.textColor = UIColor.white
-                glassView.contentView.addSubview(label)
-                label.snp.makeConstraints { make in
-                    make.centerX.centerY.equalToSuperview()
+                barButton2.customView = label
+                barButton2.actionBlock = { _ in
+                    printLog("全透明")
                 }
+                
+                let barButton3 = UIBarButtonItem(title: "菜单")
+                barButton3.style = .plain
+                let button = UIButton()
+                button.setTitle("XXX", for: .normal)
+//                button.configuration = UIButton.Configuration.clearGlass()
+                barButton3.customView = button
+                barButton3.actionBlock = { _ in
+                    printLog("XXX")
+                }
+                toolBar.items = [barButton1, barButton2, barButton3]
             }
         }
     }
