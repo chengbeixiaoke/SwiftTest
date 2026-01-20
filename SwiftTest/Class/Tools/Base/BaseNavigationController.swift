@@ -60,6 +60,8 @@ open class BaseNavigationController: UINavigationController {
         } else {
             viewController.hidesBottomBarWhenPushed = false
         }
+        
+        MiniAppManager.shared.tabbarVC?.changeRootVCFrame(isPush: true)
         super.pushViewController(viewController, animated: true)
     }
     

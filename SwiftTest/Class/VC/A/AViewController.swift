@@ -73,16 +73,11 @@ class AViewController: BaseViewController {
         
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        MiniAppManager.shared.tabbarVC?.changeRootVCFrame(isPush: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if #available(iOS 26.0, *) {
-            if let glassView = glassView as? TranslucentGlassBlurView {
-                glassView.resetDraw()
-            }
-        }
     }
     
     override func viewDidLoad() {
@@ -95,7 +90,7 @@ class AViewController: BaseViewController {
         }
         
         if #available(iOS 26.0, *) {
-            tableView.topEdgeEffect.isHidden = true
+//            tableView.topEdgeEffect.isHidden = true
             
             let glassContainerEffect = UIGlassContainerEffect()
             glassContainerEffect.spacing = 10
@@ -113,12 +108,16 @@ class AViewController: BaseViewController {
                 glassView.setCornerRadius(22)
                 glassContainerEffectView.contentView.addSubview(glassView)
                 
-                let label = UILabel()
-                label.text = "自适应"
-                label.textColor = UIColor(named: "text0000001FFFFFF1")
-                glassView.contentView.addSubview(label)
-                label.snp.makeConstraints { make in
+                let button = UIButton()
+                button.tag = 1000
+                button.setTitle("自适应", for: .normal)
+                button.tintColor = UIColor(named: "text0000001FFFFFF1")
+                button.addTarget(self, action: #selector(changeRootVCFrame(_:)), for: .touchUpInside)
+                glassView.contentView.addSubview(button)
+                button.snp.makeConstraints { make in
                     make.centerX.centerY.equalToSuperview()
+                    make.width.equalTo(80)
+                    make.height.equalTo(40)
                 }
             }
             
@@ -133,14 +132,30 @@ class AViewController: BaseViewController {
                 glassView.contentView.backgroundColor = UIColor.clear
                 glassContainerEffectView.contentView.addSubview(glassView)
                 
-                let label = UILabel()
-                label.text = "全透明"
-                label.textColor = UIColor.white
-                glassView.contentView.addSubview(label)
-                label.snp.makeConstraints { make in
+                let button = UIButton()
+                button.tag = 1001
+                button.setTitle("全透明", for: .normal)
+                button.tintColor = UIColor(named: "text0000001FFFFFF1")
+                button.addTarget(self, action: #selector(changeRootVCFrame(_:)), for: .touchUpInside)
+                glassView.contentView.addSubview(button)
+                button.snp.makeConstraints { make in
                     make.centerX.centerY.equalToSuperview()
+                    make.width.equalTo(80)
+                    make.height.equalTo(40)
                 }
             }
+        }
+    }
+    
+    @available(iOS 26.0, *)
+    @objc func changeRootVCFrame(_ sender: Any) {
+        guard let sender = sender as? UIButton else { return }
+        if sender.tag == 1000 {
+            MiniAppManager.shared.cacheMiniAppVCCount = 1
+            MiniAppManager.shared.tabbarVC?.changeRootVCFrame(isPush: false)
+        } else {
+            MiniAppManager.shared.cacheMiniAppVCCount = 0
+            MiniAppManager.shared.tabbarVC?.changeRootVCFrame(isPush: false)
         }
     }
 }
@@ -172,7 +187,7 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ACell", for: indexPath) as! ACell
         cell.nameLabel.text = dataList[indexPath.row].title
         cell.messageLabel.text = dataList[indexPath.row].vcClass.className()
-        cell.contentView.backgroundColor = (indexPath.row % 2 == 0) ? .white : .black
+        cell.contentView.backgroundColor = (indexPath.row % 2 == 0) ? .white : .blue
         return cell
     }
     

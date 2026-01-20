@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol AppTabBarController26CacheMiniAppDelgate: NSObjectProtocol {
+    var mainView: UIView { get }
+    func changeRootVCFrame(isPush: Bool)
+}
+
 @available(iOS 26.0, *)
 class AppTabBarController26: UITabBarController {
     override func viewDidLoad() {
@@ -51,6 +56,8 @@ class AppTabBarController26: UITabBarController {
             vertical: 16
         )
         tabBar.standardAppearance = appearance
+        
+        MiniAppManager.shared.tabbarVC = self
     }
     
     // MARK: 设置UITab
@@ -85,6 +92,37 @@ class AppTabBarController26: UITabBarController {
         let navigationController = BaseNavigationController(rootViewController: viewController)
         viewController.navigationItem.title = title
         return navigationController
+    }
+}
+
+@available(iOS 26.0, *)
+extension AppTabBarController26: AppTabBarController26CacheMiniAppDelgate {
+    var mainView: UIView {
+        return view
+    }
+    
+    func changeRootVCFrame(isPush: Bool) {
+        if let window = UIApplication.shared.currentKeyWindow {
+            if MiniAppManager.shared.cacheMiniAppVCCount == 0 || isPush {
+                UIView.animate(withDuration: 0.25) {
+                    MiniAppManager.shared.tabbarVC?.mainView.frame = CGRectMake(0, 0, WidthScreen, HeightScreen)
+                    window.rootViewController?.view.frame = CGRectMake(0, 0, WidthScreen, HeightScreen)
+                    window.rootViewController?.view.cornerConfiguration = .corners(topLeftRadius: 0, topRightRadius: 0, bottomLeftRadius: 0, bottomRightRadius: 0)
+                }
+            } else if MiniAppManager.shared.cacheMiniAppVCCount == 1 {
+                UIView.animate(withDuration: 0.25) {
+                    MiniAppManager.shared.tabbarVC?.mainView.frame = CGRectMake(0, 0, WidthScreen, HeightScreen-62)
+                    window.rootViewController?.view.frame = CGRectMake(0, 0, WidthScreen, HeightScreen-62)
+                    window.rootViewController?.view.cornerConfiguration = .corners(topLeftRadius: 0, topRightRadius: 0, bottomLeftRadius: 40, bottomRightRadius: 40)
+                }
+            } else {
+                UIView.animate(withDuration: 0.25) {
+                    MiniAppManager.shared.tabbarVC?.mainView.frame = CGRectMake(0, 0, WidthScreen, HeightScreen-72)
+                    window.rootViewController?.view.frame = CGRectMake(0, 0, WidthScreen, HeightScreen-72)
+                    window.rootViewController?.view.cornerConfiguration = .corners(topLeftRadius: 0, topRightRadius: 0, bottomLeftRadius: 40, bottomRightRadius: 40)
+                }
+            }
+        }
     }
 }
 

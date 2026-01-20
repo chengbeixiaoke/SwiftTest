@@ -64,21 +64,12 @@ extension Data {
 
 // MARK: - UIApplication
 extension UIApplication {
-    
-    //但是有一点要注意，如果上一个页面是dismiss，直接调用有可能还是被dismiss页，所以需要在dismiss中的completion中调用
-    class func topViewController(
-        base: UIViewController? = UIApplication.shared
-            .connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first(where: { $0.isKeyWindow })?
-            .rootViewController
-    ) -> UIViewController? {
-        
+    // 但是有一点要注意，如果上一个页面是dismiss，直接调用有可能还是被dismiss页，所以需要在dismiss中的completion中调用
+    class func topViewController(base: UIViewController? = UIApplication.shared.currentKeyWindow?.rootViewController) -> UIViewController?
+    {
         if let nav = base as? UINavigationController {
             return topViewController(base: nav.visibleViewController)
-        } else if let tab = base as? UITabBarController,
-                  let selected = tab.selectedViewController {
+        } else if let tab = base as? UITabBarController, let selected = tab.selectedViewController {
             return topViewController(base: selected)
         } else if let presented = base?.presentedViewController {
             return topViewController(base: presented)
@@ -86,14 +77,32 @@ extension UIApplication {
         return base
     }
     
-    var currentKeyWindow: UIWindow? {
+    var currentKeyWindow: UIWindow?
+    {
         if #available(iOS 13.0, *) {
-            return self.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-                .first(where: { $0.isKeyWindow })
+            let scenes = self.connectedScenes.compactMap { $0 as? UIWindowScene }
+            let windows = scenes.flatMap { $0.windows }
+            let sortedWindows = windows.sorted { $0.windowLevel.rawValue < $1.windowLevel.rawValue }
+            return sortedWindows.first(where: { window in
+                let isNormalLevel = window.windowLevel == .normal
+                let isKeyWindow = window.isKeyWindow
+                let hasRootVC = window.rootViewController != nil
+                return isNormalLevel && isKeyWindow && hasRootVC
+            })
         } else {
             return self.keyWindow
+        }
+    }
+    
+    // 主线程访问
+    static func safeApplicationState(completion: @escaping (UIApplication.State) -> Void)
+    {
+        if Thread.isMainThread {
+            completion(UIApplication.shared.applicationState)
+        } else {
+            DispatchQueue.main.async {
+                completion(UIApplication.shared.applicationState)
+            }
         }
     }
 }

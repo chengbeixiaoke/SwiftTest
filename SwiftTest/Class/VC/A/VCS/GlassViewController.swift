@@ -27,22 +27,18 @@ class GlassViewController: BaseViewController {
         
         return tableView
     }()
-    
-    var blurView2: TranslucentBlurView!
-    
+        
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        blurView2.resetDraw()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "首页"
-//        navigationController?.navigationBar.isHidden = true
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -51,14 +47,10 @@ class GlassViewController: BaseViewController {
         tableView.contentInset = UIEdgeInsets(top: 110, left: 0, bottom: 0, right: 0)
         
         if #available(iOS 26.0, *) {
-//            tableView.topEdgeEffect.isHidden = true
+            tableView.topEdgeEffect.isHidden = true
+            tableView.bottomEdgeEffect.isHidden = true
         }
-                
-//        blurView2 = TranslucentBlurView(frame: CGRectMake(0, 0, WidthScreen, 83), style: .systemUltraThinMaterial)
-//        blurView2.isUserInteractionEnabled = false
-//        blurView2.locations = [0.0, 0.8, 1.0]
-//        view.addSubview(blurView2)
-        
+
         if #available(iOS 26.0, *) {
             segmentedControl()
             setupMenuButton()
@@ -87,49 +79,37 @@ class GlassViewController: BaseViewController {
                 let glassView = UIVisualEffectView(effect: glassEffect)
                 glassView.frame = CGRectMake(140, 500, 80, 44)
                 glassView.setCornerRadius(22)
+                
                 view.addSubview(glassView)
                 
-//                let label = UILabel()
-//                label.text = "全透明"
-//                label.textColor = UIColor.white
-//                glassView.contentView.addSubview(label)
-//                label.snp.makeConstraints { make in
-//                    make.centerX.centerY.equalToSuperview()
-//                }
+                let label = UILabel()
+                label.text = "全透明"
+                label.textColor = UIColor.white
+                glassView.contentView.addSubview(label)
+                label.snp.makeConstraints { make in
+                    make.centerX.centerY.equalToSuperview()
+                }
             }
             
             do {
                 let toolBar = UIToolbar()
                 toolBar.frame = CGRectMake(50, 550, WidthScreen - 100, 44)
                 view.addSubview(toolBar)
-                toolBar.tintColor = UIColor.white
-                toolBar.backgroundColor = UIColor.clear
-                toolBar.barTintColor = UIColor.clear
                 
                 let barButton1 = UIBarButtonItem(title: "菜单")
                 barButton1.style = .plain
-                barButton1.tintColor = UIColor.clear
                 barButton1.actionBlock = { _ in
                     printLog("菜单")
                 }
                 
                 let barButton2 = UIBarButtonItem(title: "菜单")
                 barButton2.style = .plain
-                
-                let label = UILabel()
-                label.text = "全透明"
-                label.textColor = UIColor.white
-                barButton2.customView = label
                 barButton2.actionBlock = { _ in
                     printLog("全透明")
                 }
                 
                 let barButton3 = UIBarButtonItem(title: "菜单")
                 barButton3.style = .plain
-                let button = UIButton()
-                button.setTitle("XXX", for: .normal)
-//                button.configuration = UIButton.Configuration.clearGlass()
-                barButton3.customView = button
                 barButton3.actionBlock = { _ in
                     printLog("XXX")
                 }
@@ -146,7 +126,7 @@ extension GlassViewController: UITableViewDelegate, UITableViewDataSource {
         override func setupUI() {
             super.setupUI()
             
-            xx_imageView.contentMode = .scaleAspectFill
+            xx_imageView.contentMode = .scaleToFill
             xx_imageView.image = UIImage(named: "test001")
             contentView.addSubview(xx_imageView)
         }
@@ -238,7 +218,7 @@ extension GlassViewController {
     private func setupMenuButton() {
         // 创建按钮
         let menuButton = UIButton()
-        menuButton.configuration = UIButton.Configuration.prominentClearGlass()
+        menuButton.configuration = UIButton.Configuration.glass()
         menuButton.setTitle("选择操作", for: .normal)
         menuButton.frame = CGRect(x: 50, y: 100, width: 120, height: 44)
         
@@ -263,10 +243,6 @@ extension GlassViewController {
                                            image: UIImage(systemName: "printer"),
                                            handler: { _ in self.printFile() })])
             ])
-        
-        let barButton = UIBarButtonItem(title: "菜单", image: nil, primaryAction: nil, menu: menu)
-        barButton.style = .plain // 设置样式为 prominent，使玻璃背景更突出
-        navigationItem.rightBarButtonItem = barButton
         
         // 设置菜单到按钮
         menuButton.menu = menu
@@ -324,7 +300,13 @@ extension GlassViewController {
                                            handler: { _ in self.printFile2() })])
             ])
         
-        let barButton = UIBarButtonItem(title: "菜单", image: nil, primaryAction: nil, menu: menu)
+        let menuButton = UIButton()
+        menuButton.setTitle("菜单", for: .normal)
+        menuButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        menuButton.menu = menu
+        menuButton.showsMenuAsPrimaryAction = false
+        
+        let barButton = UIBarButtonItem(customView: menuButton)
         barButton.style = .plain
         navigationItem.rightBarButtonItem = barButton
     }

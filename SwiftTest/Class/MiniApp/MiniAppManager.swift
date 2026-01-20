@@ -21,6 +21,8 @@ class MiniAppManager {
         return instance!
     }()
     
+    weak var tabbarVC: AppTabBarController26CacheMiniAppDelgate?
+    var cacheMiniAppVCCount: Int = 0
     var cacheMiniAppVC: [MiniAppH5ContainerViewController] = []
     
     lazy var smallMiniAppContentView = {
