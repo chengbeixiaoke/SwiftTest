@@ -59,7 +59,7 @@ class GlassViewController: BaseViewController {
             
             do {
                 let glassView = RegularGlassBlurView()
-                glassView.frame = CGRectMake(50, 500, 80, 44)
+                glassView.frame = CGRectMake(50, 250, 80, 44)
                 glassView.setCornerRadius(22)
                 view.addSubview(glassView)
                 
@@ -77,7 +77,7 @@ class GlassViewController: BaseViewController {
                 glassEffect.isInteractive = true
                 
                 let glassView = UIVisualEffectView(effect: glassEffect)
-                glassView.frame = CGRectMake(140, 500, 80, 44)
+                glassView.frame = CGRectMake(140, 250, 80, 44)
                 glassView.setCornerRadius(22)
                 
                 view.addSubview(glassView)
@@ -93,7 +93,7 @@ class GlassViewController: BaseViewController {
             
             do {
                 let toolBar = UIToolbar()
-                toolBar.frame = CGRectMake(50, 550, WidthScreen - 100, 44)
+                toolBar.frame = CGRectMake(50, 300, WidthScreen - 100, 44)
                 view.addSubview(toolBar)
                 
                 let barButton1 = UIBarButtonItem(title: "菜单")
@@ -114,6 +114,33 @@ class GlassViewController: BaseViewController {
                     printLog("XXX")
                 }
                 toolBar.items = [barButton1, barButton2, barButton3]
+            }
+            
+            do {
+//                let xxview = UIView(frame: CGRectMake(20, 400, WidthScreen-40, 300))
+//                view.addSubview(xxview)
+//                
+//                let glassEffect = UIGlassEffect(style: .clear)
+//                glassEffect.isInteractive = false
+//                
+//                let glassView = UIVisualEffectView(effect: glassEffect)
+//                glassView.frame = CGRectMake(0, 0, WidthScreen-40, 300)
+//                glassView.setCornerRadius(22)
+//                glassView.contentView.alpha = 0.0
+//                xxview.addSubview(glassView)
+//                
+//                let mask = CAShapeLayer()
+//                mask.bounds = xxview.bounds
+//                mask.opacity = 0.0
+//                glassView.layer.mask = mask
+                
+//                let gradientLayer = CAGradientLayer()
+//                gradientLayer.frame = glassView.bounds.insetBy(dx: 10, dy: 10)
+//                gradientLayer.colors = [UIColor.white, UIColor.clear].map({$0.cgColor})
+//                gradientLayer.locations = [0.0, 1.0]
+//                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+//                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+//                xxview.layer.mask = gradientLayer
             }
         }
     }
@@ -180,31 +207,66 @@ extension GlassViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+extension UIImage {
+    static func clearImage(size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        UIGraphicsImageRenderer(size: size).image { context in
+            UIColor.clear.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+        }
+    }
+}
+
 // 选择条
 @available(iOS 26.0, *)
 extension GlassViewController {
     func segmentedControl() {
-        let glassEffect = UIGlassEffect(style: .regular)
-        glassEffect.isInteractive = true
-        
         let wwwidth: CGFloat = 300
+        let frame = CGRect(x: (WidthScreen - wwwidth)/2.0, y: 150, width: wwwidth, height: 48)
+        
+        let glassEffect = UIGlassEffect(style: .clear)
+        glassEffect.isInteractive = true
         let glassView = UIVisualEffectView(effect: glassEffect)
         glassView.cornerConfiguration = .capsule()
-        glassView.frame = CGRect(x: (WidthScreen - wwwidth)/2.0, y: 300, width: wwwidth, height: 48)
+        glassView.frame = frame
         view.addSubview(glassView)
         
         // 创建分段控制
         let segmentedControl = UISegmentedControl(items: ["选项1", "选项2", "选项3", "选项4"])
         segmentedControl.frame = glassView.bounds
+                
+        // 清除分割线
+        segmentedControl.setDividerImage(UIImage.clearImage(),
+                                         forLeftSegmentState: .normal,
+                                         rightSegmentState: .normal,
+                                         barMetrics: .default)
+        
         
         // 样式设置
+        segmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 12),
+                                                 .foregroundColor: UIColor.Text_727386],
+                                                for: .normal)
+        segmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 13),
+                                                 .foregroundColor: UIColor.ColorBlack],
+                                                for: .selected)
         segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.tintColor = .systemBlue
-        segmentedControl.backgroundColor = .systemBlue
-        segmentedControl.selectedSegmentTintColor = .systemBlue
+        segmentedControl.backgroundColor = UIColor.clear
+        segmentedControl.tintColor = .clear
+        segmentedControl.selectedSegmentTintColor = UIColor.ColorFromHex("000000", 0.3, darkHex: "FFFFFF", darkAlpha: 0.3)
+        
         // 添加事件
         segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         glassView.contentView.addSubview(segmentedControl)
+        
+        do {
+            let glassEffect = UIGlassEffect(style: .clear)
+            glassEffect.isInteractive = true
+            
+            let wwwidth: CGFloat = 300
+            let glassView = UIVisualEffectView(effect: glassEffect)
+            glassView.cornerConfiguration = .capsule()
+            glassView.frame = CGRect(x: (WidthScreen - wwwidth)/2.0, y: 200, width: wwwidth, height: 48)
+            view.addSubview(glassView)
+        }
     }
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
@@ -221,7 +283,6 @@ extension GlassViewController {
         menuButton.configuration = UIButton.Configuration.glass()
         menuButton.setTitle("选择操作", for: .normal)
         menuButton.frame = CGRect(x: 50, y: 100, width: 120, height: 44)
-        
         
         let menu = UIMenu(
             title: "操作菜单",
@@ -350,7 +411,7 @@ extension GlassViewController {
         let menuButton = UIButton()
         menuButton.configuration = UIButton.Configuration.prominentClearGlass()
         menuButton.setTitle("选择操作2", for: .normal)
-        menuButton.frame = CGRect(x: 50, y: 150, width: 120, height: 44)
+        menuButton.frame = CGRect(x: 180, y: 100, width: 120, height: 44)
         menuButton.addTarget(self, action: #selector(showCustomMenu(_ :)), for: .touchUpInside)
         // 添加按钮到视图
         view.addSubview(menuButton)

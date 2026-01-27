@@ -45,6 +45,7 @@ class AViewController: BaseViewController {
     
     var dataList: [Model] {
         return [Model(title: "GlassView", vcClass: GlassViewController.self),
+                Model(title: "LargeContent", vcClass: LargeContentViewController.self),
                 Model(title: "主题色", vcClass: AppThemeViewController.self),
                 Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
                 Model(title: "K线图2", vcClass: CandleStickDemoViewController2.self),
