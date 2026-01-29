@@ -38,7 +38,7 @@ class GlassViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "首页"
+        navigationItem.title = "XXX"
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -231,9 +231,9 @@ extension GlassViewController {
         view.addSubview(glassView)
         
         // 创建分段控制
-        let segmentedControl = UISegmentedControl(items: ["选项1", "选项2", "选项3", "选项4"])
-        segmentedControl.frame = glassView.bounds
-                
+        let segmentedControl = UISegmentedControl(items: ["选项1", "选项2", "选项3", "选项4", "选项1", "选项1", "选项1", "选项1", "选项1", "选项1", "选项1", "选项1" ,"选项1"])
+        segmentedControl.frame = CGRect(x: 2, y: 2, width: 700, height: 44)
+
         // 清除分割线
         segmentedControl.setDividerImage(UIImage.clearImage(),
                                          forLeftSegmentState: .normal,
