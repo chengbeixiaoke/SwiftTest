@@ -33,14 +33,14 @@ open class TranslucentBlurView: UIView {
         
         resetDraw()
         
-//        NotificationCenter.default.addObserver(self,
-//                                               selector: #selector(appWillResignActive),
-//                                               name: UIApplication.willResignActiveNotification,
-//                                               object: nil)
-//        NotificationCenter.default.addObserver(self,
-//                                               selector: #selector(appWillEnterForeground),
-//                                               name: UIApplication.willEnterForegroundNotification,
-//                                               object: nil)
+        //        NotificationCenter.default.addObserver(self,
+        //                                               selector: #selector(appWillResignActive),
+        //                                               name: UIApplication.willResignActiveNotification,
+        //                                               object: nil)
+        //        NotificationCenter.default.addObserver(self,
+        //                                               selector: #selector(appWillEnterForeground),
+        //                                               name: UIApplication.willEnterForegroundNotification,
+        //                                               object: nil)
     }
     
     public required init?(coder: NSCoder) {
@@ -58,7 +58,7 @@ open class TranslucentBlurView: UIView {
         let blurView = UIVisualEffectView()
         blurView.frame = bounds
         addSubview(blurView)
-                
+        
         
         var colors: [UIColor] = [UIColor.white, UIColor.clear]
         if locations.count == 3 {
@@ -94,13 +94,13 @@ open class TranslucentBlurView: UIView {
         self.animator = animator
     }
     
-//    @objc private func appWillResignActive() {
-//        animator?.pauseAnimation()
-//    }
-//
-//    @objc private func appWillEnterForeground() {
-//        resetDraw()
-//    }
+    //    @objc private func appWillResignActive() {
+    //        animator?.pauseAnimation()
+    //    }
+    //
+    //    @objc private func appWillEnterForeground() {
+    //        resetDraw()
+    //    }
     
     deinit {
         animator?.stopAnimation(false)
@@ -193,7 +193,7 @@ open class RegularGlassBlurView: UIVisualEffectView {
     {
         let xx = UIGlassEffect(style: .regular)
         xx.isInteractive = true
-//        xx.tintColor = UIColor.white.withAlphaComponent(0.5)
+        //        xx.tintColor = UIColor.white.withAlphaComponent(0.5)
         super.init(effect: xx)
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
@@ -211,5 +211,86 @@ open class RegularGlassBlurView: UIVisualEffectView {
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             printLog("[RegularGlassBlurView]: \(previousTraitCollection?.userInterfaceStyle)")
         }
+    }
+}
+
+
+class TranslucentBlurView_IM: UIView {
+    private var animator: UIViewPropertyAnimator?
+    private var fractionComplete: CGFloat = 0.1
+    private var blurView: UIVisualEffectView?
+    private var gradientLayer: CAGradientLayer?
+    private var style: UIBlurEffect.Style = .systemMaterial
+    public override init(frame: CGRect)
+    {
+        super.init(frame: frame)
+        resetDraw()
+    }
+    
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func resetDraw()
+    {
+        gradientLayer?.removeFromSuperlayer()
+        gradientLayer = nil
+        blurView?.removeFromSuperview()
+        blurView = nil
+        animator?.stopAnimation(false)
+        animator?.finishAnimation(at: .current)
+        animator = nil
+        
+        let blurView = UIVisualEffectView()
+        blurView.frame = bounds
+        addSubview(blurView)
+        
+        let animator = UIViewPropertyAnimator(duration: 0, curve: .linear) { [weak self] in
+            guard let weakSelf = self else { return }
+            blurView.effect = UIBlurEffect(style: weakSelf.style)
+        }
+        animator.startAnimation()
+        animator.pauseAnimation()
+        animator.pausesOnCompletion = true
+        animator.fractionComplete = fractionComplete
+        
+        self.blurView = blurView
+        self.animator = animator
+        
+        delay(seconds: 0.1) {
+            do {
+                let colors: [UIColor] = [UIColor.white.withAlphaComponent(0.99),
+                                         UIColor.white.withAlphaComponent(0.95),
+                                         UIColor.clear]
+                let gradientLayer = CAGradientLayer()
+                gradientLayer.frame = self.bounds
+                gradientLayer.colors = colors.map({$0.cgColor})
+                gradientLayer.locations = [0.0, 0.6, 1.0]
+                blurView.layer.mask = gradientLayer
+            }
+            
+            do {
+                let colors: [UIColor] = [UIColor.ColorFromHex("FFFFFF", 0.8, darkHex: "000000", darkAlpha: 0.8),
+                                         UIColor.ColorFromHex("FFFFFF", 0.0, darkHex: "000000", darkAlpha: 0.0)]
+                let gradientLayer = CAGradientLayer()
+                gradientLayer.frame = CGRectMake(0, 0, self.bounds.width, self.bounds.height * 1.1)
+                gradientLayer.colors = colors.map({$0.cgColor})
+                self.layer.addSublayer(gradientLayer)
+                self.gradientLayer = gradientLayer
+            }
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            resetDraw()
+        }
+    }
+    
+    deinit {
+        animator?.stopAnimation(false)
+        animator?.finishAnimation(at: .current)
+        animator = nil
     }
 }

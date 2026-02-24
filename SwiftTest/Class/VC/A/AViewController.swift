@@ -40,13 +40,15 @@ class AViewController: BaseViewController {
         tableView.register(A2Cell.self,
                            forCellReuseIdentifier: "A2Cell")
         
+        tableView.contentInsetAdjustmentBehavior = .never
+        
         return tableView
     }()
     
     var dataList: [Model] {
         return [Model(title: "GlassView", vcClass: GlassViewController.self),
-                Model(title: "LargeContent", vcClass: CustomSegmentedControlViewController.self),
-                Model(title: "LargeContent2", vcClass: LargeContentViewController.self),
+                Model(title: "LargeContent", vcClass: LargeContentViewController.self),
+                Model(title: "TTTTTVC", vcClass: TTTTTVC.self),
                 Model(title: "主题色", vcClass: AppThemeViewController.self),
                 Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
                 Model(title: "K线图2", vcClass: CandleStickDemoViewController2.self),
@@ -90,10 +92,10 @@ class AViewController: BaseViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        tableView.contentInset = UIEdgeInsets(top: 116, left: 0, bottom: 0, right: 0)
+        tableView.setContentOffset(CGPointMake(0, -116), animated: false)
         
         if #available(iOS 26.0, *) {
-//            tableView.topEdgeEffect.isHidden = true
-            
             let glassContainerEffect = UIGlassContainerEffect()
             glassContainerEffect.spacing = 10
             let glassContainerEffectView = UIVisualEffectView(effect: glassContainerEffect)
@@ -189,7 +191,7 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ACell", for: indexPath) as! ACell
         cell.nameLabel.text = dataList[indexPath.row].title
         cell.messageLabel.text = dataList[indexPath.row].vcClass.className()
-        cell.contentView.backgroundColor = (indexPath.row % 2 == 0) ? .white : .blue
+        cell.contentView.backgroundColor = (indexPath.row % 2 == 0) ? .blue : .white
         return cell
     }
     
@@ -212,6 +214,7 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = dataList[indexPath.row].vcClass.init()
-        navigationController?.pushViewController(vc, animated: true)
+        present(vc, animated: true)
+//        navigationController?.pushViewController(vc, animated: true)
     }
 }

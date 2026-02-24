@@ -86,6 +86,7 @@
 		43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */; };
 		43B188B82EF298B900AC8168 /* AppPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B188B72EF298B900AC8168 /* AppPage.swift */; };
 		43B2AD6E2EFE5BA000311207 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 43B2AD6D2EFE5BA000311207 /* index.html */; };
+		43B7DBF02F306FF8004AF830 /* TTTTTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B7DBEF2F306FF8004AF830 /* TTTTTVC.swift */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
 		43BEABA62E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */; };
 		43BEABA82E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */; };
@@ -204,6 +205,7 @@
 		43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3DViewController.swift; sourceTree = "<group>"; };
 		43B188B72EF298B900AC8168 /* AppPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPage.swift; sourceTree = "<group>"; };
 		43B2AD6D2EFE5BA000311207 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		43B7DBEF2F306FF8004AF830 /* TTTTTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTTTTVC.swift; sourceTree = "<group>"; };
 		43BEABA32E02B27500092EB3 /* MiniAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppManager.swift; sourceTree = "<group>"; };
 		43BEABA52E02B2F700092EB3 /* MiniAppH5ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAppH5ContainerViewController.swift; sourceTree = "<group>"; };
 		43BEABA72E02B3C300092EB3 /* SavoPresentSwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavoPresentSwipeInteractionController.swift; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 			children = (
 				4364EBB12F1DC36E000985BA /* GlassViewController.swift */,
 				433BF8122F1F517A007769FB /* LargeContentViewController.swift */,
+				43B7DBEF2F306FF8004AF830 /* TTTTTVC.swift */,
 			);
 			path = VCS;
 			sourceTree = "<group>";
@@ -640,7 +643,7 @@
 			mainGroup = 4326996A2D953FD70025EEAC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "../MyPackage" */,
+				4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "MyPackage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 432699742D953FD70025EEAC /* Products */;
@@ -708,13 +711,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -731,6 +730,7 @@
 				433BF8132F1F517A007769FB /* LargeContentViewController.swift in Sources */,
 				433065ED2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift in Sources */,
 				43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */,
+				43B7DBF02F306FF8004AF830 /* TTTTTVC.swift in Sources */,
 				436197FB2EE81221004932D6 /* CandleStickDemoViewController2.swift in Sources */,
 				4364EBB22F1DC36E000985BA /* GlassViewController.swift in Sources */,
 				43269A092D95438A0025EEAC /* EViewController.swift in Sources */,
@@ -1075,7 +1075,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "../MyPackage" */ = {
+		4381FB692D9D48EF00BF4B93 /* XCLocalSwiftPackageReference "MyPackage" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../MyPackage;
 		};
