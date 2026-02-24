@@ -48,7 +48,6 @@ class AViewController: BaseViewController {
     var dataList: [Model] {
         return [Model(title: "GlassView", vcClass: GlassViewController.self),
                 Model(title: "LargeContent", vcClass: LargeContentViewController.self),
-                Model(title: "TTTTTVC", vcClass: TTTTTVC.self),
                 Model(title: "主题色", vcClass: AppThemeViewController.self),
                 Model(title: "K线图", vcClass: CandleStickDemoViewController.self),
                 Model(title: "K线图2", vcClass: CandleStickDemoViewController2.self),
@@ -94,73 +93,6 @@ class AViewController: BaseViewController {
         }
         tableView.contentInset = UIEdgeInsets(top: 116, left: 0, bottom: 0, right: 0)
         tableView.setContentOffset(CGPointMake(0, -116), animated: false)
-        
-        if #available(iOS 26.0, *) {
-            let glassContainerEffect = UIGlassContainerEffect()
-            glassContainerEffect.spacing = 10
-            let glassContainerEffectView = UIVisualEffectView(effect: glassContainerEffect)
-            glassContainerEffectView.frame = CGRectMake(50, 500, 200, 64)
-            view.addSubview(glassContainerEffectView)
-            
-            do {
-                let glassEffect = UIGlassEffect(style: .clear)
-                glassEffect.isInteractive = true
-                glassEffect.tintColor = UIColor.clear
-
-                let glassView = UIVisualEffectView(effect: glassEffect)
-                glassView.frame = CGRect(x: 10, y: 10, width: 80, height: 44)
-                glassView.setCornerRadius(22)
-                glassContainerEffectView.contentView.addSubview(glassView)
-                
-                let button = UIButton()
-                button.tag = 1000
-                button.setTitle("自适应", for: .normal)
-                button.tintColor = UIColor(named: "text0000001FFFFFF1")
-                button.addTarget(self, action: #selector(changeRootVCFrame(_:)), for: .touchUpInside)
-                glassView.contentView.addSubview(button)
-                button.snp.makeConstraints { make in
-                    make.centerX.centerY.equalToSuperview()
-                    make.width.equalTo(80)
-                    make.height.equalTo(40)
-                }
-            }
-            
-            do {
-                let glassEffect = UIGlassEffect(style: .clear)
-                glassEffect.isInteractive = true
-                glassEffect.tintColor = UIColor.clear
-                
-                let glassView = UIVisualEffectView(effect: glassEffect)
-                glassView.frame = CGRect(x: 100, y: 10, width: 80, height: 44)
-                glassView.setCornerRadius(22)
-                glassView.contentView.backgroundColor = UIColor.clear
-                glassContainerEffectView.contentView.addSubview(glassView)
-                
-                let button = UIButton()
-                button.tag = 1001
-                button.setTitle("全透明", for: .normal)
-                button.tintColor = UIColor(named: "text0000001FFFFFF1")
-                button.addTarget(self, action: #selector(changeRootVCFrame(_:)), for: .touchUpInside)
-                glassView.contentView.addSubview(button)
-                button.snp.makeConstraints { make in
-                    make.centerX.centerY.equalToSuperview()
-                    make.width.equalTo(80)
-                    make.height.equalTo(40)
-                }
-            }
-        }
-    }
-    
-    @available(iOS 26.0, *)
-    @objc func changeRootVCFrame(_ sender: Any) {
-        guard let sender = sender as? UIButton else { return }
-        if sender.tag == 1000 {
-            MiniAppManager.shared.cacheMiniAppVCCount = 1
-            MiniAppManager.shared.tabbarVC?.changeRootVCFrame(isPush: false)
-        } else {
-            MiniAppManager.shared.cacheMiniAppVCCount = 0
-            MiniAppManager.shared.tabbarVC?.changeRootVCFrame(isPush: false)
-        }
     }
 }
 
@@ -214,7 +146,6 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = dataList[indexPath.row].vcClass.init()
-        present(vc, animated: true)
-//        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
