@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import YYKit
 
 /**
  只适配1/2个按钮的样式，其他样式用到了再适配

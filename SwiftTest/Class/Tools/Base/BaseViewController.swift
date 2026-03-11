@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import YYKit
 
 open class BaseViewController: UIViewController {
     

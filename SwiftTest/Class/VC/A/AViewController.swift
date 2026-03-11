@@ -19,7 +19,6 @@ import UIKit
 import CombineCocoa
 import AVFoundation
 import AVKit
-import MyPackage
 import ffmpegkit
 import YYKit
 

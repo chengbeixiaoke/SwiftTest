@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import YYKit
 import SwifterSwift
 
 class MiniAppTestView: UIView, UIScrollViewDelegate {
