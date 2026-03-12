@@ -18,9 +18,10 @@ def base_pod
   
   pod 'GLTFSceneKit'
   pod 'GCDWebServer'
+  pod 'YYKit', :git => 'https://gitlab.savo.dev/savoapp/ios/yykit.git'
     
-  pod 'BMPlayer', :path => './Frameworks/BMPlayer', :inhibit_warnings => false
-  pod 'ffmpeg-kit-ios-full', :path => './Frameworks/ffmpeg-kit-ios-full', :inhibit_warnings => false
+  pod 'BMPlayer', :path => './Frameworks/BMPlayer'
+  pod 'ffmpeg-kit-ios-full', :path => './Frameworks/ffmpeg-kit-ios-full'
 end
 
 target 'SwiftTest' do
@@ -40,9 +41,6 @@ post_install do |installer|
       target.build_configurations.each do |config|
           config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       end
-    end
-    target.build_configurations.each do |config|
-      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
     end
   end
 end

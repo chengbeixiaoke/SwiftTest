@@ -79,14 +79,10 @@
 		4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988462DBA061300A9BEE2 /* private_key.pem */; };
 		4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988472DBA061300A9BEE2 /* public_key.pem */; };
 		4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */ = {isa = PBXBuildFile; fileRef = 437988452DBA061300A9BEE2 /* decryptFile.py */; };
-		43827CF32F614D31009FC38A /* WalletSDKSPM in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 43B14F3D2F6143C10078FD0B /* WalletSDKSPM */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4385243D2ED706AE00C8F8C3 /* S3DModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */; };
 		438524472ED7074000C8F8C3 /* wd_1.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 438524422ED7074000C8F8C3 /* wd_1.hdr */; };
 		43A15A0B2EFBCEDD00936BB4 /* wd_1.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */; };
 		43AA20D32EC4341A000D1EAC /* Test3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA20D22EC4341A000D1EAC /* Test3DViewController.swift */; };
-		43B14F3B2F6143840078FD0B /* YYKit in Frameworks */ = {isa = PBXBuildFile; productRef = 43B14F3A2F6143840078FD0B /* YYKit */; };
-		43B14F3E2F6143C10078FD0B /* WalletSDKSPM in Frameworks */ = {isa = PBXBuildFile; productRef = 43B14F3D2F6143C10078FD0B /* WalletSDKSPM */; };
-		43B14F412F6143EB0078FD0B /* WalletSDKSPM in Frameworks */ = {isa = PBXBuildFile; productRef = 43B14F402F6143EB0078FD0B /* WalletSDKSPM */; };
 		43B188B82EF298B900AC8168 /* AppPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B188B72EF298B900AC8168 /* AppPage.swift */; };
 		43B2AD6E2EFE5BA000311207 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 43B2AD6D2EFE5BA000311207 /* index.html */; };
 		43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BEABA32E02B27500092EB3 /* MiniAppManager.swift */; };
@@ -116,7 +112,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				43827CF32F614D31009FC38A /* WalletSDKSPM in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,9 +231,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */,
-				43B14F3E2F6143C10078FD0B /* WalletSDKSPM in Frameworks */,
-				43B14F3B2F6143840078FD0B /* YYKit in Frameworks */,
-				43B14F412F6143EB0078FD0B /* WalletSDKSPM in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,10 +640,6 @@
 			);
 			mainGroup = 4326996A2D953FD70025EEAC;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				43B14F392F6143840078FD0B /* XCLocalSwiftPackageReference "YYKit" */,
-				43B14F3F2F6143EB0078FD0B /* XCLocalSwiftPackageReference "WalletSDKSPM" */,
-			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 432699742D953FD70025EEAC /* Products */;
 			projectDirPath = "";
@@ -1084,32 +1072,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		43B14F392F6143840078FD0B /* XCLocalSwiftPackageReference "YYKit" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Frameworks/YYKit;
-		};
-		43B14F3F2F6143EB0078FD0B /* XCLocalSwiftPackageReference "WalletSDKSPM" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Frameworks/WalletSDKSPM;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		43B14F3A2F6143840078FD0B /* YYKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = YYKit;
-		};
-		43B14F3D2F6143C10078FD0B /* WalletSDKSPM */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletSDKSPM;
-		};
-		43B14F402F6143EB0078FD0B /* WalletSDKSPM */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletSDKSPM;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		432699E52D95438A0025EEAC /* UserModelData.xcdatamodeld */ = {

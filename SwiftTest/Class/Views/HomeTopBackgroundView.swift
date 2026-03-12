@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import shared
 
 class HomeTopBackgroundView: UIView {
     private let radius = WidthScreen * 0.7
