@@ -73,6 +73,7 @@
 		436198222EEB010D004932D6 /* KLineDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198212EEB010D004932D6 /* KLineDataGenerator.swift */; };
 		436198242EEBEFB4004932D6 /* KLineDrawModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436198232EEBEFB4004932D6 /* KLineDrawModel.swift */; };
 		4364EBB22F1DC36E000985BA /* GlassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4364EBB12F1DC36E000985BA /* GlassViewController.swift */; };
+		4365ED3A2F6BC6F900EBF892 /* UIView+RoundedBorderOuterShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4365ED392F6BC6F900EBF892 /* UIView+RoundedBorderOuterShadow.swift */; };
 		43682A922E8947780015EDF6 /* CandleStickDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */; };
 		43740CC02DB7840E005119F4 /* TestRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43740CBF2DB7840E005119F4 /* TestRSA.swift */; };
 		437988422DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log in Resources */ = {isa = PBXBuildFile; fileRef = 437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */; };
@@ -191,6 +192,7 @@
 		436198212EEB010D004932D6 /* KLineDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDataGenerator.swift; sourceTree = "<group>"; };
 		436198232EEBEFB4004932D6 /* KLineDrawModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDrawModel.swift; sourceTree = "<group>"; };
 		4364EBB12F1DC36E000985BA /* GlassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassViewController.swift; sourceTree = "<group>"; };
+		4365ED392F6BC6F900EBF892 /* UIView+RoundedBorderOuterShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+RoundedBorderOuterShadow.swift"; sourceTree = "<group>"; };
 		43682A912E8947780015EDF6 /* CandleStickDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDemoViewController.swift; sourceTree = "<group>"; };
 		43740CBF2DB7840E005119F4 /* TestRSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRSA.swift; sourceTree = "<group>"; };
 		437988412DB9EB4F00A9BEE2 /* 2025-04-23_4029257634_Logs.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2025-04-23_4029257634_Logs.log"; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		433065F22E8A210A002E2018 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				4365ED392F6BC6F900EBF892 /* UIView+RoundedBorderOuterShadow.swift */,
 				436197F12EE7C2AC004932D6 /* UIColor+SExtension.swift */,
 				433065FF2E8A2FE0002E2018 /* CALayer+Extension.swift */,
 				433065FD2E8A2D27002E2018 /* UIFont+Extension.swift */,
@@ -706,9 +709,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -764,6 +771,7 @@
 				433065F62E8A21E3002E2018 /* UIEdgeInsets+Extension.swift in Sources */,
 				436198242EEBEFB4004932D6 /* KLineDrawModel.swift in Sources */,
 				433065E92E8A1E46002E2018 /* GradientLineChartViewController.swift in Sources */,
+				4365ED3A2F6BC6F900EBF892 /* UIView+RoundedBorderOuterShadow.swift in Sources */,
 				430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */,
 				435B766E2D9E411500093B91 /* Object+Extension.swift in Sources */,
 				436197D52EE6CEA3004932D6 /* SimplePieChartViewController.swift in Sources */,
