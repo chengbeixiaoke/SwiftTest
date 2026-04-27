@@ -71,7 +71,7 @@ class MockKLineDataSource: KLineChartViewDataSource {
         // 模拟股票波动（百分比变化更真实）
         for i in 0..<totalDataCount {
             let date = Date(timeInterval: TimeInterval(i) * 24 * 3600, since: startDate)
-            let dateString = dateFormatter.string(from: date)
+            _ = dateFormatter.string(from: date)
             
             // 使用百分比变化（更符合实际股票）
             let volatility: CGFloat = 0.02 // 2% 日波动率

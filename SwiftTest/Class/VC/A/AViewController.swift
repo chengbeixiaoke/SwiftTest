@@ -45,7 +45,8 @@ class AViewController: BaseViewController {
     }()
     
     var dataList: [Model] {
-        return [Model(title: "ATestViewController", vcClass: ATestViewController.self),
+        return [Model(title: "CustomDragSortViewController", vcClass: CustomDragSortViewController.self),
+                Model(title: "CustomDragViewController", vcClass: CustomDragViewController.self),
                 Model(title: "GlassView", vcClass: GlassViewController.self),
                 Model(title: "LargeContent", vcClass: LargeContentViewController.self),
                 Model(title: "主题色", vcClass: AppThemeViewController.self),
@@ -149,32 +150,3 @@ extension AViewController: UITableViewDelegate, UITableViewDataSource {
         navigationController?.pushViewController(vc, animated: true)
     }
 }
-
-
-class ATestViewController: BaseViewController {
-    private let cardView = UIView()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = .red
-
-        let panel = UIView()
-        panel.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        view.addSubview(panel)
-        panel.frame = CGRect(x: 24, y: 120, width: 260, height: 140)
-
-        panel.yy_applyRoundedBorderAndOuterShadow(
-            corners: YYViewCornerRadii(topLeft: 24, topRight: 12, bottomLeft: 20, bottomRight: 28),
-            borderWidth: 1,
-            borderColor: UIColor.white.withAlphaComponent(0.7),
-            shadowColor: UIColor.black,
-            shadowOpacity: 0.2,
-            shadowOffset: CGSize(width: 0, height: 6),
-            shadowRadius: 16,
-            shadowSpread: 0
-        )
-
-    }
-}
-

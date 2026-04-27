@@ -8,13 +8,13 @@
 import UIKit
 
 open class BaseTableView: UITableView {
-    override init(frame: CGRect, style: UITableView.Style) {
-        super.init(frame: frame, style: style)
+    public override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: frame == .zero ? CGRectMake(0, 0, WidthScreen, HeightScreen) : frame, style: style)
         
         separatorStyle = .none
-        backgroundColor = .C_Clear
-        tableHeaderView = UIView()
-        tableFooterView = UIView()
+        backgroundColor = UIColor.C_Clear
+        tableHeaderView = UIView(frame: CGRectMake(0, 0, WidthScreen, CGFLOAT_MIN))
+        tableFooterView = UIView(frame: CGRectMake(0, 0, WidthScreen, CGFLOAT_MIN))
         contentInset = .zero
         scrollIndicatorInsets = .zero
         
@@ -27,8 +27,15 @@ open class BaseTableView: UITableView {
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
         
+        contentInsetAdjustmentBehavior = .never
+        
         if #available(iOS 15.0, *) {
             sectionHeaderTopPadding = 0
+        }
+        
+        if #available(iOS 26.0, *) {
+            topEdgeEffect.isHidden = true
+            bottomEdgeEffect.isHidden = true
         }
     }
     
@@ -36,7 +43,7 @@ open class BaseTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func reloadDataAndKeepOffset() {
+    open func reloadDataAndKeepOffset() {
         setContentOffset(contentOffset, animated: false)
         
         let beforeContentSize = contentSize
@@ -50,7 +57,7 @@ open class BaseTableView: UITableView {
         setContentOffset(newOffset, animated: false)
     }
         
-    public func insertSectionAndKeepOffset(_ indexSet: IndexSet) {
+    open func insertSectionAndKeepOffset(_ indexSet: IndexSet) {
         setContentOffset(contentOffset, animated: false)
         
         var animationView: UIView
@@ -81,7 +88,7 @@ open class BaseTableView: UITableView {
         setContentOffset(newOffset, animated: false)
     }
         
-    public func scrollToLastItem(at pos: UITableView.ScrollPosition = .top, animated: Bool, completion:(()->())? = nil) {
+    open func scrollToLastItem(at pos: UITableView.ScrollPosition = .top, animated: Bool, completion:(()->())? = nil) {
         guard numberOfSections > 0 else { return }
         let lastSection = numberOfSections - 1
         
@@ -99,7 +106,7 @@ open class BaseTableView: UITableView {
         }
     }
     
-    public func setContentOffsetOfBottom(animated: Bool) {
+    open func setContentOffsetOfBottom(animated: Bool) {
         if (bounds.size.height - contentInset.horizontal) < contentSize.height {
             let bottomOffset = CGPoint(x: 0, y: contentSize.height - bounds.size.height + contentInset.bottom)
             setContentOffset(bottomOffset, animated: animated)

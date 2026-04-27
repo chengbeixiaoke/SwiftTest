@@ -58,6 +58,15 @@ extension LargeContentViewController: UITableViewDelegate, UITableViewDataSource
     class ACell: BaseTableViewCell {
         let xx_imageView = UIImageView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen))
         
+        override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+            super.init(style: style, reuseIdentifier: reuseIdentifier)
+            setupUI()
+        }
+        
+        public required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
         override func setupUI() {
             super.setupUI()
             

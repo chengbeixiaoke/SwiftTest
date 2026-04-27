@@ -131,7 +131,7 @@ class AShareTradingCalendar {
     // 简化版的中国节假日判断（示例，实际应该使用完整数据）
     private static func isChineseHoliday(_ date: Date) -> Bool {
         let calendar = Calendar.current
-        let year = calendar.component(.year, from: date)
+        _ = calendar.component(.year, from: date)
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
         
@@ -557,7 +557,7 @@ class KLineDataGenerator {
         guard !tickData.isEmpty else { return [] }
         
         var aggregatedData: [CandleStickData] = []
-        let calendar = Calendar.current
+        _ = Calendar.current
         
         switch targetType {
         case .minute_5_K, .minute_15_K, .minute_30_K, .minute_60_K:

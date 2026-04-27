@@ -99,17 +99,17 @@ public extension UIView {
     
     // MARK: - 私有属性（使用关联对象存储边框层）
     private struct AssociatedKeys {
-        static var borderLayerKey = "UIView.borderLayerKey"
-        static var radiiKey = "UIView.radiiKey"
+        static var borderLayerKey: UInt8 = 0
+        static var radiiKey: UInt8 = 0
     }
-    
+
     private var borderLayer: CAShapeLayer? {
-        get { return objc_getAssociatedObject(self, &AssociatedKeys.borderLayerKey) as? CAShapeLayer }
+        get { objc_getAssociatedObject(self, &AssociatedKeys.borderLayerKey) as? CAShapeLayer }
         set { objc_setAssociatedObject(self, &AssociatedKeys.borderLayerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-    
+
     private var viewRadii: SSRadii? {
-        get { return objc_getAssociatedObject(self, &AssociatedKeys.radiiKey) as? SSRadii }
+        get { objc_getAssociatedObject(self, &AssociatedKeys.radiiKey) as? SSRadii }
         set { objc_setAssociatedObject(self, &AssociatedKeys.radiiKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
@@ -136,7 +136,7 @@ public extension UIView {
         self.layer.mask = maskLayer
         
         // 处理边框
-//        updateBorderLayer(with: path, config: borderConfig)
+        updateBorderLayer(with: path, config: borderConfig)
     }
     
     // MARK: - 私有方法
@@ -246,7 +246,7 @@ public extension UIView {
     {
         guard let currentPath = (self.layer.mask as? CAShapeLayer)?.path else { return }
         let path = UIBezierPath(cgPath: currentPath)
-//        updateBorderLayer(with: path, config: config)
+        updateBorderLayer(with: path, config: config)
     }
     
     /// 移除边框

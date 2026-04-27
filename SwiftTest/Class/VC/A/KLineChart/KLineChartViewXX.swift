@@ -462,7 +462,7 @@ class KLineChartViewXX: UIView {
         
         // 绘制信息框
         let priceRange = visiblePriceMax - visiblePriceMin
-        let price = visiblePriceMax - (point.y - chartRect.origin.y) / chartRect.height * priceRange
+        _ = visiblePriceMax - (point.y - chartRect.origin.y) / chartRect.height * priceRange
         
         let infoText = """
         日期: \(data.timestamp)
@@ -1008,7 +1008,7 @@ extension KLineChartViewXX {
                                                oldCount: Int,
                                                newCount: Int,
                                                chartWidth: CGFloat) {
-        let totalWidth = CGFloat(newCount) * (klineWidth + config.klineSpacing)
+        _ = CGFloat(newCount) * (klineWidth + config.klineSpacing)
         
         // 计算目标位置（显示新加载的数据）
         let targetOffset: CGFloat = 0

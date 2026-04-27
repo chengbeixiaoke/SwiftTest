@@ -245,7 +245,7 @@ class AnimatedPieChartWithLabelsView: UIView {
         
         // 绘制饼图
         var startAngle: CGFloat = -.pi / 2
-        var sectorProgresses = calculateSectorProgresses()
+        let sectorProgresses = calculateSectorProgresses()
         
         for (index, data) in dataEntries.enumerated() {
             let sectorProgress = sectorProgresses[index]

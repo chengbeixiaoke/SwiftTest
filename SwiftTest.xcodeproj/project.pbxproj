@@ -103,6 +103,8 @@
 		43EA0FCA2EFD3FDA00424D04 /* model-viewer.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FC82EFD3FDA00424D04 /* model-viewer.min.js */; };
 		43EA0FCE2EFD4FCE00424D04 /* modelGLB.glb in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FCB2EFD4FCE00424D04 /* modelGLB.glb */; };
 		43EA0FD02EFD4FCE00424D04 /* modelHDR.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0FCD2EFD4FCE00424D04 /* modelHDR.hdr */; };
+		43F5FF842F89015100E06902 /* CustomDragSortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5FF832F89015100E06902 /* CustomDragSortViewController.swift */; };
+		43F5FF862F89016E00E06902 /* CustomDragViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5FF852F89016E00E06902 /* CustomDragViewController.swift */; };
 		70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -223,6 +225,8 @@
 		43EA0FC82EFD3FDA00424D04 /* model-viewer.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "model-viewer.min.js"; sourceTree = "<group>"; };
 		43EA0FCB2EFD4FCE00424D04 /* modelGLB.glb */ = {isa = PBXFileReference; lastKnownFileType = file; path = modelGLB.glb; sourceTree = "<group>"; };
 		43EA0FCD2EFD4FCE00424D04 /* modelHDR.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = modelHDR.hdr; sourceTree = "<group>"; };
+		43F5FF832F89015100E06902 /* CustomDragSortViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDragSortViewController.swift; sourceTree = "<group>"; };
+		43F5FF852F89016E00E06902 /* CustomDragViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDragViewController.swift; sourceTree = "<group>"; };
 		7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
 		B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -336,6 +340,8 @@
 				433066552E8BC083002E2018 /* ACell.swift */,
 				432699F22D95438A0025EEAC /* AViewController.swift */,
 				4324E4EB2DA909F500C8971B /* AppThemeViewController.swift */,
+				43F5FF832F89015100E06902 /* CustomDragSortViewController.swift */,
+				43F5FF852F89016E00E06902 /* CustomDragViewController.swift */,
 			);
 			path = A;
 			sourceTree = "<group>";
@@ -709,13 +715,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -747,6 +749,7 @@
 				436197F02EE7C265004932D6 /* AnimatedLineGraphChartView.swift in Sources */,
 				436197F22EE7C2AC004932D6 /* UIColor+SExtension.swift in Sources */,
 				43269A0C2D95438A0025EEAC /* BViewController.swift in Sources */,
+				43F5FF842F89015100E06902 /* CustomDragSortViewController.swift in Sources */,
 				433065FE2E8A2D27002E2018 /* UIFont+Extension.swift in Sources */,
 				43269A0D2D95438A0025EEAC /* DCell.swift in Sources */,
 				433065F92E8A23DB002E2018 /* PublicFunction.swift in Sources */,
@@ -770,6 +773,7 @@
 				436198092EE948AA004932D6 /* CandleStickDemoViewController3.swift in Sources */,
 				433065F62E8A21E3002E2018 /* UIEdgeInsets+Extension.swift in Sources */,
 				436198242EEBEFB4004932D6 /* KLineDrawModel.swift in Sources */,
+				43F5FF862F89016E00E06902 /* CustomDragViewController.swift in Sources */,
 				433065E92E8A1E46002E2018 /* GradientLineChartViewController.swift in Sources */,
 				4365ED3A2F6BC6F900EBF892 /* UIView+RoundedBorderOuterShadow.swift in Sources */,
 				430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */,
@@ -851,7 +855,6 @@
 				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/SavoFrameworks",
@@ -903,7 +906,6 @@
 				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/SavoFrameworks",

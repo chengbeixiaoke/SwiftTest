@@ -24,6 +24,15 @@ class ACell: BaseTableViewCell {
         return label
     }()
     
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func setupUI() {
         super.setupUI()
         
@@ -46,6 +55,15 @@ class A2Cell: BaseTableViewCell {
     private lazy var levelBackgroundView = {
         return HomeTopBackgroundView(frame: CGRectMake(0, 0, WidthScreen, HeightScreen))
     }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func setupUI() {
         super.setupUI()

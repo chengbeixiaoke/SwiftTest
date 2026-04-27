@@ -209,7 +209,7 @@ open class RegularGlassBlurView: UIVisualEffectView {
     open func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            printLog("[RegularGlassBlurView]: \(previousTraitCollection?.userInterfaceStyle)")
+
         }
     }
 }

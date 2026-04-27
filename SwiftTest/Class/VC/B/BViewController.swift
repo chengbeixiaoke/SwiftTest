@@ -89,16 +89,13 @@ class BViewController: BaseViewController, UITableViewDelegate, UITableViewDataS
             guard let weakSelf = self else { return }
             weakSelf.editingCell = _cell
         }
-        cell.clickDeleteBlock = { [weak self] in
-            guard let weakSelf = self else { return }
+        cell.clickDeleteBlock = {
             print("删除")
         }
-        cell.clickMuteBlock = { [weak self] in
-            guard let weakSelf = self else { return }
+        cell.clickMuteBlock = {
             print("静音")
         }
-        cell.clickTopBlock = { [weak self] in
-            guard let weakSelf = self else { return }
+        cell.clickTopBlock = {
             print("置顶")
         }
         return cell

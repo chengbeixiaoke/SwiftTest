@@ -62,7 +62,7 @@ class GradientLineChartView: UIView {
         let linePath = UIBezierPath()
         
         // 计算第一个点
-        var firstPoint = CGPoint(
+        let firstPoint = CGPoint(
             x: chartRect.minX,
             y: chartRect.maxY - (dataPoints[0] - minValue) / normalizedValueRange * chartRect.height
         )
