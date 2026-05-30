@@ -58,3 +58,7 @@ public func UIScale(_ x: CGFloat) -> CGFloat {
         return x
     }
 }
+
+public var iOS26: Bool {
+    if #available(iOS 26.0, *) { return true } else { return false }
+}

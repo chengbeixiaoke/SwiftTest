@@ -300,7 +300,7 @@ func openSystemSeeting() {
 }
 
 // MARK: - 系统音效
-func playSystemAudioShock() {
+func PlaySystemAudioShock() {
     DispatchQueue.main.async {
         AudioServicesPlaySystemSound(1519)
     }

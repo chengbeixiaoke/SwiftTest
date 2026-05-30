@@ -80,6 +80,8 @@
 		4379884A2DBA061300A9BEE2 /* private_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988462DBA061300A9BEE2 /* private_key.pem */; };
 		4379884B2DBA061300A9BEE2 /* public_key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 437988472DBA061300A9BEE2 /* public_key.pem */; };
 		4379884C2DBA061300A9BEE2 /* decryptFile.py in Resources */ = {isa = PBXBuildFile; fileRef = 437988452DBA061300A9BEE2 /* decryptFile.py */; };
+		437BC0F52FC9875100B9DF52 /* CustomSystemSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437BC0F42FC9875100B9DF52 /* CustomSystemSegmentedView.swift */; };
+		437BC0F72FC9AE4600B9DF52 /* K24HomeTransactionLeverageSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437BC0F62FC9AE4600B9DF52 /* K24HomeTransactionLeverageSliderView.swift */; };
 		4385243D2ED706AE00C8F8C3 /* S3DModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */; };
 		438524472ED7074000C8F8C3 /* wd_1.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 438524422ED7074000C8F8C3 /* wd_1.hdr */; };
 		43A15A0B2EFBCEDD00936BB4 /* wd_1.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */; };
@@ -201,6 +203,8 @@
 		437988452DBA061300A9BEE2 /* decryptFile.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = decryptFile.py; sourceTree = "<group>"; };
 		437988462DBA061300A9BEE2 /* private_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = private_key.pem; sourceTree = "<group>"; };
 		437988472DBA061300A9BEE2 /* public_key.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = public_key.pem; sourceTree = "<group>"; };
+		437BC0F42FC9875100B9DF52 /* CustomSystemSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSystemSegmentedView.swift; sourceTree = "<group>"; };
+		437BC0F62FC9AE4600B9DF52 /* K24HomeTransactionLeverageSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K24HomeTransactionLeverageSliderView.swift; sourceTree = "<group>"; };
 		4385243C2ED706AE00C8F8C3 /* S3DModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3DModelView.swift; sourceTree = "<group>"; };
 		438524422ED7074000C8F8C3 /* wd_1.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = wd_1.hdr; sourceTree = "<group>"; };
 		43A15A0A2EFBCEDD00936BB4 /* wd_1.usdz */ = {isa = PBXFileReference; lastKnownFileType = file; path = wd_1.usdz; sourceTree = "<group>"; };
@@ -482,9 +486,11 @@
 		433DD99D2F176734009FE5DE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				437BC0F42FC9875100B9DF52 /* CustomSystemSegmentedView.swift */,
 				431F2E6B2F1A85D700207C6E /* HomeTopBackgroundView.swift */,
 				431F2E692F1A7C9D00207C6E /* GlassEffectContainerView.swift */,
 				433DD99E2F176757009FE5DE /* GradientBlurView.swift */,
+				437BC0F62FC9AE4600B9DF52 /* K24HomeTransactionLeverageSliderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -632,7 +638,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					432699722D953FD70025EEAC = {
 						CreatedOnToolsVersion = 16.2;
@@ -715,9 +721,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -734,6 +744,7 @@
 				433BF8132F1F517A007769FB /* LargeContentViewController.swift in Sources */,
 				433065ED2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift in Sources */,
 				43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */,
+				437BC0F72FC9AE4600B9DF52 /* K24HomeTransactionLeverageSliderView.swift in Sources */,
 				436197FB2EE81221004932D6 /* CandleStickDemoViewController2.swift in Sources */,
 				4364EBB22F1DC36E000985BA /* GlassViewController.swift in Sources */,
 				43269A092D95438A0025EEAC /* EViewController.swift in Sources */,
@@ -812,6 +823,7 @@
 				43269A212D95438A0025EEAC /* DViewController.swift in Sources */,
 				43C2E23D2E28F3BC00F04297 /* AppThemeModeManager.swift in Sources */,
 				43C2E2452E290D6700F04297 /* YYLabel+Extension.swift in Sources */,
+				437BC0F52FC9875100B9DF52 /* CustomSystemSegmentedView.swift in Sources */,
 				4361980F2EE95753004932D6 /* KLineConfig.swift in Sources */,
 				43269A232D95438A0025EEAC /* UIView+Extension.swift in Sources */,
 			);
@@ -851,8 +863,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -878,8 +888,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = test.wyy.com.SwiftTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				STRIP_INSTALLED_PRODUCT = NO;
-				STRIP_SWIFT_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -902,8 +910,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -928,8 +934,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = test.wyy.com.SwiftTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				STRIP_INSTALLED_PRODUCT = NO;
-				STRIP_SWIFT_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -976,6 +980,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -999,6 +1004,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1039,6 +1045,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1055,6 +1062,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
