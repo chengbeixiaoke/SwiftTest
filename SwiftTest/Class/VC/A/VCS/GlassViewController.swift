@@ -11,7 +11,7 @@ import SnapKit
 class GlassViewController: BaseViewController {
     lazy var redView = {
         let view = K24HomeTransactionLeverageSliderView()
-        view.updateUI(min: 3, max: 3)
+        view.updateUI(min: 3, max: 4)
         return view
     }()
     
@@ -25,6 +25,9 @@ class GlassViewController: BaseViewController {
             make.centerX.centerY.equalToSuperview()
             make.width.equalTo(redView.viewWidth)
             make.height.equalTo(redView.viewHeight)
+        }
+        redView.valueChangedBlock = { index in
+            printLog(index)
         }
     }
 }

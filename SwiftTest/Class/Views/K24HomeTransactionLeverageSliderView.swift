@@ -207,6 +207,9 @@ class K24HomeTransactionLeverageSliderView: BaseView {
         currentScaleMarkIndex = ((index / 10) + ((index % 10) >= 5 ? 1 : 0)) * 10
         currentRulerLeft = -CGFloat(currentScaleMarkIndex) * stepLength
         
+        let current = currentScaleMarkIndex / 10 + minValue
+        valueChangedBlock?(current)
+        
         UIView.animate(withDuration: 0.2) {
             self.rulerViewLeft?.update(offset: self.currentRulerLeft)
             self.contentView.layoutIfNeeded()
