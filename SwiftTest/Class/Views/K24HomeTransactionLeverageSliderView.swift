@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class K24HomeTransactionLeverageSliderView: BaseView, UIGestureRecognizerDelegate {
+class K24HomeTransactionLeverageSliderView: BaseView {
     public var valueChangedBlock: ((Int) -> Void)?
     
     // 这里不要用 UIScale(x)
@@ -17,22 +17,21 @@ class K24HomeTransactionLeverageSliderView: BaseView, UIGestureRecognizerDelegat
     
     private var minValue = 1
     private var maxValue = 5
-    private var currentValue = 1
     private var currentScaleMarkIndex = 0
-    private var dragStartScaleMarkIndex = 0
     
     private var valueLabels: [UILabel] = []
     private var scaleMarks: [UIView] = []
     private var dragStartRulerLeft: CGFloat = 0
     private var currentRulerLeft: CGFloat = 0
     private var dragStartLocationX: CGFloat = 0
+    private var rulerViewLeft: Constraint?
     
     private let scaleMarkWidth = 2.0
     private let scaleMarkHeight = 5.0
     private let scaleMarkSpaceing = 6.0
     private let scaleMarkMargin = 16.0
     
-    private var scaleMarkStep: CGFloat {
+    private var stepLength: CGFloat {
         scaleMarkWidth + scaleMarkSpaceing
     }
     
@@ -56,14 +55,16 @@ class K24HomeTransactionLeverageSliderView: BaseView, UIGestureRecognizerDelegat
         return view
     }()
     
-    private lazy var glassView = {
-        let view = GlassEffectContainerView()
-        view.glassViewStyle = .regular
-        view.glassViewCornerRadius = 56/2.0
+    lazy var segmentedControl = {
+        let view = CustomSystemSegmentedView(frame: .zero)
+        view.normalConfig = [.foregroundColor: UIColor.C_Clear, .font: UIFont.systemFont(ofSize: 15)]
+        view.selectedConfig = [.foregroundColor: UIColor.C_Clear, .font:UIFont.systemFont(ofSize: 15)]
+        view.selectedColor = .clear
+        view.updateUI(titles: [""])
+        view.selectedIndex = 0
+        view.backgroundColor = .clear
         return view
     }()
-    
-    private var rulerViewLeft: Constraint?
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,20 +77,9 @@ class K24HomeTransactionLeverageSliderView: BaseView, UIGestureRecognizerDelegat
     }
     
     private func setupUI() {
-//        if #available(iOS 26.0, *) {
-//            addSubview(glassView)
-//            glassView.snp.makeConstraints { make in
-//                make.edges.equalToSuperview()
-//            }
-//            glassView.s_addSubview(scaleContainerView)
-//            scaleContainerView.snp.makeConstraints { make in
-//                make.edges.equalToSuperview()
-//            }
-//        } else {
-            addSubview(scaleContainerView)
-            scaleContainerView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-//            }
+        addSubview(scaleContainerView)
+        scaleContainerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         scaleContainerView.addSubview(contentView)
@@ -98,21 +88,27 @@ class K24HomeTransactionLeverageSliderView: BaseView, UIGestureRecognizerDelegat
         }
         
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        gesture.minimumPressDuration = 0.05
+        gesture.minimumPressDuration = 0.01
         gesture.cancelsTouchesInView = false
-        gesture.delegate = self
         addGestureRecognizer(gesture)
         
         contentView.addSubview(rulerView)
         rulerView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            rulerViewLeft = make.left.equalToSuperview().constraint
+            rulerViewLeft = make.left.equalTo(contentView.snp.left).constraint
             make.width.greaterThanOrEqualTo(10)
             make.height.equalToSuperview()
         }
+        
+        addSubview(segmentedControl)
+        segmentedControl.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+            make.width.equalTo(viewWidth * 1.3)
+            make.height.equalTo(viewHeight * 1.2)
+        }
     }
     
-    public func updateUI(min: Int, max: Int, current: Int) {
+    public func updateUI(min: Int, max: Int) {
         valueLabels.forEach({$0.removeFromSuperview()})
         valueLabels.removeAll()
         
@@ -121,11 +117,10 @@ class K24HomeTransactionLeverageSliderView: BaseView, UIGestureRecognizerDelegat
         
         minValue = min
         maxValue = max
-        currentValue = current
-        currentScaleMarkIndex = scaleMarkIndex(for: currentValue)
+        currentScaleMarkIndex = 0
         
         var last: UIView? = nil
-        let totalScaleMarkCount = (maxValue - minValue + 2) * 10
+        let totalScaleMarkCount = (maxValue - minValue + 2) * 10 - 1
         for i in 0..<totalScaleMarkCount {
             let scaleMark = UIView()
             scaleMark.tag = i
@@ -149,10 +144,6 @@ class K24HomeTransactionLeverageSliderView: BaseView, UIGestureRecognizerDelegat
             last = scaleMark
             
             if (i + 1) % 10 == 0 {
-                if i > 0 && i < maxValue * 10 {
-                    scaleMark.backgroundColor = .ColorFromHex("#FF0000")
-                }
-                
                 let index = minValue + ((i + 1) / 10) - 1
                 if index <= maxValue {
                     let label = UILabel()
@@ -168,122 +159,87 @@ class K24HomeTransactionLeverageSliderView: BaseView, UIGestureRecognizerDelegat
                 }
             }
         }
+        
+        delay(seconds: 0.1) {
+            self.updateScaleMarkUI()
+        }
     }
-
-    @objc
-    private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
         case .began:
             applyScale(1.4)
             dragStartRulerLeft = currentRulerLeft
-            dragStartScaleMarkIndex = currentScaleMarkIndex
             dragStartLocationX = gesture.location(in: self).x
+            
         case .changed:
-            updateRulerPosition(with: gesture)
+            updateRulerPosition(gesture)
+            
         case .ended, .cancelled, .failed:
-            snapToNearestIntegerScaleMark()
+            correctionRulerPosition()
             applyScale(1.0)
+            
         default:
             break
         }
     }
     
-    private func updateRulerPosition(with gesture: UILongPressGestureRecognizer) {
+    private func updateRulerPosition(_ gesture: UILongPressGestureRecognizer) {
         let translationX = gesture.location(in: self).x - dragStartLocationX
-        let stepCount = Int(translationX / scaleMarkStep)
-        let nextLeft = dragStartRulerLeft + CGFloat(stepCount) * scaleMarkStep
-        guard nextLeft < 0 && nextLeft > (contentView.bounds.width - rulerView.bounds.width) else { return }
-        guard nextLeft != currentRulerLeft else { return }
+        var nextLeft = dragStartRulerLeft + translationX
+        nextLeft = max(nextLeft, (contentView.bounds.width - rulerView.bounds.width))
+        nextLeft = min(nextLeft, 0)
+        rulerViewLeft?.update(offset: nextLeft)
         currentRulerLeft = nextLeft
-        rulerViewLeft?.update(offset: currentRulerLeft)
-        currentScaleMarkIndex = min(max(dragStartScaleMarkIndex - stepCount, 0), scaleMarks.count - 1)
-        PlaySystemAudioShock()
-        layoutIfNeeded()
-    }
-    
-    private func snapToNearestIntegerScaleMark() {
-        let nearestValue = nearestIntegerValueForCurrentCenter()
-        currentValue = nearestValue
-        animateSnapToScaleMark(scaleMarkIndex(for: nearestValue))
-        valueChangedBlock?(nearestValue)
-    }
-    
-    private func alignRulerViewToCurrentScaleMark(animated: Bool) {
-        let centerX = contentView.bounds.midX
-        let targetLeft = centerX - scaleMarkCenterX(for: currentScaleMarkIndex)
-        currentRulerLeft = targetLeft
-        rulerViewLeft?.update(offset: targetLeft)
         
-        let animations = {
-            self.layoutIfNeeded()
-        }
-        if animated {
-            UIView.animate(withDuration: 0.18, animations: animations)
-        } else {
-            animations()
+        contentView.layoutIfNeeded()
+        rulerView.layoutIfNeeded()
+        let dragStartScaleMarkIndex = Int(-currentRulerLeft / stepLength)
+        if dragStartScaleMarkIndex != currentScaleMarkIndex {
+            PlaySystemAudioShock()
+            currentScaleMarkIndex = dragStartScaleMarkIndex
+            updateScaleMarkUI()
         }
     }
     
-    private func animateSnapToScaleMark(_ targetIndex: Int) {
-        let stepDirection = targetIndex == currentScaleMarkIndex ? 0 : (targetIndex > currentScaleMarkIndex ? 1 : -1)
-        guard stepDirection != 0 else {
-            alignRulerViewToCurrentScaleMark(animated: false)
-            return
+    private func correctionRulerPosition() {
+        let index = currentScaleMarkIndex
+        currentScaleMarkIndex = ((index / 10) + ((index % 10) >= 5 ? 1 : 0)) * 10
+        currentRulerLeft = -CGFloat(currentScaleMarkIndex) * stepLength
+        
+        UIView.animate(withDuration: 0.2) {
+            self.rulerViewLeft?.update(offset: self.currentRulerLeft)
+            self.contentView.layoutIfNeeded()
+        } completion: { _ in
+            self.updateScaleMarkUI()
         }
-        
-        func animateNextStep() {
-            guard currentScaleMarkIndex != targetIndex else { return }
-            
-            currentScaleMarkIndex += stepDirection
-            let centerX = contentView.bounds.midX
-            let targetLeft = centerX - scaleMarkCenterX(for: currentScaleMarkIndex)
-            currentRulerLeft = targetLeft
-            rulerViewLeft?.update(offset: targetLeft)
-            
-            UIView.animate(withDuration: 0.06, animations: {
-                self.layoutIfNeeded()
-            }, completion: { _ in
-                animateNextStep()
-                PlaySystemAudioShock()
-            })
-        }
-        
-        animateNextStep()
-    }
-    
-    private func nearestIntegerValueForCurrentCenter() -> Int {
-        let centerX = contentView.bounds.midX
-        var nearestValue = minValue
-        var nearestDistance = CGFloat.greatestFiniteMagnitude
-        
-        for value in minValue...maxValue {
-            let index = scaleMarkIndex(for: value)
-            let markCenterX = currentRulerLeft + scaleMarkCenterX(for: index)
-            let distance = abs(markCenterX - centerX)
-            if distance < nearestDistance {
-                nearestDistance = distance
-                nearestValue = value
-            }
-        }
-        
-        return nearestValue
-    }
-    
-    private func scaleMarkIndex(for value: Int) -> Int {
-        (value - minValue + 1) * 10 - 1
-    }
-    
-    private func scaleMarkCenterX(for index: Int) -> CGFloat {
-        scaleMarkMargin + scaleMarkWidth / 2.0 + CGFloat(index) * scaleMarkStep
     }
     
     private func applyScale(_ scale: CGFloat) {
+        if scale > 1.0 {
+            contentView.layer.borderLineThemeColor = .clear
+        } else {
+            contentView.layer.borderLineThemeColor = .BL_F1F1F1_1_464646_05
+        }
+        
         UIView.animate(withDuration: 0.15) {
             self.scaleContainerView.transform = CGAffineTransform(scaleX: scale, y: scale)
         }
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        true
+    func updateScaleMarkUI() {
+        scaleMarks.forEach {$0.backgroundColor = .BG_000000_1_FFFFFF_1}
+        
+        let center = currentScaleMarkIndex + 9
+        if scaleMarks.count > center {
+            scaleMarks[center].backgroundColor = .ColorFromHex("FF0000")
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            contentView.layer.traitCollectionDidChange(previousTraitCollection)
+        }
     }
 }
