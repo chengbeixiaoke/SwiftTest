@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension SceneDelegate {
+extension SceneDelegate: SavoAppDelegateProtocol {
     func updateTraitCollection(_ type: UIUserInterfaceStyle) {
         self.window?.overrideUserInterfaceStyle = type
     }

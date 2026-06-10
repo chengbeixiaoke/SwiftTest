@@ -11,8 +11,9 @@ import SwiftyJSON
 import AudioToolbox
 import YYKit
 
-// MARK: - 确保在在主线程执行
-public func OnMainThreadIfNeeded(task: @escaping () -> Void)
+/// 确保在主线程执行任务
+/// - Parameter task: 任务Block
+public func ExecuteOnMainThreadIfNeeded(task: @escaping () -> Void)
 {
     if Thread.isMainThread {
         task()
@@ -20,6 +21,22 @@ public func OnMainThreadIfNeeded(task: @escaping () -> Void)
         DispatchQueue.main.async {
             task()
         }
+    }
+}
+
+/// 确保在主线程执行任务；如果实在子线程调用，则会等待主线程执行完成
+/// - Parameter task: 任务Block
+public func ExecuteOnMainThreadAndWait(task: @escaping () -> Void)
+{
+    if Thread.isMainThread {
+        task()
+    } else {
+        let semaphore = DispatchSemaphore(value: 0)
+        DispatchQueue.main.async {
+            task()
+            semaphore.signal()
+        }
+        semaphore.wait()
     }
 }
 

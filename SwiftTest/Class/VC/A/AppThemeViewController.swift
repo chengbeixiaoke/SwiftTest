@@ -73,12 +73,7 @@ class AppThemeViewController: BaseViewController {
             }
             .store(in: &cancellables)
     }
-    
-    override func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.wyy_traitCollectionDidChange(previousTraitCollection)
         
-    }
-    
     func action() {
         if AppThemeModeManager.isDark() {
             AppThemeModeManager.shared.changeAppThemeMode(.light)

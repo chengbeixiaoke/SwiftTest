@@ -64,7 +64,7 @@ class VideoPlayerViewController: BaseViewController {
                 
                 if returnCode == 0 {
                     /// 转换成功
-                    OnMainThreadIfNeeded {
+                    ExecuteOnMainThreadIfNeeded {
                         let asset = BMPlayerResource(url: URL.FileURL(outputPath))
                         weakSelf.player.setVideo(resource: asset)
                         weakSelf.player.play()

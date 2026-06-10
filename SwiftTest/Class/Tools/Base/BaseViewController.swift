@@ -1,78 +1,98 @@
 //
 //  BaseViewController.swift
-//  SwiftTest
+//  SavoBaseModule
 //
-//  Created by yyw on 2025/7/17.
+//  Created by yyw on 2025/8/19.
 //
 
 import UIKit
+import YYKit
+import SnapKit
 
 open class BaseViewController: UIViewController {
+    // 缓存注册的监听深浅色变化的token
+    private var colorAppearanceChangeRegistration: Any?
     
-    public var viewBackgroundColor: UIColor {
-        return .ColorWhite
+    // 生命周期回调
+    public var viewWillAppearBlock: ((BaseViewController)->())?
+    public var viewDidAppearBlock: ((BaseViewController)->())?
+    public var viewWillDisappearBlock: ((BaseViewController)->())?
+    public var viewDidDisappearBlock: ((BaseViewController)->())?
+            
+    // VC 背景颜色
+    // 弹窗类型的背景色是181818
+    open var viewBackgroundColor: UIColor {
+        return .BG_FFFFFF_1_181818_1
     }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.wyy_traitCollectionDidChange(previousTraitCollection)
-            }
-        }
-    }
-    
-    public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("[VC] viewWillAppear: \(className())")
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        viewWillAppearBlock?(self)
+        printLog("[VC] - viewWillAppear: \(self.className())")
     }
     
-    public override func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("[VC] viewDidAppear: \(className())")
+        viewDidAppearBlock?(self)
+        printLog("[VC] - viewDidAppear: \(self.className())")
     }
     
-    public override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("[VC] viewWillDisappear: \(className())")
+        viewWillDisappearBlock?(self)
+        printLog("[VC] - viewWillDisappear: \(self.className())")
     }
     
-    public override func viewDidDisappear(_ animated: Bool) {
+    open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        print("[VC] viewDidDisappear: \(className())")
+        viewDidDisappearBlock?(self)
+        printLog("[VC] - viewDidDisappear: \(self.className())")
     }
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
-        print("[VC] viewDidLoad: \(className())")
+        
+        // 注册 深/浅 颜色变化的监听
+        configureColorAppearanceObservation()
         
         view.backgroundColor = viewBackgroundColor
-        
-        navigationItem.hidesBackButton = true
-        if navigationController?.children.count ?? 0 <= 1 {
-            navigationItem.leftBarButtonItem = nil
+    }
+    
+    open func clickBackAction() {
+        if presentingViewController != nil {
+            dismiss(animated: true)
         } else {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "normal_back"),
-                                                               style: .plain,
-                                                               target: self,
-                                                               action: #selector(backAction))
+            navigationController?.popViewController(animated: true)
         }
     }
     
-    public func wyy_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    // iOS17之前的系统使用该方法监听深/浅色变化
+    final public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
         
+        if #unavailable(iOS 17.0) {
+            guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
+            colorAppearanceDidChange(from: previousTraitCollection)
+        }
     }
     
-    @objc public func backAction() {
-        let _ =  navigationController?.popViewController(animated: true)
+    // iOS17之后的系统使用该方法监听深/浅色变化
+    open func colorAppearanceDidChange(from previousTraitCollection: UITraitCollection?) {
+        
     }
     
     deinit {
-        print("[VC] deinit: \(className())")
+        printLog("[VC] - deinit:\(self.className())")
+    }
+}
+
+private extension BaseViewController {
+    func configureColorAppearanceObservation() {
+        if #available(iOS 17.0, *) {
+            colorAppearanceChangeRegistration = registerForTraitChanges([UITraitUserInterfaceStyle.self, UITraitAccessibilityContrast.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                guard self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
+                self.colorAppearanceDidChange(from: previousTraitCollection)
+            }
+        }
     }
 }

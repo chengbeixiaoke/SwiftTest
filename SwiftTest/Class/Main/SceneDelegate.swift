@@ -21,10 +21,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
         /// 初始化暗黑模式监听者
-        AppThemeModeManager.shared.changeAppThemeMode(.followingSystem)
-        AppThemeModeManager.initUserInterfaceStyleListener()
+        AppThemeModeManager.initUserInterfaceStyleListener(windowScene: windowScene)
+        AppThemeModeManager.shared.appDelegate = self
         window?.overrideUserInterfaceStyle = AppThemeModeManager.shared.userInterfaceStyle()
-        
+
         if #available(iOS 26.0, *) {
             window?.rootViewController = AppTabBarController26()
         } else {
@@ -76,4 +76,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 }
-

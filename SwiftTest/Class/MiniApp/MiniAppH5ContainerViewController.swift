@@ -133,7 +133,7 @@ class MiniAppH5ContainerViewController: BaseViewController, UIViewControllerTran
 #endif
     }
     
-    func clickBackAction() {
+    override func clickBackAction() {
         if webView.canGoBack {
             webView.goBack()
         }
@@ -218,7 +218,7 @@ extension MiniAppH5ContainerViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         print("[MiniApp] 加载失败，URL:\(url), error:\(error.localizedDescription)")
-        OnMainThreadIfNeeded {
+        ExecuteOnMainThreadIfNeeded {
             self.webView.isHidden = true
             self.progressView.isHidden = true
         }
@@ -226,7 +226,7 @@ extension MiniAppH5ContainerViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         print("[MiniApp] 加载失败，URL:\(url), error:\(error.localizedDescription)")
-        OnMainThreadIfNeeded {
+        ExecuteOnMainThreadIfNeeded {
             self.webView.isHidden = true
             self.progressView.isHidden = true
         }

@@ -99,11 +99,13 @@ public extension UIColor {
         
         
         return UIColor { traitCollection in
-            if AppThemeModeManager.isDark() {
+            switch AppThemeModeManager.shared.currentMode {
+            case .dark:
                 return darkColor
-            }
-            else {
+            case .light:
                 return lightColor
+            case .followingSystem:
+                return traitCollection.userInterfaceStyle == .dark ? darkColor : lightColor
             }
         }
     }
@@ -630,4 +632,3 @@ public extension UIColor {
     static let Level_5_Right_1            = ColorFromHex("57E40D")
     static let Level_5_Right_0            = ColorFromHex("57E40D", 0.0)
 }
-

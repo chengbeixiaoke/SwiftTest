@@ -1,6 +1,6 @@
 //
 //  AppThemeModeManager.swift
-//  CashSAVO
+//  SavoBaseModule
 //
 //  Created by yyw on 2025/1/8.
 //
@@ -9,7 +9,7 @@ import UIKit
 
 let keyCacheAppThemeMode = "keyCacheAppThemeMode"
 
-enum AppThemeMode: String {
+public enum AppThemeMode: String {
     /// 跟随系统
     case followingSystem = "0"
     /// 深色
@@ -18,15 +18,22 @@ enum AppThemeMode: String {
     case light = "2"
 }
 
-class AppThemeModeManager {
+public protocol SavoAppDelegateProtocol {
+    func updateTraitCollection(_ type: UIUserInterfaceStyle)
+}
+
+public class AppThemeModeManager {
     // MARK: - 单例
     public static let shared: AppThemeModeManager = AppThemeModeManager()
+    
+    //
+    public var appDelegate: SavoAppDelegateProtocol? = nil
     
     fileprivate var window: UIWindow?
     private init() {}
     
     private var _currentMode: AppThemeMode = AppThemeModeManager.getCurrentModeByCache()
-    private(set) var currentMode: AppThemeMode {
+    public private(set) var currentMode: AppThemeMode {
         get {
             return _currentMode
         }
@@ -35,7 +42,7 @@ class AppThemeModeManager {
         }
     }
     
-    func changeAppThemeMode(_ mode: AppThemeMode) {
+    public func changeAppThemeMode(_ mode: AppThemeMode) {
         if self.currentMode == mode {
             return
         }
@@ -47,11 +54,10 @@ class AppThemeModeManager {
         self.changeKeyWindowUserInterfaceStyle(self.userInterfaceStyle())
     }
     
-    private func getSystemThemeMode() -> AppThemeMode {
+    fileprivate func getSystemThemeMode() -> AppThemeMode {
         var style: AppThemeMode = .light
         
-        
-        OnMainThreadIfNeeded {
+        ExecuteOnMainThreadAndWait {
             if let window = self.window {
                 if window.traitCollection.userInterfaceStyle == .dark {
                     style = .dark
@@ -71,15 +77,10 @@ class AppThemeModeManager {
         return style
     }
     
-    func userInterfaceStyle() -> UIUserInterfaceStyle {
+    public func userInterfaceStyle() -> UIUserInterfaceStyle {
         switch self.currentMode {
         case .followingSystem:
-            if self.getSystemThemeMode() == .dark {
-                return .dark
-            }
-            else {
-                return .light
-            }
+            return .unspecified
             
         case .dark:
             return .dark
@@ -90,15 +91,24 @@ class AppThemeModeManager {
     }
     
     fileprivate func changeKeyWindowUserInterfaceStyle(_ type: UIUserInterfaceStyle) {
-        if let sceneDelegate = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first?.delegate as? SceneDelegate {
-                sceneDelegate.updateTraitCollection(type)
-            print("SAVO - [Style] 主题颜色切换为: \(type == .light ? "浅色模式" : "深色模式")")
+        if let appDelegate = appDelegate {
+            appDelegate.updateTraitCollection(type)
+            let modeDescription: String
+            switch type {
+            case .light:
+                modeDescription = "浅色模式"
+            case .dark:
+                modeDescription = "深色模式"
+            default:
+                modeDescription = "跟随系统"
+            }
+            printLog("[Theme] 主题颜色切换为: \(modeDescription)")
         }
     }
 }
 
-extension AppThemeModeManager {
-    private static func getCurrentModeByCache() -> AppThemeMode {
+public extension AppThemeModeManager {
+    static func getCurrentModeByCache() -> AppThemeMode {
         let defualt = UserDefaults.standard
         if let cache = defualt.value(forKey: keyCacheAppThemeMode) as? String {
             return AppThemeMode.init(rawValue: cache) ?? .followingSystem
@@ -107,28 +117,35 @@ extension AppThemeModeManager {
     }
     
     static func isDark() -> Bool {
-        return AppThemeModeManager.shared.userInterfaceStyle() == .dark
+        switch AppThemeModeManager.shared.currentMode {
+        case .dark:
+            return true
+        case .light:
+            return false
+        case .followingSystem:
+            return AppThemeModeManager.shared.getSystemThemeMode() == .dark
+        }
     }
     
-    static func initUserInterfaceStyleListener() {
-        let window = UIWindow(frame: CGRectMake(0, 0, 10, 10))
+    static func initUserInterfaceStyleListener(windowScene: UIWindowScene) {
+        let window = UIWindow(windowScene: windowScene)
+        window.frame = CGRectMake(0, 0, 1, 1)
+        window.windowLevel = .normal - 1
+        window.backgroundColor = .clear
         window.rootViewController = UIUserInterfaceStyleVC()
-        window.makeKeyAndVisible()
+        window.isHidden = false
         
         AppThemeModeManager.shared.window = window
     }
 }
 
 /// 用于监听系统深色模式改变
-class UIUserInterfaceStyleVC: UIViewController {
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let previousTraitCollection = previousTraitCollection {
-                if AppThemeModeManager.shared.currentMode == .followingSystem && (UIApplication.shared.applicationState == .active || UIApplication.shared.applicationState == .inactive) && UITraitCollection.current.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-                    AppThemeModeManager.shared.changeKeyWindowUserInterfaceStyle(UITraitCollection.current.userInterfaceStyle)
-                }
+class UIUserInterfaceStyleVC: BaseViewController {
+    open override func colorAppearanceDidChange(from previousTraitCollection: UITraitCollection?) {
+        super.colorAppearanceDidChange(from: previousTraitCollection)
+        if let previousTraitCollection = previousTraitCollection {
+            if AppThemeModeManager.shared.currentMode == .followingSystem && (UIApplication.shared.applicationState == .active || UIApplication.shared.applicationState == .inactive) && traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                AppThemeModeManager.shared.changeKeyWindowUserInterfaceStyle(.unspecified)
             }
         }
     }
