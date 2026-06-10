@@ -15,7 +15,12 @@ class GlassViewController: BaseViewController {
         return view
     }()
     
-    lazy var textFieldView: UITextField = {
+//    lazy var textFieldView = {
+//        let textField = PhoneCustomTextFieldView()
+//        return textField
+//    }()
+    
+    private var textFieldView: UITextField = {
         let textField = UITextField()
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.textAlignment = .left
@@ -24,6 +29,7 @@ class GlassViewController: BaseViewController {
         textField.autocorrectionType = .no
         //关闭键盘检查
         textField.spellCheckingType = .no
+        textField.text = "哈哈哈哈"
         return textField
     }()
     
@@ -44,11 +50,22 @@ class GlassViewController: BaseViewController {
         }
         
         textFieldView.text = "哈哈哈哈哈"
+//        textFieldView.configCenterText(str: "哈哈哈哈哈")
         view.addSubview(textFieldView)
         textFieldView.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
             make.width.equalTo(UIScale(200))
             make.height.equalTo(UIScale(30))
+        }
+    }
+}
+
+public extension UITextField {
+    var isCombinedInput: Bool {
+        if let markedRange = markedTextRange, position(from: markedRange.start, offset: 0) != nil {
+            return true
+        } else {
+            return false
         }
     }
 }

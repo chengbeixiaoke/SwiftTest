@@ -25,6 +25,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         AppThemeModeManager.shared.appDelegate = self
         window?.overrideUserInterfaceStyle = AppThemeModeManager.shared.userInterfaceStyle()
 
+        /// 设置键盘
+        AppIQKeyboardManager.enableIQKeyboardManager(enable: true)
+        
         if #available(iOS 26.0, *) {
             window?.rootViewController = AppTabBarController26()
         } else {

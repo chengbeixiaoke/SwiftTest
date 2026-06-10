@@ -22,6 +22,9 @@ def base_pod
     
   pod 'BMPlayer', :path => './Frameworks/BMPlayer'
   pod 'ffmpeg-kit-ios-full', :path => './Frameworks/ffmpeg-kit-ios-full'
+  
+  # 键盘管理（完整组件）
+  pod 'IQKeyboardManagerSwift', '~> 8.0.1'
 end
 
 target 'SwiftTest' do

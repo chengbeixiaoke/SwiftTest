@@ -65,7 +65,7 @@ class K24HomeTransactionLeverageSliderView: BaseView {
         view.backgroundColor = .clear
         return view
     }()
-        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -239,10 +239,8 @@ class K24HomeTransactionLeverageSliderView: BaseView {
         }
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            contentView.layer.traitCollectionDidChange(previousTraitCollection)
-        }
+    override func colorAppearanceDidChange(from previousTraitCollection: UITraitCollection?) {
+        super.colorAppearanceDidChange(from: previousTraitCollection)
+        contentView.layer.traitCollectionDidChange(previousTraitCollection)
     }
 }

@@ -99,6 +99,8 @@
 		43C2E2412E28F5FC00F04297 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2402E28F5FC00F04297 /* BaseViewController.swift */; };
 		43C2E2432E28FBB900F04297 /* SceneDelegate+Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */; };
 		43C2E2452E290D6700F04297 /* YYLabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */; };
+		43D4084A2FD9C931008A5BF2 /* PhoneCustomTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D408492FD9C931008A5BF2 /* PhoneCustomTextFieldView.swift */; };
+		43D4084C2FD9CE31008A5BF2 /* AppIQKeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4084B2FD9CE31008A5BF2 /* AppIQKeyboardManager.swift */; };
 		43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCC3862DB62EA100E83159 /* FileEncryptor.swift */; };
 		43EA0F972EFCE63300424D04 /* g.glb in Resources */ = {isa = PBXBuildFile; fileRef = 43EA0F962EFCE63300424D04 /* g.glb */; };
 		43EA0FC62EFD399F00424D04 /* WebView3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EA0FC52EFD399F00424D04 /* WebView3D.swift */; };
@@ -223,6 +225,8 @@
 		43C2E2402E28F5FC00F04297 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		43C2E2422E28FBB900F04297 /* SceneDelegate+Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SceneDelegate+Other.swift"; sourceTree = "<group>"; };
 		43C2E2442E290D6700F04297 /* YYLabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YYLabel+Extension.swift"; sourceTree = "<group>"; };
+		43D408492FD9C931008A5BF2 /* PhoneCustomTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCustomTextFieldView.swift; sourceTree = "<group>"; };
+		43D4084B2FD9CE31008A5BF2 /* AppIQKeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIQKeyboardManager.swift; sourceTree = "<group>"; };
 		43DCC3862DB62EA100E83159 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
 		43EA0F962EFCE63300424D04 /* g.glb */ = {isa = PBXFileReference; lastKnownFileType = file; path = g.glb; sourceTree = "<group>"; };
 		43EA0FC52EFD399F00424D04 /* WebView3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView3D.swift; sourceTree = "<group>"; };
@@ -566,6 +570,8 @@
 		43B1894B2EF8E21E00AC8168 /* VCS */ = {
 			isa = PBXGroup;
 			children = (
+				43D408492FD9C931008A5BF2 /* PhoneCustomTextFieldView.swift */,
+				43D4084B2FD9CE31008A5BF2 /* AppIQKeyboardManager.swift */,
 				4364EBB12F1DC36E000985BA /* GlassViewController.swift */,
 				433BF8122F1F517A007769FB /* LargeContentViewController.swift */,
 			);
@@ -745,6 +751,7 @@
 				433065ED2E8A1EE5002E2018 /* CombinedChartDemoViewController.swift in Sources */,
 				43269A082D95438A0025EEAC /* EntityUserModelV1.swift in Sources */,
 				437BC0F72FC9AE4600B9DF52 /* K24HomeTransactionLeverageSliderView.swift in Sources */,
+				43D4084A2FD9C931008A5BF2 /* PhoneCustomTextFieldView.swift in Sources */,
 				436197FB2EE81221004932D6 /* CandleStickDemoViewController2.swift in Sources */,
 				4364EBB22F1DC36E000985BA /* GlassViewController.swift in Sources */,
 				43269A092D95438A0025EEAC /* EViewController.swift in Sources */,
@@ -794,6 +801,7 @@
 				431F2E6A2F1A7C9D00207C6E /* GlassEffectContainerView.swift in Sources */,
 				435B76522D9E345700093B91 /* VideoPlayerViewController.swift in Sources */,
 				43269A142D95438A0025EEAC /* CViewController.swift in Sources */,
+				43D4084C2FD9CE31008A5BF2 /* AppIQKeyboardManager.swift in Sources */,
 				43BEABA42E02B27500092EB3 /* MiniAppManager.swift in Sources */,
 				43DCC3872DB62EA100E83159 /* FileEncryptor.swift in Sources */,
 				436197FE2EE81BB6004932D6 /* KLineData.swift in Sources */,
