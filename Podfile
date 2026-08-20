@@ -25,6 +25,8 @@ def base_pod
   
   # 键盘管理（完整组件）
   pod 'IQKeyboardManagerSwift', '~> 8.0.1'
+
+  pod 'KSCrash' 
 end
 
 target 'SwiftTest' do
