@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F0C0A0012F00000100000001 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0A0022F00000100000001 /* CrashReporter.swift */; };
+		4301599730524F6B00A3CE40 /* DeviceInfoTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4301599630524F6B00A3CE40 /* DeviceInfoTools.swift */; };
 		430D94812EBB21C200D44522 /* AppRouterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430D94802EBB21C200D44522 /* AppRouterManager.swift */; };
 		431F2E6A2F1A7C9D00207C6E /* GlassEffectContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431F2E692F1A7C9D00207C6E /* GlassEffectContainerView.swift */; };
 		431F2E6C2F1A85D700207C6E /* HomeTopBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431F2E6B2F1A85D700207C6E /* HomeTopBackgroundView.swift */; };
@@ -111,6 +111,7 @@
 		43F5FF842F89015100E06902 /* CustomDragSortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5FF832F89015100E06902 /* CustomDragSortViewController.swift */; };
 		43F5FF862F89016E00E06902 /* CustomDragViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5FF852F89016E00E06902 /* CustomDragViewController.swift */; };
 		70B7D08140DA2D47D08ABB22 /* Pods_SwiftTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */; };
+		F0C0A0012F00000100000001 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0A0022F00000100000001 /* CrashReporter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -127,10 +128,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F0C0A0022F00000100000001 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
 		2E62492FBA8854686AFD4BA0 /* Pods-SwiftTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.debug.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.debug.xcconfig"; sourceTree = "<group>"; };
 		4300E9642EFA948000FBB966 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = ../mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
 		4300E9652EFA948000FBB966 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = ../mul.lproj/LaunchScreen.xcstrings; sourceTree = "<group>"; };
+		4301599630524F6B00A3CE40 /* DeviceInfoTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoTools.swift; sourceTree = "<group>"; };
 		430D94802EBB21C200D44522 /* AppRouterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterManager.swift; sourceTree = "<group>"; };
 		431F2E692F1A7C9D00207C6E /* GlassEffectContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassEffectContainerView.swift; sourceTree = "<group>"; };
 		431F2E6B2F1A85D700207C6E /* HomeTopBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBackgroundView.swift; sourceTree = "<group>"; };
@@ -239,6 +240,7 @@
 		43F5FF852F89016E00E06902 /* CustomDragViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDragViewController.swift; sourceTree = "<group>"; };
 		7E79A77BB7310BECCEC515A9 /* Pods-SwiftTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTest.release.xcconfig"; path = "Target Support Files/Pods-SwiftTest/Pods-SwiftTest.release.xcconfig"; sourceTree = "<group>"; };
 		B03EE556CFF5D8CE9DF3DC7C /* Pods_SwiftTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0C0A0022F00000100000001 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,6 +337,7 @@
 				433065F82E8A23DB002E2018 /* PublicMacro.swift */,
 				43B188B72EF298B900AC8168 /* AppPage.swift */,
 				F0C0A0022F00000100000001 /* CrashReporter.swift */,
+				4301599630524F6B00A3CE40 /* DeviceInfoTools.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -730,9 +733,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftTest/Pods-SwiftTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -754,6 +761,7 @@
 				436197FB2EE81221004932D6 /* CandleStickDemoViewController2.swift in Sources */,
 				4364EBB22F1DC36E000985BA /* GlassViewController.swift in Sources */,
 				43269A092D95438A0025EEAC /* EViewController.swift in Sources */,
+				4301599730524F6B00A3CE40 /* DeviceInfoTools.swift in Sources */,
 				43269A0A2D95438A0025EEAC /* UserModel.swift in Sources */,
 				433065EB2E8A1EBC002E2018 /* BarChartDemoViewController.swift in Sources */,
 				433DD99F2F176757009FE5DE /* GradientBlurView.swift in Sources */,
@@ -871,6 +879,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -918,6 +927,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TSNC7TNG22;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (

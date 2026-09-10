@@ -94,6 +94,9 @@ class AViewController: BaseViewController {
         }
         tableView.contentInset = UIEdgeInsets(top: 116, left: 0, bottom: 0, right: 0)
         tableView.setContentOffset(CGPointMake(0, -116), animated: false)
+        
+        // 打印一下设备的部分信息
+        DeviceInfoTools.carrierInfo()
     }
 }
 
